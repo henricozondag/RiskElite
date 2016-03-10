@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="mamahetogames.riskelite">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Menu" />
+        <activity android:name=".Settings" />
+        <activity android:name=".ToGame" />
+        <activity android:name=".SetupGame" />
+        <activity android:name=".StartGame" />
+        <activity android:name=".Game" />
+        <activity android:name=".EndGame" />
+        <activity android:name=".HighScore" />
+        <activity android:name=".PreMove" />
+        <activity android:name=".EndMove" />
+        <activity android:name=".MovePhase3" />
+        <activity android:name=".MovePhase2" />
+        <activity android:name=".MovePhase1" />
+        <activity android:name=".PlayerDetails" />
+        <activity android:name=".MoveAction"></activity>
+    </application>
+
+</manifest>
