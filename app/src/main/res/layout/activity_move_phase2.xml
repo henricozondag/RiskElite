@@ -9,4 +9,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="mamahetogames.riskelite.MovePhase2">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="MovePhase2"
+        android:id="@+id/textViewMovePhase2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MovePhase3"
+        android:id="@+id/buttonMovePhase3"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PlayerDetails"
+        android:id="@+id/buttonPlayerDetails"
+        android:layout_below="@+id/buttonMovePhase3"
+        android:layout_alignStart="@+id/textViewMovePhase2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MoveAction"
+        android:id="@+id/buttonMoveAction"
+        android:layout_above="@+id/buttonMovePhase3"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
