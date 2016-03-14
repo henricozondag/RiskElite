@@ -33,18 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="100dp">
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,6 +42,25 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/textViewMoveAction"
                 android:layout_column="24" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="100dp">
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_column="24" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         </TableRow>
 
         <TableRow
@@ -174,15 +181,80 @@
         </TableRow>
 
         <TableRow
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageDice1"
+                android:layout_column="24"
+                android:src="@mipmap/dice_6" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageDice2"
                 android:layout_column="24"
-                android:src="@mipmap/dice_6" />
+                android:src="@mipmap/dice_5"
+                android:contentDescription="testje2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageDice3"
+                android:layout_column="24"
+                android:src="@mipmap/dice_4"
+                android:contentDescription="testje" />
         </TableRow>
 
     </TableLayout>
