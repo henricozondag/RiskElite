@@ -29,7 +29,7 @@
         <activity android:name=".MovePhase2" />
         <activity android:name=".MovePhase1" />
         <activity android:name=".PlayerDetails" />
-        <activity android:name=".MoveAction"/>
+        <activity android:name=".MoveAction" />
     </application>
 
 </manifest>

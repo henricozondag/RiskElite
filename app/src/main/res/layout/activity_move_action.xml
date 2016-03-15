@@ -21,12 +21,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Move Action"
+                android:text="VELDSLAG"
                 android:id="@+id/textViewMoveAction"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="43dp"
-                android:layout_column="24" />
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal"
+                android:layout_span="2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="ATTACKER"
+                android:id="@+id/textViewAttacker"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="DEFENDER"
+                android:id="@+id/textViewDefender"
+                android:layout_column="1"
+                android:layout_gravity="right" />
         </TableRow>
 
         <TableRow
@@ -41,25 +64,75 @@
                 android:layout_alignEnd="@+id/textViewMoveAction"
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/textViewMoveAction"
-                android:layout_column="24" />
+                android:layout_column="0" />
         </TableRow>
 
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="100dp">
 
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"
-                android:layout_column="24" />
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 dobbelsteen"
+                    android:id="@+id/radioButtonDice1"
+                    android:layout_column="24"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 dobbelstenen"
+                    android:id="@+id/radioButtonDice2"
+                    android:layout_column="24"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3 dobbelstenen"
+                    android:id="@+id/radioButtonDice3"
+                    android:layout_column="24"
+                    android:checked="false" />
+            </RadioGroup>
+
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 dobbelsteen"
+                    android:id="@+id/radioButtonDice4"
+                    android:layout_column="24"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 dobbelstenen"
+                    android:id="@+id/radioButtonDice5"
+                    android:layout_column="24"
+                    android:checked="false" />
+
+            </RadioGroup>
+
+
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
 
         </TableRow>
 
@@ -71,11 +144,18 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gooi"
+                android:text="Gooi Attack"
                 android:id="@+id/buttonGooiAttack"
                 android:layout_alignEnd="@+id/buttonMovePhase2"
                 android:layout_above="@+id/buttonMovePhase2"
-                android:layout_column="24" />
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gooi Defend"
+                android:id="@+id/buttonGooiDefend"
+                android:layout_column="1" />
         </TableRow>
 
         <TableRow
@@ -188,8 +268,15 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imageDice1"
-                android:layout_column="24"
+                android:layout_column="0"
                 android:src="@mipmap/dice_6" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageDice4"
+                android:layout_column="1"
+                android:src="@mipmap/dice_1" />
 
         </TableRow>
 
@@ -239,9 +326,16 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imageDice2"
-                android:layout_column="24"
+                android:layout_column="0"
                 android:src="@mipmap/dice_5"
                 android:contentDescription="testje2" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageDice5"
+                android:layout_column="1"
+                android:src="@mipmap/dice_2" />
         </TableRow>
 
         <TableRow
@@ -252,9 +346,101 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imageDice3"
-                android:layout_column="24"
+                android:layout_column="0"
                 android:src="@mipmap/dice_4"
                 android:contentDescription="testje" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/textViewALost"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/textViewDLost"
+                android:layout_column="1"
+                android:layout_gravity="center_horizontal" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Verloren"
+                android:id="@+id/textView3"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Verloren"
+                android:id="@+id/textView4"
+                android:layout_column="1"
+                android:layout_gravity="center_horizontal" />
+
         </TableRow>
 
     </TableLayout>
