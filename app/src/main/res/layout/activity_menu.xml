@@ -9,4 +9,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="mamahetogames.riskelite.Menu">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HighScore"
+        android:id="@+id/buttonHighScore"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="199dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="MENU"
+        android:id="@+id/textViewMenu"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:id="@+id/buttonSettings"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Game"
+        android:id="@+id/buttonToGame"
+        android:layout_above="@+id/buttonSettings"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

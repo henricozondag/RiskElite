@@ -1,9 +1,9 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -21,7 +21,5 @@ public class SplashScreen extends AppCompatActivity {
                 startActivity(i);
             }
         }, 2500);
-
     }
-
-}
+        }

@@ -9,4 +9,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="mamahetogames.riskelite.Game">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Game"
+        android:id="@+id/textViewGame"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Game"
+        android:id="@+id/buttonEndGame"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pre Move"
+        android:id="@+id/buttonPreMove"
+        android:layout_above="@+id/buttonEndGame"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="27dp" />
 </RelativeLayout>
