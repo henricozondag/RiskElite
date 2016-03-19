@@ -65,6 +65,13 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/textViewMoveAction"
                 android:layout_column="0" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AANVALLEN"
+                android:id="@+id/buttonAanvallen"
+                android:layout_column="1" />
         </TableRow>
 
         <TableRow
@@ -160,11 +167,42 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></TableRow>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Resultaat:"
+                android:id="@+id/textView"
+                android:layout_column="0"
+                android:layout_span="2"
+                android:layout_gravity="center_horizontal" />
+
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></TableRow>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Aanval"
+                android:id="@+id/textView6"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Verdediging"
+                android:id="@+id/textView5"
+                android:layout_column="1"
+                android:layout_gravity="center_horizontal" />
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
@@ -269,14 +307,14 @@
                 android:layout_height="40dp"
                 android:id="@+id/imageDice1"
                 android:layout_column="0"
-                android:src="@mipmap/dice_6" />
+                android:src="@mipmap/black" />
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imageDice4"
                 android:layout_column="1"
-                android:src="@mipmap/dice_1" />
+                android:src="@mipmap/black" />
 
         </TableRow>
 
@@ -327,7 +365,7 @@
                 android:layout_height="40dp"
                 android:id="@+id/imageDice2"
                 android:layout_column="0"
-                android:src="@mipmap/dice_5"
+                android:src="@mipmap/black"
                 android:contentDescription="testje2" />
 
             <ImageView
@@ -335,7 +373,7 @@
                 android:layout_height="40dp"
                 android:id="@+id/imageDice5"
                 android:layout_column="1"
-                android:src="@mipmap/dice_2" />
+                android:src="@mipmap/black" />
         </TableRow>
 
         <TableRow
@@ -347,7 +385,7 @@
                 android:layout_height="40dp"
                 android:id="@+id/imageDice3"
                 android:layout_column="0"
-                android:src="@mipmap/dice_4"
+                android:src="@mipmap/black"
                 android:contentDescription="testje" />
         </TableRow>
 
@@ -403,8 +441,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
-                android:id="@+id/textViewALost"
+                android:text="Attacker"
+                android:id="@+id/textViewAtt"
                 android:layout_column="0"
                 android:layout_gravity="center_horizontal" />
 
@@ -412,8 +450,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
-                android:id="@+id/textViewDLost"
+                android:text="Defender"
+                android:id="@+id/textViewDef"
                 android:layout_column="1"
                 android:layout_gravity="center_horizontal" />
 
@@ -427,7 +465,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Verloren"
+                android:text="Armies"
                 android:id="@+id/textView3"
                 android:layout_column="0"
                 android:layout_gravity="center_horizontal" />
@@ -436,10 +474,85 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Verloren"
+                android:text="Armies"
                 android:id="@+id/textView4"
                 android:layout_column="1"
                 android:layout_gravity="center_horizontal" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/textViewAttArmies"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/textViewDefArmies"
+                android:layout_column="1"
+                android:layout_gravity="center_horizontal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Lost"
+                android:id="@+id/textView2"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Lost"
+                android:id="@+id/textView7"
+                android:layout_column="1"
+                android:layout_gravity="center_horizontal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/textViewALost"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/textViewDLost"
+                android:layout_column="1"
+                android:layout_gravity="center_horizontal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         </TableRow>
 
