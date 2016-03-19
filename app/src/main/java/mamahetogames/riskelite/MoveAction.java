@@ -1,9 +1,9 @@
 package mamahetogames.riskelite;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -181,14 +181,33 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         //Controleren of de aanvaller of verdediger de slag verloren heeft
         if (armiesAttacker == 0) {
         // open een nieuwe activity met een attacker lost animatie
-            Intent i = new Intent(this, Menu.class);
+            savePreferences("Winnaar: ", "Verdediger");
+            savePreferences("Aanvaller verloren: ", String.valueOf(totalLostA));
+            savePreferences("Verdediger verloren: ", String.valueOf(totalLostD));
+            finish();
+            Intent i = new Intent(this, MoveActionResult.class);
             startActivity(i);
         }
         else if (armiesDefender == 0) {
         // open een nieuwe activity met een defender lost animatie
             // en met de statistieken van de veldslag
+            savePreferences("Winnaar: ", "Aanvaller");
+            savePreferences("Aanvaller verloren: ", String.valueOf(totalLostA));
+            savePreferences("Verdediger verloren: ", String.valueOf(totalLostD));
+            finish();
+            Intent i = new Intent(this, MoveActionResult.class);
+            startActivity(i);
         }
     };
+
+    private void savePreferences(String key, String value) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
 
     public void orderResult() {
         if (resultDice1 > resultDice2 && resultDice1 > resultDice3) {
