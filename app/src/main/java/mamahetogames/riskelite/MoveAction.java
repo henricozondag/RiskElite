@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -17,13 +18,13 @@ import java.util.Random;
 public class MoveAction extends AppCompatActivity implements View.OnClickListener {
 
     int resultDice1, resultDice2, resultDice3, resultDice4, resultDice5, numberOfDice, numberOfDiceDefend;
-    int topA1, topA2, topA3, topD1, topD2, lostA, lostD, totalLostA, totalLostD, imgId;
+    int topA1, topA2, topA3, topD1, topD2, lostA, lostD, totalLostA, totalLostD;
     ImageView imageDice1, imageDice2, imageDice3, imageDice4, imageDice5;
     Random ran = new Random();
+    RadioGroup radioGroupAttack, radioGroupDefend;
     RadioButton radioButtonDice1, radioButtonDice2, radioButtonDice3, radioButtonDice4, radioButtonDice5;
     TextView textViewALost, textViewDLost, textViewAttArmies, textViewDefArmies;
     Button buttonGooiAttack, buttonMovePhase2, buttonGooiDefend, buttonAanvallen;
-    String fnm;
 
     // de onderstaande ints moeten later gevuld worden vanuit het vorige scherm.
     // het betreft de aantallen waarmee aangevallen/verdedigt gaat worden
@@ -34,9 +35,11 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_action);
 
+        radioGroupAttack = (RadioGroup) findViewById(R.id.radioButtonGroupAttack);
         radioButtonDice1 = (RadioButton) findViewById(R.id.radioButtonDice1);
         radioButtonDice2 = (RadioButton) findViewById(R.id.radioButtonDice2);
         radioButtonDice3 = (RadioButton) findViewById(R.id.radioButtonDice3);
+        radioGroupDefend = (RadioGroup) findViewById(R.id.radioButtonGroupDefend);
         radioButtonDice4 = (RadioButton) findViewById(R.id.radioButtonDice4);
         radioButtonDice5 = (RadioButton) findViewById(R.id.radioButtonDice5);
 
@@ -83,11 +86,12 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         private int resultDice;
         public String PACKAGE_NAME = getApplicationContext().getPackageName();
 
-        // setter
+        // setter. Dit is een goede manier van standaard programmeren. (denk ik) :)
+        // Binnen een methode een setter maken en een getter.
         void setDice(int dice) {
             resultDice = ran.nextInt(6) + 1;
-            fnm = "dice_" + Integer.toString(resultDice);
-            imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + fnm, null, null);
+            String fnm = "dice_" + Integer.toString(resultDice);
+            int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + fnm, null, null);
             switch(dice) {
                 case 1:
                     imageDice1.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
@@ -138,12 +142,11 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         switch (armiesDefender) {
             case 1:
                 radioButtonDice4.setVisibility(View.VISIBLE);
-                radioButtonDice4.setSelected(true);
+                radioGroupDefend.check(radioButtonDice4.getId());
                 break;
             default:
                 radioButtonDice4.setVisibility(View.VISIBLE);
                 radioButtonDice5.setVisibility(View.VISIBLE);
-                radioButtonDice5.setSelected(true);
                 break;
         }
     }
@@ -300,18 +303,18 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
                 switch (armiesAttacker) {
                     case 1:
                         radioButtonDice1.setVisibility(View.VISIBLE);
-                        radioButtonDice1.setSelected(true);
+                        radioGroupAttack.check(radioButtonDice1.getId());
                         break;
                     case 2:
                         radioButtonDice1.setVisibility(View.VISIBLE);
                         radioButtonDice2.setVisibility(View.VISIBLE);
-                        radioButtonDice2.setSelected(true);
+                        radioGroupAttack.check(radioButtonDice2.getId());
                         break;
                     default:
                         radioButtonDice1.setVisibility(View.VISIBLE);
                         radioButtonDice2.setVisibility(View.VISIBLE);
                         radioButtonDice3.setVisibility(View.VISIBLE);
-                        radioButtonDice3.setSelected(true);
+                        radioGroupAttack.check(radioButtonDice3.getId());
                         break;
                 }
                 buttonGooiAttack.setVisibility(View.VISIBLE);
