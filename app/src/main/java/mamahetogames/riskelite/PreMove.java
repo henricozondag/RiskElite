@@ -29,6 +29,9 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
                 break;
             case R.id.buttonMovePhase1:
                 i = new Intent(this, MovePhase1.class);
+                Bundle b = new Bundle();
+                b.putInt("key", 3);
+                i.putExtras(b);
                 startActivity(i);
                 break;
         }
