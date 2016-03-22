@@ -184,21 +184,19 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         //Controleren of de aanvaller of verdediger de slag verloren heeft
         if (armiesAttacker == 0) {
         // open een nieuwe activity met een attacker lost animatie
-            savePreferences("Winnaar: ", "Verdediger");
-            savePreferences("Aanvaller verloren: ", String.valueOf(totalLostA));
-            savePreferences("Verdediger verloren: ", String.valueOf(totalLostD));
-            finish();
             Intent i = new Intent(this, MoveActionResult.class);
+            i.putExtra("winnaar", "Verdediger");
+            i.putExtra("totalLostA", totalLostA);
+            i.putExtra("totalLostD", totalLostD);
             startActivity(i);
         }
         else if (armiesDefender == 0) {
         // open een nieuwe activity met een defender lost animatie
             // en met de statistieken van de veldslag
-            savePreferences("Winnaar: ", "Aanvaller");
-            savePreferences("Aanvaller verloren: ", String.valueOf(totalLostA));
-            savePreferences("Verdediger verloren: ", String.valueOf(totalLostD));
-            finish();
             Intent i = new Intent(this, MoveActionResult.class);
+            i.putExtra("winnaar", "Aanvaller");
+            i.putExtra("totalLostA", totalLostA);
+            i.putExtra("totalLostD", totalLostD);
             startActivity(i);
         }
     };
@@ -210,7 +208,6 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         editor.putString(key, value);
         editor.commit();
     }
-
 
     public void orderResult() {
         if (resultDice1 > resultDice2 && resultDice1 > resultDice3) {
