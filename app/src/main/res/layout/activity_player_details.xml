@@ -28,11 +28,11 @@
         android:layout_marginBottom="16dp" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard1"
         android:layout_below="@+id/textViewPlayerDetails"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="false"
         android:layout_marginTop="45dp"
         android:layout_marginLeft="0dp" />
 
@@ -43,14 +43,16 @@
         android:checked="false"
         android:layout_below="@+id/imageViewCard1"
         android:layout_alignEnd="@+id/imageViewCard1"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard2"
         android:layout_below="@+id/textViewPlayerDetails"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="false"
         android:layout_marginTop="45dp"
         android:layout_marginLeft="70dp" />
 
@@ -64,11 +66,11 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard3"
         android:layout_below="@+id/textViewPlayerDetails"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="false"
         android:layout_marginTop="45dp"
         android:layout_marginLeft="140dp" />
 
@@ -82,11 +84,11 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard4"
         android:layout_below="@+id/textViewPlayerDetails"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="false"
         android:layout_marginTop="45dp"
         android:layout_marginLeft="210dp" />
 
@@ -100,11 +102,11 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard5"
         android:layout_below="@+id/textViewPlayerDetails"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="false"
         android:layout_marginTop="45dp"
         android:layout_marginLeft="280dp" />
 
@@ -118,8 +120,8 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard6"
         android:layout_below="@+id/imageViewCard1"
         android:layout_alignParentStart="false"
@@ -135,8 +137,8 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard7"
         android:layout_below="@+id/imageViewCard1"
         android:layout_alignParentStart="false"
@@ -153,8 +155,8 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard8"
         android:layout_below="@+id/imageViewCard1"
         android:layout_alignParentStart="false"
@@ -171,8 +173,8 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard9"
         android:layout_below="@+id/imageViewCard1"
         android:layout_alignParentStart="false"
@@ -189,8 +191,8 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/imageViewCard10"
         android:layout_below="@+id/imageViewCard1"
         android:layout_alignParentStart="false"
@@ -214,5 +216,35 @@
         android:layout_below="@+id/checkBoxCard8"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Te plaatsen legers:"
+        android:id="@+id/textViewPlaatsenLegers"
+        android:layout_below="@+id/buttonRuilKaarten"
+        android:layout_toStartOf="@+id/checkBoxCard8"
+        android:layout_marginTop="30dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="0"
+        android:id="@+id/textViewAantalLegers"
+        android:layout_alignTop="@+id/textViewPlaatsenLegers"
+        android:layout_alignEnd="@+id/checkBoxCard9"
+        android:visibility="invisible" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plaatsen"
+        android:id="@+id/buttonPlaatsenLegers"
+        android:layout_alignTop="@+id/buttonMovePhase2"
+        android:layout_alignEnd="@+id/checkBoxCard10"
+        android:visibility="invisible" />
 
 </RelativeLayout>
