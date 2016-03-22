@@ -3,29 +3,25 @@ package mamahetogames.riskelite;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MovePhase1 extends AppCompatActivity implements View.OnClickListener {
 
-    Canvas canvas;
-    RiskMap RiskMap;
     Context context;
     int armieCard;
     private int aantalLegers;
     TextView legerBijTeZetten;
+    Bitmap armyIcon;
+    Paint paint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +30,8 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
 
         legerBijTeZetten = (TextView) this.findViewById(R.id.legersBijTeZetten);
 
-        //RiskMap = new RiskMap(this);
-        //setContentView(RiskMap);
-        //Bitmap armyIcon;
-        //armyIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.toy_soldier_clip_art_small);
-        //canvas.drawBitmap(armyIcon, 0, 0, null);
 
+        // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is het aantal legers dat we hebben.
         Bundle b = getIntent().getExtras();
         aantalLegers = b.getInt("plaatsLegers");
         legerBijTeZetten.setText("" + aantalLegers);
@@ -49,19 +41,6 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         buttonMovePhase2.setOnClickListener(this);
         buttonPutArmy.setOnClickListener(this);
 
-    }
-
-    class RiskMap extends SurfaceView {
-        Thread ourThread = null;
-        SurfaceHolder ourHolder;
-        //Paint paint;
-
-        public RiskMap (Context context) {
-            super(context);
-            ourHolder = getHolder();
-            //paint = new Paint();
-
-        }
     }
 
     @Override
