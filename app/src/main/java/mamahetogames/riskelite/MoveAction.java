@@ -27,7 +27,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
     Button buttonGooiAttack, buttonMovePhase2, buttonGooiDefend, buttonAanvallen;
 
     // de onderstaande ints moeten later gevuld worden vanuit het vorige scherm.
-    // het betreft de aantallen waarmee aangevallen/verdedigt gaat worden
+    // het betreft de aantallen waarmee aangevallen/verdedigd gaat worden
     int armiesAttacker = 5, armiesDefender = 3;
 
     @Override
@@ -260,8 +260,8 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         }
         if (resultDice5 != 0 && resultDice2 != 0) {
             if (topA2 > topD2) {
-                lostD = lostD + 1;
-            } else lostA = lostA + 1;
+                lostD++;
+            } else lostA++;
         }
         updateArmies();
     }

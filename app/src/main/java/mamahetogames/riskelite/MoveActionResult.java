@@ -14,10 +14,14 @@ public class MoveActionResult extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_action_result);
+
+        // getdata
         Bundle b = getIntent().getExtras();
         totalLostA = b.getInt("totalLostA");
         totalLostD = b.getInt("totalLostD");
         winnaar = b.getString("winnaar");
+
+        // scherm vullen
         textViewWinnaar = (TextView) this.findViewById(R.id.textViewWinnaar);
         textViewLostD = (TextView) this.findViewById(R.id.textViewLostD);
         textViewLostA = (TextView) this.findViewById(R.id.textViewLostA);

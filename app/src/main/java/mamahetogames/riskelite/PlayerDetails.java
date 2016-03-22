@@ -30,14 +30,14 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten
     String status = "phase1";
     TextView textViewAantalLegers, textViewPlaatsenLegers;
-    Button buttonPlaatsenLegers;
+    Button buttonPlaatsenLegers, buttonMovePhase2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_details);
 
-        Button buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
+        buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
         Button buttonRuilKaarten = (Button) findViewById(R.id.buttonRuilKaarten);
         buttonRuilKaarten.setOnClickListener(this);
@@ -248,9 +248,8 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(PlayerDetails.this, "Heel goed, je hebt drie dezelfde aangevinkt!",  Toast.LENGTH_LONG).show();
                 addArmies();
                 removeCards();
-
             }
-            else if (cardList.get(0) != cardList.get(1) && cardList.get(0) != cardList.get(1) && cardList.get(1) != cardList.get(2))
+            else if (cardList.get(0) != cardList.get(1) && cardList.get(0) != cardList.get(2) && cardList.get(1) != cardList.get(2))
             {
                 Toast.makeText(PlayerDetails.this, "Heel goed, je hebt drie verschillende aangevinkt!",  Toast.LENGTH_LONG).show();
                 addArmies();
@@ -266,11 +265,15 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     }
 
     public void addArmies() {
-        plaatsLegers = armieCard;
+
+        // schermdingen
         textViewAantalLegers.setVisibility(View.VISIBLE);
         textViewAantalLegers.setText(Integer.toString(armieCard));
         textViewPlaatsenLegers.setVisibility(View.VISIBLE);
         buttonPlaatsenLegers.setVisibility(View.VISIBLE);
+        buttonMovePhase2.setVisibility(View.INVISIBLE);
+
+        plaatsLegers = armieCard;
         armieCard = armieCard + 2;
         savePreferences("armieCard", armieCard);
     }
@@ -289,7 +292,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         if (checkBoxCard10.isChecked()) { typeCard10 = 0; savePreferences("typeCard10", typeCard10);}
 
         //Log.i("typeCard1", Integer.toString(typeCard1));
-        laatKaartenZien(1);
+        laatKaartenZien(player);
     }
 
     private void loadSavedPreferences() {
@@ -313,7 +316,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
                 .getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     @Override

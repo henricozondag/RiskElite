@@ -30,7 +30,7 @@
         <activity android:name=".MovePhase1" />
         <activity android:name=".PlayerDetails" />
         <activity android:name=".MoveAction" />
-        <activity android:name=".MoveActionResult"></activity>
+        <activity android:name=".MoveActionResult" />
     </application>
 
 </manifest>
