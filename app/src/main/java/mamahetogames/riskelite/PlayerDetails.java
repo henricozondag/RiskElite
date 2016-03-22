@@ -26,7 +26,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     CheckBox checkBoxCard6, checkBoxCard7, checkBoxCard8, checkBoxCard9, checkBoxCard10;
     public ArrayList<Integer> cardList = new ArrayList<>();
     int typeCard1, typeCard2, typeCard3, typeCard4, typeCard5, typeCard6, typeCard7, typeCard8, typeCard9, typeCard10;
-    int player = 1, armieCard;
+    int player = 1, armieCard, plaatsLegers;
     // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten
     String status = "phase1";
     TextView textViewAantalLegers, textViewPlaatsenLegers;
@@ -73,13 +73,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         // haal op welke kaarten er allemaal actief zijn voor de huidige speler
         loadSavedPreferences();
-/*
-        typeCard1 = 1;
-        typeCard2 = 2;
-        typeCard3 = 3;
-        typeCard4 = 2;
-        typeCard5 = 2;
-*/
         laatKaartenZien(player);
     }
 
@@ -273,7 +266,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     }
 
     public void addArmies() {
-
+        plaatsLegers = armieCard;
         textViewAantalLegers.setVisibility(View.VISIBLE);
         textViewAantalLegers.setText(Integer.toString(armieCard));
         textViewPlaatsenLegers.setVisibility(View.VISIBLE);
@@ -337,6 +330,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
             case R.id.buttonPlaatsenLegers:
                 //finish();   Dit is volgens mij niet nodig nu
                 i = new Intent(this, MovePhase1.class);
+                i.putExtra("plaatsLegers", plaatsLegers);
                 startActivity(i);
                 break;
         }
