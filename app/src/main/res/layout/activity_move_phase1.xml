@@ -9,20 +9,89 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="mamahetogames.riskelite.MovePhase1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="MovePhase1"
-        android:id="@+id/textViewMovePhase1"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/tableLayout">
 
-    <Button
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="MovePhase1"
+                android:id="@+id/textViewMovePhase1"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_column="2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Beschikbare legers:"
+                android:id="@+id/textAantalLegers"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="37dp"
+                android:layout_below="@+id/textViewMovePhase1"
+                android:layout_alignParentStart="true"
+                android:layout_span="3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Geen"
+                android:id="@+id/legersBijTeZetten"
+                android:layout_column="5"
+                android:layout_gravity="center_horizontal"
+                android:editable="true"
+                android:enabled="true"
+                android:layout_alignTop="@+id/textAantalLegers"
+                android:layout_toEndOf="@+id/textViewMovePhase1" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:text="Zet Leger"
+                android:id="@+id/buttonPutArmy"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/legersBijTeZetten"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:text="MovePhase2"
+                android:id="@+id/buttonMovePhase2"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/legersBijTeZetten"
+                android:layout_column="2" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MovePhase2"
-        android:id="@+id/buttonMovePhase2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/imageView2"
+        android:src="@mipmap/ic_launcher"
+        android:layout_below="@+id/tableLayout" />
+
 </RelativeLayout>
