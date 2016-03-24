@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="MovePhase2"
+        android:text="MovePhase2 - Speler X"
         android:id="@+id/textViewMovePhase2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -21,24 +21,24 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MovePhase3"
+        android:text="Einde beurt"
         android:id="@+id/buttonMovePhase3"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignTop="@+id/buttonPlayerDetails"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PlayerDetails"
+        android:text="Details"
         android:id="@+id/buttonPlayerDetails"
-        android:layout_below="@+id/buttonMovePhase3"
-        android:layout_alignStart="@+id/textViewMovePhase2" />
+        android:layout_alignTop="@+id/buttonMoveAction"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MoveAction"
+        android:text="Aanvallen"
         android:id="@+id/buttonMoveAction"
-        android:layout_above="@+id/buttonMovePhase3"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/textViewMovePhase2"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
