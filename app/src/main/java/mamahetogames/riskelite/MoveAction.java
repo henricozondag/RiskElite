@@ -13,27 +13,33 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class MoveAction extends AppCompatActivity implements View.OnClickListener {
 
-    int resultDice1, resultDice2, resultDice3, resultDice4, resultDice5, numberOfDice, numberOfDiceDefend;
-    int topA1, topA2, topA3, topD1, topD2, lostA, lostD, totalLostA, totalLostD;
+    int numberOfDice, numberOfDiceDefend;
+    int lostA, lostD, totalLostA, totalLostD;
+    ArrayList<Integer> topA = new ArrayList<Integer>();
+    ArrayList<Integer> topD = new ArrayList<Integer>();
     Random ran = new Random();
     RadioGroup radioGroupAttack, radioGroupDefend;
     TextView textViewALost, textViewDLost, textViewAttArmies, textViewDefArmies;
     Button buttonGooiAttack, buttonMovePhase2, buttonGooiDefend, buttonAanvallen;
     ImageView[] imageDice = new ImageView[5];
     RadioButton[] radioButtonDice = new RadioButton[5];
-
-    // de onderstaande ints moeten later gevuld worden vanuit het vorige scherm.
-    // het betreft de aantallen waarmee aangevallen/verdedigd gaat worden
-    int armiesAttacker = 5, armiesDefender = 3;
+    int armiesAttacker, armiesDefender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_action);
+
+        // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit zijn de betrokken legers.
+        Bundle b = getIntent().getExtras();
+        armiesAttacker = b.getInt("armiesAttacker");
+        armiesDefender = b.getInt("armiesDefender");
 
         radioGroupAttack = (RadioGroup) findViewById(R.id.radioButtonGroupAttack);
         radioButtonDice[0] = (RadioButton) findViewById(R.id.radioButtonDice1);
@@ -80,6 +86,8 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         radioButtonDice[4].setVisibility(View.INVISIBLE);
         buttonGooiDefend.setVisibility(View.INVISIBLE);
         buttonAanvallen.setVisibility(View.INVISIBLE);
+
+        setupDiceAttacker(armiesAttacker);
     }
 
     public class rollDice {
@@ -100,19 +108,13 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
 
     public void rollDiceAttack(int numberOfDice) {
         rollDice rd = new rollDice();
-        rd.setDice(0);
-        resultDice1 = rd.getDice();
-        resultDice2 = 0;
-        resultDice3 = 0;
-        if (numberOfDice > 1) {
-            rd.setDice(1);
-            resultDice2 = rd.getDice();
-            resultDice3 = 0;
+        topA.clear();
+
+        for(int dice=0; dice<numberOfDice; dice++) {
+            rd.setDice(dice);
+            topA.add(rd.getDice());
         }
-        if (numberOfDice > 2) {
-            rd.setDice(2);
-            resultDice3 = rd.getDice();
-        }
+
         radioButtonDice[0].setVisibility(View.INVISIBLE);
         radioButtonDice[1].setVisibility(View.INVISIBLE);
         radioButtonDice[2].setVisibility(View.INVISIBLE);
@@ -120,26 +122,17 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         buttonGooiAttack.setVisibility(View.INVISIBLE);
 
         // aantal dobbelstenen voor de verdediger aanpassen aan de legers die nog beschikbaar zijn
-        switch (armiesDefender) {
-            case 1:
-                radioButtonDice[3].setVisibility(View.VISIBLE);
-                radioGroupDefend.check(radioButtonDice[3].getId());
-                break;
-            default:
-                radioButtonDice[3].setVisibility(View.VISIBLE);
-                radioButtonDice[4].setVisibility(View.VISIBLE);
-                break;
-        }
+        setupDiceDefender(armiesDefender);
     }
 
     public void rollDiceDefend(int numberOfDiceDefend) {
         rollDice rd = new rollDice();
         rd.setDice(3);
-        resultDice4 = rd.getDice();
-        resultDice5 = 0;
+        topD.clear();
+        topD.add(rd.getDice());
         if (numberOfDiceDefend > 1) {
             rd.setDice(4);
-            resultDice5 = rd.getDice();
+            topD.add(rd.getDice());
         }
         radioButtonDice[3].setVisibility(View.INVISIBLE);
         radioButtonDice[4].setVisibility(View.INVISIBLE);
@@ -191,41 +184,43 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
     }
 
     public void orderResult() {
-        if (resultDice1 > resultDice2 && resultDice1 > resultDice3) {
-            topA1 = resultDice1;
-            if (resultDice2 > resultDice3) {
-                topA2 = resultDice2;
-                topA3 = resultDice3;
-            } else {
-                topA2 = resultDice3;
-                topA3 = resultDice2;
-            }
+        Collections.sort(topA);
+        Collections.reverse(topA);
+        Collections.sort(topD);
+        Collections.reverse(topD);
+    }
+
+    public void setupDiceAttacker(int armiesAttacker) {
+        switch (armiesAttacker) {
+            case 1:
+                radioButtonDice[0].setVisibility(View.VISIBLE);
+                radioGroupAttack.check(radioButtonDice[0].getId());
+                break;
+            case 2:
+                radioButtonDice[0].setVisibility(View.VISIBLE);
+                radioButtonDice[1].setVisibility(View.VISIBLE);
+                radioGroupAttack.check(radioButtonDice[1].getId());
+                break;
+            default:
+                radioButtonDice[0].setVisibility(View.VISIBLE);
+                radioButtonDice[1].setVisibility(View.VISIBLE);
+                radioButtonDice[2].setVisibility(View.VISIBLE);
+                radioGroupAttack.check(radioButtonDice[2].getId());
+                break;
         }
-        else if (resultDice2 > resultDice1 && resultDice2 > resultDice3) {
-            topA1 = resultDice2;
-            if (resultDice1 > resultDice3) {
-                topA2 = resultDice1;
-                topA3 = resultDice3;
-            } else {
-                topA2 = resultDice3;
-                topA3 = resultDice1;
-            }
-        }
-        else if (resultDice1 > resultDice2) {
-            topA1 = resultDice3;
-            topA2 = resultDice1;
-            topA3 = resultDice2;
-        } else {
-            topA1 = resultDice3;
-            topA2 = resultDice2;
-            topA3 = resultDice1;
-        }
-        if (resultDice4 > resultDice5) {
-            topD1 = resultDice4;
-            topD2 = resultDice5;
-        } else {
-            topD1 = resultDice5;
-            topD2 = resultDice4;
+    }
+
+    public void setupDiceDefender(int armiesDefender) {
+        switch (armiesDefender) {
+            case 1:
+                radioButtonDice[3].setVisibility(View.VISIBLE);
+                radioGroupDefend.check(radioButtonDice[3].getId());
+                break;
+            default:
+                radioButtonDice[3].setVisibility(View.VISIBLE);
+                radioButtonDice[4].setVisibility(View.VISIBLE);
+                radioGroupDefend.check(radioButtonDice[4].getId());
+                break;
         }
     }
 
@@ -233,16 +228,18 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         orderResult();
         lostA = 0;
         lostD = 0;
-        if (topA1 > topD1) {
+
+        if (topA.get(0) > topD.get(0)) {
             lostD = 1;
-        }
-        else {
+        } else {
             lostA = 1;
         }
-        if (resultDice5 != 0 && resultDice2 != 0) {
-            if (topA2 > topD2) {
+        if (numberOfDice > 1 && numberOfDiceDefend > 1) {
+            if (topA.get(1) > topD.get(1)) {
                 lostD++;
-            } else lostA++;
+            } else {
+                lostA++;
+            }
         }
         updateArmies();
     }
@@ -268,33 +265,19 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
                 rollDiceAttack(numberOfDice);
                 break;
             case R.id.buttonGooiDefend:
-                if (radioButtonDice[3].isChecked())
+                if (radioButtonDice[3].isChecked()) {
                     numberOfDiceDefend = 1;
-                imageDice[4].setImageResource(R.mipmap.black);
-                if (radioButtonDice[4].isChecked())
+                    imageDice[4].setImageResource(R.mipmap.black);
+                }
+                else {
                     numberOfDiceDefend = 2;
+                }
                 rollDiceDefend(numberOfDiceDefend);
                 calculateResult();
                 break;
             case R.id.buttonAanvallen:
                 //Aantal dobbelstenen voor de aanvaller aanpassen aan de legers die nog beschikbaar zijn
-                switch (armiesAttacker) {
-                    case 1:
-                        radioButtonDice[0].setVisibility(View.VISIBLE);
-                        radioGroupAttack.check(radioButtonDice[0].getId());
-                        break;
-                    case 2:
-                        radioButtonDice[0].setVisibility(View.VISIBLE);
-                        radioButtonDice[1].setVisibility(View.VISIBLE);
-                        radioGroupAttack.check(radioButtonDice[1].getId());
-                        break;
-                    default:
-                        radioButtonDice[0].setVisibility(View.VISIBLE);
-                        radioButtonDice[1].setVisibility(View.VISIBLE);
-                        radioButtonDice[2].setVisibility(View.VISIBLE);
-                        radioGroupAttack.check(radioButtonDice[2].getId());
-                        break;
-                }
+                setupDiceAttacker(armiesAttacker);
                 buttonGooiAttack.setVisibility(View.VISIBLE);
                 buttonAanvallen.setVisibility(View.INVISIBLE);
                 imageDice[0].setImageResource(R.mipmap.black);

@@ -21,20 +21,24 @@ import java.util.ArrayList;
 public class PlayerDetails extends AppCompatActivity implements View.OnClickListener{
 
     public ArrayList<Integer> cardList = new ArrayList<>();
-    int typeCard1, typeCard2, typeCard3, typeCard4, typeCard5, typeCard6, typeCard7, typeCard8, typeCard9, typeCard10;
-    int player = 1, armieCard, plaatsLegers;
+    int player = 0, armieCard, plaatsLegers;
     // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten
-    String status = "phase1";
+    String status;
     TextView textViewAantalLegers, textViewPlaatsenLegers;
     Button buttonPlaatsenLegers, buttonMovePhase2, buttonRuilKaarten;
     ImageView[] imageViewCard = new ImageView[10];
     CheckBox[] checkBoxCard = new CheckBox[10];
-    int[] typeCard = new int[10];
+    int[][] cardType = new int[3][10];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_details);
+
+        // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is de speler waarvoor je de kaarten bekijkt.
+        Bundle b = getIntent().getExtras();
+        player = b.getInt("player");
+        status = b.getString("status");
 
         buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
@@ -70,7 +74,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         // haal op welke kaarten er allemaal actief zijn voor de huidige speler
         loadSavedPreferences();
-        laatKaartenZien(player);
+        laatKaartenZien();
     }
 
     //bitmap geneuzel
@@ -111,22 +115,18 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public void laatKaartenZien (int player) {
-        for(int card=0; card<=9; card++) {
-            kaartZichtbaar(card);
-        }
-    }
-
-    public void kaartZichtbaar (int card) {
+    public void laatKaartenZien () {
 
         String PACKAGE_NAME = getApplicationContext().getPackageName();
-        int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card" + typeCard[card], null, null);
-        imageViewCard[card].setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId, 100, 100));
-        if (typeCard[card] > 0)
-            checkBoxCard[card].setVisibility(View.VISIBLE);
-        else {
-            checkBoxCard[card].setVisibility(View.INVISIBLE);
-            checkBoxCard[card].setChecked(false);
+        for (int card = 0; card <= 9; card++) {
+            int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card" + cardType[player][card], null, null);
+            imageViewCard[card].setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId, 100, 100));
+            if (cardType[player][card] > 0)
+                checkBoxCard[card].setVisibility(View.VISIBLE);
+            else {
+                checkBoxCard[card].setVisibility(View.INVISIBLE);
+                checkBoxCard[card].setChecked(false);
+            }
         }
     }
 
@@ -138,7 +138,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
             // tellen hoeveel er zijn gecheckt
             if (checkBoxCard[card].isChecked()) {
                 counter++;
-                cardList.add(typeCard[card]);
+                cardList.add(cardType[player][card]);
             }
         }
         //Bekijken welk soort setje is ingeleverd: (drie dezelfde? drie verschillende? fout?)
@@ -182,19 +182,19 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         //hierdoor veranderd het plaatje in een kruis en verdwijnt de checkbox onder het plaatje
         for(int card=0; card<=9; card++) {
             if (checkBoxCard[card].isChecked()) {
-                typeCard[card] = 0;
-                savePreferences("typeCard"+card, typeCard[card]);
+                cardType[player][card] = 0;
+                savePreferences("typeCard"+card, cardType[player][card]);
             }
         }
         //Log.i("typeCard1", Integer.toString(typeCard[0]));
-        laatKaartenZien(player);
+        laatKaartenZien();
     }
 
     private void loadSavedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
         for(int card=0; card<=9; card++) {
-            typeCard[card] = sharedPreferences.getInt("card"+card, 1);
+            cardType[player][card] = sharedPreferences.getInt("card"+card, 1);
         }
         armieCard = sharedPreferences.getInt("armieCard", 4);
     }
