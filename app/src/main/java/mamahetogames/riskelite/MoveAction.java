@@ -224,6 +224,10 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     public void calculateResult() {
         orderResult();
         lostA = 0;
