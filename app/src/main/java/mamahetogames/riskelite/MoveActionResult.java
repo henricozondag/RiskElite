@@ -35,7 +35,10 @@ public class MoveActionResult extends AppCompatActivity implements View.OnClickL
 
         buttonMovePhase2 = (Button) findViewById(R.id.buttonBackMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
+    }
 
+    @Override
+    public void onBackPressed() {
     }
 
     @Override
