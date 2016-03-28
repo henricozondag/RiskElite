@@ -29,6 +29,11 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
                 break;
             case R.id.buttonMovePhase1:
                 i = new Intent(this, MovePhase1.class);
+                // Bundle toevoegen aan startActivity zodat de MovePhase1 ook weet hoeveel legers er te plaatsen zijn.
+                Bundle b = new Bundle();
+                b.putInt("plaatsLegers", 3);
+                i.putExtras(b);
+                // Start andere scherm
                 startActivity(i);
                 break;
         }

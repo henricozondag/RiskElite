@@ -1,21 +1,29 @@
 package mamahetogames.riskelite;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Map;
+
 public class MovePhase1 extends AppCompatActivity implements View.OnClickListener {
 
+    Context context;
+    int armieCard;
     private int aantalLegers;
-
     TextView legerBijTeZetten;
+    Bitmap armyIcon;
+    Paint paint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +32,11 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
 
         legerBijTeZetten = (TextView) this.findViewById(R.id.legersBijTeZetten);
 
-        aantalLegers = 3;
-        legerBijTeZetten.setText("" + aantalLegers);
+
+        // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is het aantal legers dat we hebben.
+        Bundle b = getIntent().getExtras();
+        aantalLegers = b.getInt("plaatsLegers");
+        legerBijTeZetten.setText(Integer.toString(aantalLegers));
 
         Button buttonMovePhase2 =       (Button) findViewById(R.id.buttonMovePhase2);
         Button buttonPutArmy =          (Button) findViewById(R.id.buttonPutArmy);
@@ -43,7 +54,8 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
                 startActivity(i);
                 break;
             case R.id.buttonPutArmy:
-                legerBijZetten();
+                i = new Intent(this, MapScreen.class);
+                startActivity(i);
                 break;
 
         }
@@ -68,9 +80,17 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
                     legerBijZetten();
                     Log.i("klik locatie", "" + motionEvent.getX()+ "  " +  motionEvent.getY());
 
-                } else {
-                    legerBijZetten();
-                    Log.i("klik locatie", "" + motionEvent.getX()+ "  " +  motionEvent.getY());
+                }   else if (motionEvent.getY() > 0) {
+                        legerBijZetten();
+                        Log.i("klik locatie", "" + motionEvent.getX()+ "  " +  motionEvent.getY());
+                    }
+                    else if (motionEvent.getY() > 0) {
+                        legerBijZetten();
+                        Log.i("klik locatie", "" + motionEvent.getX()+ "  " +  motionEvent.getY());
+                    }
+                    else if (motionEvent.getY() > 0) {
+                        legerBijZetten();
+                        Log.i("klik locatie", "" + motionEvent.getX()+ "  " +  motionEvent.getY());
                     }
                 }
         return true;
