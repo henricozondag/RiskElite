@@ -36,7 +36,7 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is het aantal legers dat we hebben.
         Bundle b = getIntent().getExtras();
         aantalLegers = b.getInt("plaatsLegers");
-        legerBijTeZetten.setText("" + aantalLegers);
+        legerBijTeZetten.setText(Integer.toString(aantalLegers));
 
         Button buttonMovePhase2 =       (Button) findViewById(R.id.buttonMovePhase2);
         Button buttonPutArmy =          (Button) findViewById(R.id.buttonPutArmy);
