@@ -31,6 +31,8 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     Float nieuwFloatX = new Float(nieuwX);
     Float nieuwFloatY = new Float(nieuwY);
 
+    Rect ProvinciesLijst[] = new Rect[12];
+
     Rect Zeeland =         new Rect(8,    1139,   239,    1464);
     Rect Friesland =       new Rect(617,  154,    790,    436);
     Rect Groningen =       new Rect(825,  107,    1065,   289);
@@ -55,6 +57,19 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
+
+        ProvinciesLijst[0] = Zeeland;
+        ProvinciesLijst[1] = Friesland;
+        ProvinciesLijst[2] = Groningen;
+        ProvinciesLijst[3] = Drenthe;
+        ProvinciesLijst[4] = Flevoland;
+        ProvinciesLijst[5] = Overijssel;
+        ProvinciesLijst[6] = NoordHolland;
+        ProvinciesLijst[7] = Utrecht;
+        ProvinciesLijst[8] = Gelderland;
+        ProvinciesLijst[9] = Limburg;
+        ProvinciesLijst[10] = NoordBrabant;
+        ProvinciesLijst[11] = ZuidHolland;
 
         armyIcon = BitmapFactory.decodeResource(getResources(),R.mipmap.toy_soldier_clip_art_small);
         landKaart = BitmapFactory.decodeResource(getResources(), R.mipmap.provincieskaart);
@@ -114,12 +129,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 Canvas c = holder.lockCanvas();
                 //c.drawARGB(255,150,150,10);
                 c.drawBitmap(landKaart, 0, 0, null);
-
-                //if (Zeeland.contains(intX,intX) || NoordHolland.contains(intX,intX) || NoordBrabant.contains(intX,intX) || Gelderland.contains(intX,intX) || Flevoland.contains(intX,intX) ||
-                //        Utrecht.contains(intX,intX) || Friesland.contains(intX,intX) || Groningen.contains(intX,intX) || Drenthe.contains(intX,intX) ||
-                //        Overijssel.contains(intX,intX) || Limburg.contains(intX,intX) || ZuidHolland.contains(intX,intX)) {
-                    c.drawBitmap(armyIcon, floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), null);
-                //}
+                c.drawBitmap(armyIcon, floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), null);
                 holder.unlockCanvasAndPost(c);
 
 
@@ -163,63 +173,18 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
         Integer legerCoordinaten[] = new Integer[2];
 
-        if (Zeeland.contains(x, y) == true) {
-            legerCoordinaten[0] = Zeeland.centerX();
-            legerCoordinaten[1] = Zeeland.centerY();
-            Log.i("float", "zeeland");
+        for (int i = 0; i < ProvinciesLijst.length; i++ ) {
+            if (ProvinciesLijst[i].contains(x,y)){
+                legerCoordinaten[0] = ProvinciesLijst[i].centerX();
+                legerCoordinaten[1] = ProvinciesLijst[i].centerY();
+            }
         }
-        else if (ZuidHolland.contains(x, y) == true) {
-            legerCoordinaten[0] = ZuidHolland.centerX();
-            legerCoordinaten[1] = ZuidHolland.centerY();
-        }
-        else if (Limburg.contains(x, y) == true) {
-            legerCoordinaten[0] = Limburg.centerX();
-            legerCoordinaten[1] = Limburg.centerY();
-        }
-        else if (Drenthe.contains(x, y) == true) {
-            legerCoordinaten[0] = Drenthe.centerX();
-            legerCoordinaten[1] = Drenthe.centerY();
-        }
-        else if (Overijssel.contains(x, y) == true) {
-            legerCoordinaten[0] = Overijssel.centerX();
-            legerCoordinaten[1] = Overijssel.centerY();
-        }
-        else if (Groningen.contains(x, y) == true) {
-            legerCoordinaten[0] = Groningen.centerX();
-            legerCoordinaten[1] = Groningen.centerY();
-        }
-        else if (Friesland.contains(x, y) == true) {
-            legerCoordinaten[0] = Friesland.centerX();
-            legerCoordinaten[1] = Friesland.centerY();
-        }
-        else if (Flevoland.contains(x, y) == true) {
-            legerCoordinaten[0] = Flevoland.centerX();
-            legerCoordinaten[1] = Flevoland.centerY();
-        }
-        else if (Utrecht.contains(x, y) == true) {
-            legerCoordinaten[0] = Utrecht.centerX();
-            legerCoordinaten[1] = Utrecht.centerY();
-        }
-        else if (NoordHolland.contains(x, y) == true) {
-            legerCoordinaten[0] = NoordHolland.centerX();
-            legerCoordinaten[1] = NoordHolland.centerY();
-        }
-        else if (NoordBrabant.contains(x, y) == true) {
-            legerCoordinaten[0] = NoordBrabant.centerX();
-            legerCoordinaten[1] = NoordBrabant.centerY();
-        }
-        else if (Gelderland.contains(x, y) == true) {
-            legerCoordinaten[0] = Gelderland.centerX();
-            legerCoordinaten[1] = Gelderland.centerY();
-        }
-        else {
+        if (legerCoordinaten[0] == null) {
+            Log.i("niets"," lege coordinaten");
             legerCoordinaten[0] = 0;
             legerCoordinaten[1] = 0;
         }
-        //y = Integer.parseInt(String.valueOf(y));
-       // x = Integer.parseInt(String.valueOf(x));
-        //return (x);
         return legerCoordinaten;
-        }
+    }
 
     }
