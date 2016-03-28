@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Map;
+
 public class MovePhase1 extends AppCompatActivity implements View.OnClickListener {
 
     Context context;
@@ -52,7 +54,8 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
                 startActivity(i);
                 break;
             case R.id.buttonPutArmy:
-                legerBijZetten();
+                i = new Intent(this, MapScreen.class);
+                startActivity(i);
                 break;
 
         }
