@@ -36,7 +36,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
                 startActivity(i);
                 break;
             case R.id.buttonToGame:
-                i = new Intent(this, ToGame.class);
+                i = new Intent(this, StartGame.class);
                 startActivity(i);
                 break;
             case R.id.buttonMovePhase1:
