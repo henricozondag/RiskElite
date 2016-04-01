@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -31,9 +33,11 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     Float nieuwFloatX = new Float(nieuwX);
     Float nieuwFloatY = new Float(nieuwY);
 
+    Paint black, white;
+
     Rect ProvinciesLijst[] = new Rect[12];
 
-    Rect Zeeland =         new Rect(8,    1139,   239,    1464);
+    Rect Zeeland =         new Rect(8,   1139,    239,    1464);
     Rect Friesland =       new Rect(617,  154,    790,    436);
     Rect Groningen =       new Rect(825,  107,    1065,   289);
     Rect Drenthe =         new Rect(813,  313,    992,    576);
@@ -57,6 +61,15 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
+
+        Log.i("x size" + size.x ,"y size" + size.y);
+
+        black = new Paint();
+        black.setColor(Color.BLACK);
+        black.setTextSize(50);
+
+        white = new Paint();
+        white.setColor(Color.WHITE);
 
         ProvinciesLijst[0] = Zeeland;
         ProvinciesLijst[1] = Friesland;
@@ -127,9 +140,15 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     continue; // continue zorgt ervoor dat er opnieuw gecheckt wordt of er iets geldig is
                 }
                 Canvas c = holder.lockCanvas();
-                //c.drawARGB(255,150,150,10);
                 c.drawBitmap(landKaart, 0, 0, null);
-                c.drawBitmap(armyIcon, floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), null);
+                if (floatX != 0) {
+                    c.drawBitmap(armyIcon, floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), null);
+                    c.drawCircle(floatX - 25 ,floatY - 80, 30, black);
+                    c.drawCircle(floatX - 25 ,floatY - 80, 28, white);
+                    c.drawText("1", floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), black);
+                    c.drawText("1", floatX,  floatY, white);
+                }
+
                 holder.unlockCanvasAndPost(c);
 
 
