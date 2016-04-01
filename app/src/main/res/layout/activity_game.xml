@@ -21,17 +21,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="End Game"
-        android:id="@+id/buttonEndGame"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Pre Move"
         android:id="@+id/buttonPreMove"
-        android:layout_above="@+id/buttonEndGame"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="27dp" />
+        android:layout_marginBottom="27dp"
+        android:layout_centerVertical="true" />
 </RelativeLayout>

@@ -17,11 +17,8 @@
         </activity>
         <activity android:name=".Menu" />
         <activity android:name=".Settings" />
-        <activity android:name=".ToGame" />
-        <activity android:name=".SetupGame" />
         <activity android:name=".StartGame" />
         <activity android:name=".Game" />
-        <activity android:name=".EndGame" />
         <activity android:name=".HighScore" />
         <activity android:name=".PreMove" />
         <activity android:name=".EndMove" />
@@ -31,7 +28,7 @@
         <activity android:name=".PlayerDetails" />
         <activity android:name=".MoveAction" />
         <activity android:name=".MoveActionResult" />
-        <activity android:name=".MapScreen"></activity>
+        <activity android:name=".MapScreen" />
     </application>
 
 </manifest>

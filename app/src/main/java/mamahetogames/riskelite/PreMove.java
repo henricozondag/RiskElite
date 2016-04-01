@@ -13,8 +13,6 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_move);
 
-        Button buttonGame = (Button) findViewById(R.id.buttonGame);
-        buttonGame.setOnClickListener(this);
         Button buttonMovePhase1 = (Button) findViewById(R.id.buttonMovePhase1);
         buttonMovePhase1.setOnClickListener(this);
     }
@@ -23,10 +21,6 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
     public void onClick(View v) {
         Intent i;
         switch (v.getId()) {
-            case R.id.buttonGame:
-                i = new Intent(this, Game.class);
-                startActivity(i);
-                break;
             case R.id.buttonMovePhase1:
                 i = new Intent(this, MovePhase1.class);
                 // Bundle toevoegen aan startActivity zodat de MovePhase1 ook weet hoeveel legers er te plaatsen zijn.
