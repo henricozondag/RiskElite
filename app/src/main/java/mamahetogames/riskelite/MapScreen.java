@@ -37,24 +37,12 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
     Rect ProvinciesLijst[] = new Rect[12];
 
-    Rect Zeeland =         new Rect(8,   1139,    239,    1464);
-    Rect Friesland =       new Rect(617,  154,    790,    436);
-    Rect Groningen =       new Rect(825,  107,    1065,   289);
-    Rect Drenthe =         new Rect(813,  313,    992,    576);
-    Rect Flevoland =       new Rect(553,  523,    723,    764);
-    Rect Overijssel =      new Rect(784,  614,    1018,   825);
-    Rect NoordHolland =    new Rect(289,  409,    506,    811);
-    Rect Utrecht =         new Rect(430,  857,    594,    998);
-    Rect Gelderland =      new Rect(623,  846,    926,    1089);
-    Rect Limburg =         new Rect(652,  1262,   810,    1698);
-    Rect NoordBrabant =    new Rect(289,  1139,   651,    1408);
-    Rect ZuidHolland =     new Rect(169,  866,    409,    1115);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         v = new mapView(this);
         v.setOnTouchListener(this);
+
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -62,6 +50,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         screenWidth = size.x;
         screenHeight = size.y;
 
+        Log.i("" + ScaleY(1139),"" + ScaleX(8) );
         Log.i("x size" + size.x ,"y size" + size.y);
 
         black = new Paint();
@@ -70,6 +59,19 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
         white = new Paint();
         white.setColor(Color.WHITE);
+
+        Rect Zeeland =      new Rect(ScaleX(8),     ScaleY(1139),   ScaleX(239),    ScaleY(1464));
+        Rect Friesland =    new Rect(ScaleX(617),   ScaleY(154),    ScaleX(790),    ScaleY(436));
+        Rect Groningen =    new Rect(ScaleX(825),   ScaleY(107),    ScaleX(1065),   ScaleY(289));
+        Rect Drenthe =      new Rect(ScaleX(813),   ScaleY(313),    ScaleX(992),    ScaleY(576));
+        Rect Flevoland =    new Rect(ScaleX(553),   ScaleY(523),    ScaleX(723),    ScaleY(764));
+        Rect Overijssel =   new Rect(ScaleX(784),   ScaleY(614),    ScaleX(1018),   ScaleY(825));
+        Rect NoordHolland = new Rect(ScaleX(289),   ScaleY(409),    ScaleX(506),    ScaleY(811));
+        Rect Utrecht =      new Rect(ScaleX(430),   ScaleY(857),    ScaleX(594),    ScaleY(998));
+        Rect Gelderland =   new Rect(ScaleX(623),   ScaleY(846),    ScaleX(926),    ScaleY(1089));
+        Rect Limburg =      new Rect(ScaleX(652),   ScaleY(1262),   ScaleX(810),    ScaleY(1698));
+        Rect NoordBrabant = new Rect(ScaleX(289),   ScaleY(1139),   ScaleX(651),    ScaleY(1408));
+        Rect ZuidHolland =  new Rect(ScaleX(169),   ScaleY(866),    ScaleX(409),    ScaleY(1115));
 
         ProvinciesLijst[0] = Zeeland;
         ProvinciesLijst[1] = Friesland;
@@ -90,7 +92,6 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
         setContentView(v);
 
-
     }
 
     @Override
@@ -108,8 +109,8 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 Integer legerCoordinaten[] = zetLeger(intX, intY);
                 nieuwX =  legerCoordinaten[0];
                 nieuwY =  legerCoordinaten[1];
-                floatX = (float) nieuwX;
-                floatY = (float) nieuwY;
+                floatX = (float) ScaleX(nieuwX);
+                floatY = (float) ScaleY(nieuwY);
                 Log.i("nieuwX "+ nieuwX,"nieuw Y" + nieuwY);
                 break;
 
@@ -143,8 +144,8 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 c.drawBitmap(landKaart, 0, 0, null);
                 if (floatX != 0) {
                     c.drawBitmap(armyIcon, floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), null);
-                    c.drawCircle(floatX - 25 ,floatY - 80, 30, black);
-                    c.drawCircle(floatX - 25 ,floatY - 80, 28, white);
+                    c.drawCircle(floatX - ScaleY(25) ,floatY - ScaleY(80), ScaleY(30), black);
+                    c.drawCircle(floatX - ScaleX(25) ,floatY - ScaleX(80), ScaleX(28), white);
                     c.drawText("1", floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), black);
                     c.drawText("1", floatX,  floatY, white);
                 }
@@ -204,6 +205,18 @@ public class MapScreen extends Activity implements View.OnTouchListener {
             legerCoordinaten[1] = 0;
         }
         return legerCoordinaten;
+    }
+
+    public Integer ScaleX (int integer) {
+        int result;
+        result = (int) Math.round((double) integer/1080 * screenWidth);
+        return result;
+    }
+
+    public Integer ScaleY (int integer) {
+        int result;
+        result = (int) Math.round((double) integer/1776 * screenHeight);
+        return result;
     }
 
     }
