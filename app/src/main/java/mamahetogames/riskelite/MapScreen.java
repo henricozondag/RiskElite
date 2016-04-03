@@ -26,16 +26,13 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     mapView v;
     Bitmap armyIcon;
     Bitmap landKaart;
-    float x, y, floatX,floatY;
-    int intY, intX, nieuwX, nieuwY;
-    int screenWidth, screenHeight;
-    boolean provincieGeklikt;
-    Float nieuwFloatX = new Float(nieuwX);
-    Float nieuwFloatY = new Float(nieuwY);
+    float floatX,floatY;
+    int nieuwX, nieuwY, screenWidth, screenHeight, aantalLegers;
 
     Paint black, white;
 
-    Rect ProvinciesLijst[] = new Rect[12];
+    Rect[] ProvinciesLijst = new Rect[12];
+    Bitmap[] BezettingLegers = new Bitmap[12];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +40,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         v = new mapView(this);
         v.setOnTouchListener(this);
 
+        aantalLegers = 3;
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -90,6 +88,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         landKaart = BitmapFactory.decodeResource(getResources(), R.mipmap.provincieskaart);
         armyIcon = Bitmap.createScaledBitmap(armyIcon, screenWidth / 15 , screenHeight / 15, false);
         landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
+
+        //Bitmap BezetZeeland = new Bitmap();
+
+
         setContentView(v);
 
     }
@@ -109,8 +111,8 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 Integer legerCoordinaten[] = zetLeger(intX, intY);
                 nieuwX =  legerCoordinaten[0];
                 nieuwY =  legerCoordinaten[1];
-                floatX = (float) ScaleX(nieuwX);
-                floatY = (float) ScaleY(nieuwY);
+                floatX = (float) nieuwX;
+                floatY = (float) nieuwY;
                 Log.i("nieuwX "+ nieuwX,"nieuw Y" + nieuwY);
                 break;
 
@@ -142,12 +144,19 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 }
                 Canvas c = holder.lockCanvas();
                 c.drawBitmap(landKaart, 0, 0, null);
+                c.drawRect(ScaleX(5), ScaleY(5), ScaleX(430), ScaleY(100), black);
+                c.drawRect(ScaleX(15), ScaleY(15), ScaleX(420), ScaleY(90), white);
+                c.drawText("Legers zetten: ", ScaleX(25), ScaleY(70), black);
+                c.drawText( "" + aantalLegers , ScaleX(350) , ScaleY(70), black);
+
+                // Als er in een provincievlak gedrukt is, zet daar legertje neer!
                 if (floatX != 0) {
+
                     c.drawBitmap(armyIcon, floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), null);
-                    c.drawCircle(floatX - ScaleY(25) ,floatY - ScaleY(80), ScaleY(30), black);
-                    c.drawCircle(floatX - ScaleX(25) ,floatY - ScaleX(80), ScaleX(28), white);
+                    c.drawCircle(floatX - ScaleY(25), floatY - ScaleY(80), ScaleY(30), black);
+                    c.drawCircle(floatX - ScaleX(25), floatY - ScaleX(80), ScaleX(28), white);
                     c.drawText("1", floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), black);
-                    c.drawText("1", floatX,  floatY, white);
+                    c.drawText("1", floatX, floatY, white);
                 }
 
                 holder.unlockCanvasAndPost(c);
@@ -197,6 +206,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
             if (ProvinciesLijst[i].contains(x,y)){
                 legerCoordinaten[0] = ProvinciesLijst[i].centerX();
                 legerCoordinaten[1] = ProvinciesLijst[i].centerY();
+                aantalLegers--;
             }
         }
         if (legerCoordinaten[0] == null) {
