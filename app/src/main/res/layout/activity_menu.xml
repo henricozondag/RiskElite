@@ -42,4 +42,13 @@
         android:id="@+id/buttonToGame"
         android:layout_above="@+id/buttonSettings"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MovePhase1"
+        android:id="@+id/buttonMovePhase1"
+        android:layout_marginBottom="71dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/buttonSettings" />
 </RelativeLayout>

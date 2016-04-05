@@ -21,17 +21,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game"
-        android:id="@+id/buttonGame"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="MovePhase1"
         android:id="@+id/buttonMovePhase1"
         android:layout_marginTop="38dp"
-        android:layout_below="@+id/buttonGame"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 </RelativeLayout>
