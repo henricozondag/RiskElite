@@ -247,4 +247,36 @@
         android:layout_alignEnd="@+id/checkBoxCard10"
         android:visibility="invisible" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="add Card"
+        android:id="@+id/buttonAddRandomCard"
+        android:layout_below="@+id/textViewAantalLegers"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewCardType1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textViewPlaatsenLegers"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewCardType2"
+        android:layout_alignBottom="@+id/buttonMovePhase2"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewCardType3"
+        android:layout_above="@+id/imageViewCardType2"
+        android:layout_alignStart="@+id/imageViewCardType1"
+        android:visibility="invisible" />
+
 </RelativeLayout>

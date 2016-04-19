@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.database.sqlite.SQLiteDatabase;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -11,6 +12,17 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite2",MODE_PRIVATE,null);
+        //mydatabase.execSQL("create table if not exists games(naam string, tijd string, level int");
+        mydatabase.execSQL("create table if not exists cards(key INTEGER PRIMARY KEY, game_id int, player int, type int, number int)");
+        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (1,1,1,1,0)");
+        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (2,1,1,2,0)");
+        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (3,1,1,3,0)");
+        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (4,1,2,1,0)");
+        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (5,1,2,2,0)");
+        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (6,1,2,3,0)");
+        //mydatabase.execSQL("create table if not exists players(naam string, tijd string, level int)");
 
         // Wacht 2500ms en ga door naar menu
         Handler handler = new Handler();
@@ -22,4 +34,4 @@ public class SplashScreen extends AppCompatActivity {
             }
         }, 25);
     }
-        }
+}
