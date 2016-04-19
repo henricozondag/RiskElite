@@ -13,16 +13,16 @@ public class MovePhase3 extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_phase3);
 
-        Button buttonEndMove = (Button) findViewById(R.id.buttonEndMove);
-        buttonEndMove.setOnClickListener(this);
+        Button buttonPreMove = (Button) findViewById(R.id.buttonPreMove);
+        buttonPreMove.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         Intent i;
         switch (v.getId()) {
-            case R.id.buttonEndMove:
-                i = new Intent(this, EndMove.class);
+            case R.id.buttonPreMove:
+                i = new Intent(this, PreMove.class);
                 startActivity(i);
                 break;
         }

@@ -21,7 +21,6 @@
         <activity android:name=".Game" />
         <activity android:name=".HighScore" />
         <activity android:name=".PreMove" />
-        <activity android:name=".EndMove" />
         <activity android:name=".MovePhase3" />
         <activity android:name=".MovePhase2" />
         <activity android:name=".MovePhase1" />
