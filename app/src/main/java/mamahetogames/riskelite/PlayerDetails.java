@@ -78,19 +78,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         imageViewCard[9] = (ImageView)findViewById(R.id.imageViewCard10);
         checkBoxCard[9] = (CheckBox)findViewById(R.id.checkBoxCard10);
 
-        //onzichtbare imageviews waarmee ik vergelijk (voor het verwijderen)
-        imageViewCardType1 = (ImageView)findViewById(R.id.imageViewCardType1);
-        imageViewCardType2 = (ImageView)findViewById(R.id.imageViewCardType2);
-        imageViewCardType3 = (ImageView)findViewById(R.id.imageViewCardType3);
-
-        String PACKAGE_NAME = getApplicationContext().getPackageName();
-        int imgId1 = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card1", null, null);
-        imageViewCardType1.setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId1, 100, 100));
-        int imgId2 = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card2", null, null);
-        imageViewCardType2.setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId2, 100, 100));
-        int imgId3 = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card3", null, null);
-        imageViewCardType3.setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId3, 100, 100));
-
         textViewAantalLegers = (TextView)findViewById(R.id.textViewAantalLegers);
         textViewPlaatsenLegers =(TextView)findViewById(R.id.textViewPlaatsenLegers);
 
@@ -157,9 +144,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         // for loop zo vaak als er kaarten zijn
         for (int n = 1; n <= playerCards.getCount(); n++) {
-            Log.i("type", Integer.toString(playerCards.getInt(0)));
-            Log.i("number", Integer.toString(playerCards.getInt(1)));
-            Log.i("showcard", Integer.toString(showCard));
 
             //per type loop totdat alle kaarten er staan
             for (int cardNr = 1; cardNr <= playerCards.getInt(1); cardNr++) {
@@ -173,44 +157,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
             }
             playerCards.moveToNext();
         }
-    }
-
-    // methode om 2 bitmaps te vergelijken met elkaar. Gebruik ik om te kijken welke kaarten ik uit de database moet verwijderen
-    boolean SameAs(Bitmap A, Bitmap B) {
-
-        // Different types of image
-        if(A.getConfig() != B.getConfig())
-            return false;
-
-        // Different sizes
-        if (A.getWidth() != B.getWidth())
-            return false;
-        if (A.getHeight() != B.getHeight())
-            return false;
-
-        // Allocate arrays - OK because at worst we have 3 bytes + Alpha (?)
-        int w = A.getWidth();
-        int h = A.getHeight();
-
-        int[] argbA = new int[w*h];
-        int[] argbB = new int[w*h];
-
-        A.getPixels(argbA, 0, w, 0, 0, w, h);
-        B.getPixels(argbB, 0, w, 0, 0, w, h);
-
-        // Alpha channel special check
-        if (A.getConfig() == Bitmap.Config.ALPHA_8) {
-            // in this case we have to manually compare the alpha channel as the rest is garbage.
-            final int length = w * h;
-            for (int i = 0 ; i < length ; i++) {
-                if ((argbA[i] & 0xFF000000) != (argbB[i] & 0xFF000000)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        return Arrays.equals(argbA, argbB);
     }
 
     public void ruilKaarten() {
@@ -266,32 +212,9 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite2", MODE_PRIVATE, null);
         //achterhalen welke kaarten aangevinkt waren en daarvan de status op 0 zetten
         //hierdoor veranderd het plaatje in een kruis en verdwijnt de checkbox onder het plaatje
-        for(int card=0; card<=9; card++) {
-            if (checkBoxCard[card].isChecked()) {
-                Bitmap bitmap = ((BitmapDrawable)imageViewCard[card].getDrawable()).getBitmap();
-                Bitmap bitmap1 = ((BitmapDrawable)imageViewCardType1.getDrawable()).getBitmap();
-                Bitmap bitmap2 = ((BitmapDrawable)imageViewCardType2.getDrawable()).getBitmap();
 
-                if (SameAs(bitmap, bitmap1) == true) {
-                    Log.i("bitmap", "1");
-                    Cursor cardType = mydatabase.rawQuery("Select number from cards where player = " + player + " and type = 1", null);
-                    cardType.moveToFirst();
-                    int number = cardType.getInt(0) - 1;
-                    mydatabase.execSQL("update cards set number = " + number + " where player = " + player + " and type = 1");
-                } else if (SameAs(bitmap, bitmap2) == true) {
-                    Log.i("bitmap", "2");
-                    Cursor cardType = mydatabase.rawQuery("Select number from cards where player = " + player + " and type = 2", null);
-                    cardType.moveToFirst();
-                    int number = cardType.getInt(0) - 1;
-                    mydatabase.execSQL("update cards set number = " + number + " where player = " + player + " and type = 2");
-                } else {
-                    Log.i("bitmap", "3");
-                    Cursor cardType = mydatabase.rawQuery("Select number from cards where player = " + player + " and type = 3", null);
-                    cardType.moveToFirst();
-                    int number = cardType.getInt(0) - 1;
-                    mydatabase.execSQL("update cards set number = " + number + " where player = " + player + " and type = 3");
-                }
-            }
+        for(int i=0; i<=2; i++) {
+            mydatabase.execSQL("update cards set number = number -1 where player = " + player + " and type = " + cardList.get(i));
         }
         laatKaartenZien();
         mydatabase.close();
@@ -318,17 +241,8 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite2", MODE_PRIVATE, null);
         int type = ran.nextInt(3) + 1;
 
-        Log.i("type", Integer.toString(type));
-
-        Cursor playerCards = mydatabase.rawQuery("Select number from cards where player = " + player + " and type = " + type, null);
-        playerCards.moveToFirst();
-        int number = playerCards.getInt(0);
-        Log.i("number", Integer.toString(number));
-        number++;
-        Log.i("number++", Integer.toString(number));
-
-        // insert voorbeeldje
-        mydatabase.execSQL("update cards set number = " + number + " where player = " + player + " and type = " + type);
+        // update het type kaart met +1
+        mydatabase.execSQL("update cards set number = number + 1 where player = " + player + " and type = " + type);
         mydatabase.close();
         laatKaartenZien();
     }
@@ -345,7 +259,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
                 ruilKaarten();
                 break;
             case R.id.buttonPlaatsenLegers:
-                //finish();   Dit is volgens mij niet nodig nu
                 i = new Intent(this, MovePhase1.class);
                 i.putExtra("plaatsLegers", plaatsLegers);
                 startActivity(i);

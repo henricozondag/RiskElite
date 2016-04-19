@@ -14,7 +14,14 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite2",MODE_PRIVATE,null);
-        //mydatabase.execSQL("create table if not exists games(naam string, tijd string, level int");
+        mydatabase.execSQL("create table if not exists game(key INTEGER PRIMARY KEY, game_id int");
+
+        mydatabase.execSQL("create table if not exists settings(key INTEGER PRIMARY KEY, game_id int, name string, value string");
+        mydatabase.execSQL("insert or replace into settings (key, game_id, name, value) values (1,1,'armyCard','4')");
+
+        //mydatabase.execSQL("create table if not exists countries (key INTEGER PRIMARY KEY, game_id int, country string, owner string, armies int");
+
+
         mydatabase.execSQL("create table if not exists cards(key INTEGER PRIMARY KEY, game_id int, player int, type int, number int)");
         mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (1,1,1,1,0)");
         mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (2,1,1,2,0)");
