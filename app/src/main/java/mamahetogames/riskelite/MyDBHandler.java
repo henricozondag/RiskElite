@@ -65,7 +65,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         // Voor elke speler, drie kaarten inserten/updaten naar aantal:0
         for (int i=0; i < players; i++) {
             for (int j=0; j < 3; j++) {
-                String query = "insert or replace into cards (key, game_id, player, type, number) values (" + key + ",1," + player + ",1,0)";
+                int type = j+1;
+                String query = "insert or replace into cards (key, game_id, player, type, number) values (" + key + ",1," + player + "," + type + ",0)";
                 db.execSQL(query);
                 key++;
             }
