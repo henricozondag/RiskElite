@@ -13,6 +13,11 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        //Per speler kaarten initialiseren
+        MyDBHandler db = new MyDBHandler(this);
+        db.initCards(2);
+
+        //
         Button buttonPreMove = (Button) findViewById(R.id.buttonPreMove);
         buttonPreMove.setOnClickListener(this);
     }

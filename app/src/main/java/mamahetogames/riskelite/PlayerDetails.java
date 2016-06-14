@@ -211,27 +211,20 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
     public void removeCards() {
 
-        //SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite3", MODE_PRIVATE, null);
         MyDBHandler db = new MyDBHandler(this);
-        //achterhalen welke kaarten aangevinkt waren en daarvan de status op 0 zetten
-        //hierdoor veranderd het plaatje in een kruis en verdwijnt de checkbox onder het plaatje
 
         db.removeCards(player, cardList);
         laatKaartenZien(player);
     }
 
     private void loadSavedPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        /*for(int card=0; card<=9; card++) {
-            cardType[player][card] = sharedPreferences.getInt("card"+card, 1);
-        }*/
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         armieCard = sharedPreferences.getInt("armieCard", 4);
     }
 
     private void savePreferences(String key, int value) {
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
         editor.apply();

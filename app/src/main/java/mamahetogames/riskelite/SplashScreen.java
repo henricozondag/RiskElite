@@ -23,9 +23,9 @@ public class SplashScreen extends AppCompatActivity {
         //mydatabase.execSQL("create table if not exists countries (key INTEGER PRIMARY KEY, game_id int, country string, owner string, armies int");
 
         //mydatabase.execSQL("create table if not exists cards(key INTEGER PRIMARY KEY, game_id int, player int, type int, number int)");
-        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (1,1,1,1,1)");
-        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (2,1,1,2,2)");
-        mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (3,1,1,3,1)");
+        //mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (1,1,1,1,0)");
+        //mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (2,1,1,2,0)");
+        //mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (3,1,1,3,0)");
         ////mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (4,1,2,1,0)");
         ////mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (5,1,2,2,0)");
         ////mydatabase.execSQL("insert or replace into cards (key, game_id, player, type, number) values (6,1,2,3,0)");

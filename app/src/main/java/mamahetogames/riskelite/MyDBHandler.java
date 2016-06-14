@@ -57,28 +57,22 @@ public class MyDBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createData(int game_id) {
-    }
+    public void initCards(int players) {
+        int key = 1;
+        int player = 1;
+        SQLiteDatabase db = this.getWritableDatabase();
 
-//    public String getCards() {
-//
-//        String antwoord = "";
-//
-//        String selectQuery = "SELECT  1 FROM DUAL";
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        Cursor cursor = db.rawQuery(selectQuery, null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                antwoord = cursor.getString(1);
-//            } while (cursor.moveToNext());
-//        }
-//
-//        return antwoord;
-//
-//    }
-//
+        // Voor elke speler, drie kaarten inserten/updaten naar aantal:0
+        for (int i=0; i < players; i++) {
+            for (int j=0; j < 3; j++) {
+                String query = "insert or replace into cards (key, game_id, player, type, number) values (" + key + ",1," + player + ",1,0)";
+                db.execSQL(query);
+                key++;
+            }
+            player++;
+        }
+        db.close();
+    }
 
     public Cursor getCards(int player) {
         String selectQuery = "Select type, number from cards where player = " + player;
@@ -88,42 +82,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         return playerCards;
     }
-
-    /*
-    public void addProduct(Product product) {
-
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_PRODUCTNAME, product.getProductName());
-        values.put(COLUMN_QUANTITY, product.getQuantity());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.insert(TABLE_PRODUCTS, null, values);
-        db.close();
-    }
-
-    public Product findProduct(String productname) {
-        String query = "Select * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_PRODUCTNAME + " =  \"" + productname + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        Product product = new Product();
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            product.setID(Integer.parseInt(cursor.getString(0)));
-            product.setProductName(cursor.getString(1));
-            product.setQuantity(Integer.parseInt(cursor.getString(2)));
-            cursor.close();
-        } else {
-            product = null;
-        }
-        db.close();
-        return product;
-    }
-*/
 
     public void addRandomCard(int player) {
         int type = ran.nextInt(3) + 1;
@@ -143,41 +101,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         for (int i = 0; i <= 2; i++) {
             String query = "update cards set number = number -1 where player = " + player + " and type = " + cardList.get(i);
             db.execSQL(query);
-        }
-        db.close();
-    }
-
-    public Cursor testKlas (int player) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor hop = db.rawQuery("Select type, number from cards where player = " + player, null);
-        return hop;
-    }
-
-    public void playerCards (int player, String PACKAGE_NAME) {
-
-        PlayerDetails playDetails = new PlayerDetails();
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        int showCard = 0;
-        //String PACKAGE_NAME = getApplicationContext().getPackageName();
-
-        Cursor playerCards = db.rawQuery("Select type, number from cards where player = " + player, null);
-        playerCards.moveToFirst();
-
-        // for loop zo vaak als er kaarten zijn
-        for (int n = 1; n <= playerCards.getCount(); n++) {
-
-            //per type loop totdat alle kaarten er staan
-            for (int cardNr = 1; cardNr <= playerCards.getInt(1); cardNr++) {
-
-                //type van de kaart ophalen
-                playDetails.cardType[player][showCard] = playerCards.getInt(0);
-                int imgId = playDetails.getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card" + playDetails.cardType[player][showCard], null, null);
-                playDetails.imageViewCard[showCard].setImageBitmap(playDetails.decodeSampledBitmapFromResource(playDetails.getResources(), imgId, 100, 100));
-                playDetails.checkBoxCard[showCard].setVisibility(View.VISIBLE);
-                showCard++;
-            }
-            playerCards.moveToNext();
         }
         db.close();
     }
