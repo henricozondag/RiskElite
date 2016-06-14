@@ -14,7 +14,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite4",MODE_PRIVATE,null);
+        //SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite4",MODE_PRIVATE,null);
         //mydatabase.execSQL("create table if not exists game(key INTEGER PRIMARY KEY, game_id int");
 
         //mydatabase.execSQL("create table if not exists settings(key INTEGER PRIMARY KEY, game_id int, name string, value string");

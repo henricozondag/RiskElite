@@ -16,6 +16,7 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
         //Per speler kaarten initialiseren
         MyDBHandler db = new MyDBHandler(this);
         db.initCards(2);
+        db.newGame("TEST2");
 
         //
         Button buttonPreMove = (Button) findViewById(R.id.buttonPreMove);
