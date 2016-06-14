@@ -60,23 +60,33 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void createData(int game_id) {
     }
 
-    public String getCards() {
+//    public String getCards() {
+//
+//        String antwoord = "";
+//
+//        String selectQuery = "SELECT  1 FROM DUAL";
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.rawQuery(selectQuery, null);
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                antwoord = cursor.getString(1);
+//            } while (cursor.moveToNext());
+//        }
+//
+//        return antwoord;
+//
+//    }
+//
 
-        String antwoord = "";
-
-        String selectQuery = "SELECT  1 FROM DUAL";
+    public Cursor getCards(int player) {
+        String selectQuery = "Select type, number from cards where player = " + player;
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor playerCards = db.rawQuery(selectQuery, null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                antwoord = cursor.getString(1);
-            } while (cursor.moveToNext());
-        }
-
-        return antwoord;
-
+        return playerCards;
     }
 
     /*
@@ -117,8 +127,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public void addRandomCard(int player) {
         int type = ran.nextInt(3) + 1;
-        //String query = "update " + TABLE_CARDS + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_PLAYER + " = " + player + " and " + COLUMN_TYPE + " = " + type;
-        String query = "insert or replace into " + TABLE_CARDS + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_PLAYER + " = " + player + " and " + COLUMN_TYPE + " = " + type;
+        String query = "update " + TABLE_CARDS + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_PLAYER + " = " + player + " and " + COLUMN_TYPE + " = " + type;
+        //String query = "insert or replace into " + TABLE_CARDS + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_PLAYER + " = " + player + " and " + COLUMN_TYPE + " = " + type;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
