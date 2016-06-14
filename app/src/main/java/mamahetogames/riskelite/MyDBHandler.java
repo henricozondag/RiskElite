@@ -32,13 +32,15 @@ public class MyDBHandler extends SQLiteOpenHelper {
     */
     Random ran = new Random();
 
-    public MyDBHandler(Context context, String name,
-                       SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+    public MyDBHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        Log.i("ONCREATE?", "Bovendesupert");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.i("ONCREATE?", "in oncreate");
+
         String CREATE_CARDS_TABLE = "CREATE TABLE " +
                 TABLE_CARDS + "("
                 + COLUMN_KEY + " INTEGER PRIMARY KEY," + COLUMN_GAME_ID
@@ -46,8 +48,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 + " INTEGER," + COLUMN_NUMBER
                 + " INTEGER" + ")";
         db.execSQL(CREATE_CARDS_TABLE);
-
-        Log.i("ONCREATE?", "JA");
     }
 
     @Override
@@ -58,6 +58,25 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     public void createData(int game_id) {
+    }
+
+    public String getCards() {
+
+        String antwoord = "";
+
+        String selectQuery = "SELECT  1 FROM DUAL";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                antwoord = cursor.getString(1);
+            } while (cursor.moveToNext());
+        }
+
+        return antwoord;
+
     }
 
     /*

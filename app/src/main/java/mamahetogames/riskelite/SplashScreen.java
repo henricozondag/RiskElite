@@ -14,10 +14,10 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        Log.i("ONCREATE?", "Voor aanroep in splash");
 
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-        dbHandler.createData(2);
-        Log.i("ONCREATE?", "JaA");
+        MyDBHandler db = new MyDBHandler(this);
+
         ////SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite2",MODE_PRIVATE,null);
         //mydatabase.execSQL("create table if not exists game(key INTEGER PRIMARY KEY, game_id int");
 

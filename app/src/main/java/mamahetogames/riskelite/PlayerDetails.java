@@ -38,6 +38,8 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     public int[][] cardType = new int[3][10];
     ImageView imageViewCardType1, imageViewCardType2, imageViewCardType3;
 
+    MyDBHandler db = new MyDBHandler(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         Bundle b = getIntent().getExtras();
         player = b.getInt("player");
         status = b.getString("status");
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
         buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
@@ -138,12 +139,12 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
        int showCard = 0;
         //open database
        //SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite3.db", MODE_PRIVATE, null);
-        //MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-        //dbHandler.playerCards(player, PACKAGE_NAME);
+        //MyDBHandler db = new MyDBHandler(this, null, null, 1);
+        //db.playerCards(player, PACKAGE_NAME);
         // Ophalen van het type kaart en de hoeveelheid van dat type
        String PACKAGE_NAME = getApplicationContext().getPackageName();
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-        Cursor playerCards = dbHandler.testKlas(player);
+        MyDBHandler db = new MyDBHandler(this);
+        Cursor playerCards = db.testKlas(player);
        //Cursor playerCards = mydatabase.rawQuery("Select type, number from cards where player = " + player, null);
        playerCards.moveToFirst();
 
@@ -176,27 +177,31 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         //showcard geeft aan welke van de 10 kaarten gevuld is
         int showCard = 0;
         //open database
-        SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite3", MODE_PRIVATE, null);
+        //SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite3", MODE_PRIVATE, null);
         // Ophalen van het type kaart en de hoeveelheid van dat type
         String PACKAGE_NAME = getApplicationContext().getPackageName();
-        Cursor playerCards = mydatabase.rawQuery("Select type, number from cards where player = " + player, null);
-        playerCards.moveToFirst();
 
-        // for loop zo vaak als er kaarten zijn
-        for (int n = 1; n <= playerCards.getCount(); n++) {
+        Log.i("ONCREATE?","En..... ");
+        Log.i("ONCREATE?","Cards: " + db.getCards());
 
-            //per type loop totdat alle kaarten er staan
-            for (int cardNr = 1; cardNr <= playerCards.getInt(1); cardNr++) {
-
-                //type van de kaart ophalen
-                cardType[player][showCard] = playerCards.getInt(0);
-                int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card" + cardType[player][showCard], null, null);
-                imageViewCard[showCard].setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId, 100, 100));
-                checkBoxCard[showCard].setVisibility(View.VISIBLE);
-                showCard++;
-            }
-            playerCards.moveToNext();
-        }
+//        Cursor playerCards = db.rawquery("Select type, number from cards where player = " + player, null);
+//        playerCards.moveToFirst();
+//
+//        // for loop zo vaak als er kaarten zijn
+//        for (int n = 1; n <= playerCards.getCount(); n++) {
+//
+//            //per type loop totdat alle kaarten er staan
+//            for (int cardNr = 1; cardNr <= playerCards.getInt(1); cardNr++) {
+//
+//                //type van de kaart ophalen
+//                cardType[player][showCard] = playerCards.getInt(0);
+//                int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card" + cardType[player][showCard], null, null);
+//                imageViewCard[showCard].setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId, 100, 100));
+//                checkBoxCard[showCard].setVisibility(View.VISIBLE);
+//                showCard++;
+//            }
+//            playerCards.moveToNext();
+//        }
         //mydatabase.close();
     }
 
@@ -251,11 +256,11 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     public void removeCards() {
 
         //SQLiteDatabase mydatabase = openOrCreateDatabase("riskElite3", MODE_PRIVATE, null);
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        MyDBHandler db = new MyDBHandler(this);
         //achterhalen welke kaarten aangevinkt waren en daarvan de status op 0 zetten
         //hierdoor veranderd het plaatje in een kruis en verdwijnt de checkbox onder het plaatje
 
-        dbHandler.removeCards(player, cardList);
+        db.removeCards(player, cardList);
         laatKaartenZien();
     }
 
@@ -277,8 +282,8 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     }
 
     public void addRandomCard(int player) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-        dbHandler.addRandomCard(player);
+        MyDBHandler db = new MyDBHandler(this);
+        db.addRandomCard(player);
         laatKaartenZien();
     }
 
