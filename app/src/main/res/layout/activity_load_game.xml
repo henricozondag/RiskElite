@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="mamahetogames.riskelite.LoadGame">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Load Game"
+        android:id="@+id/textViewLoadGame"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="1"
+        android:id="@+id/textViewGame1"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="2"
+        android:id="@+id/textViewGame2"
+        android:visibility="invisible"
+        android:layout_below="@+id/textViewGame1"
+        android:layout_alignStart="@+id/textViewGame1"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="3"
+        android:id="@+id/textViewGame3"
+        android:layout_below="@+id/textViewGame2"
+        android:layout_alignStart="@+id/textViewGame2"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="4"
+        android:id="@+id/textViewGame4"
+        android:layout_below="@+id/textViewGame3"
+        android:layout_alignStart="@+id/textViewGame3"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="5"
+        android:id="@+id/textViewGame5"
+        android:layout_below="@+id/textViewGame4"
+        android:layout_alignStart="@+id/textViewGame4"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="6"
+        android:id="@+id/textViewGame6"
+        android:layout_below="@+id/textViewGame5"
+        android:layout_alignStart="@+id/textViewGame5"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="7"
+        android:id="@+id/textViewGame7"
+        android:visibility="invisible"
+        android:layout_below="@+id/textViewGame6"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="8"
+        android:id="@+id/textViewGame8"
+        android:visibility="invisible"
+        android:layout_below="@+id/textViewGame7"
+        android:layout_alignStart="@+id/textViewGame7"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="9"
+        android:id="@+id/textViewGame9"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/textViewGame8"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="10"
+        android:id="@+id/textViewGame10"
+        android:visibility="invisible"
+        android:layout_below="@+id/textViewGame9"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Game"
+        android:id="@+id/buttonLoadGame"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame1"
+        android:layout_alignTop="@+id/textViewGame1"
+        android:layout_toStartOf="@+id/textViewGame10"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame2"
+        android:layout_alignTop="@+id/textViewGame2"
+        android:layout_toStartOf="@+id/textViewGame10"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame3"
+        android:layout_below="@+id/checkBoxGame2"
+        android:layout_alignEnd="@+id/checkBoxGame2"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame4"
+        android:layout_below="@+id/checkBoxGame3"
+        android:layout_alignEnd="@+id/checkBoxGame3"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame5"
+        android:layout_below="@+id/checkBoxGame4"
+        android:layout_toStartOf="@+id/textViewGame10"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame6"
+        android:layout_below="@+id/checkBoxGame5"
+        android:layout_alignEnd="@+id/checkBoxGame5"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame7"
+        android:layout_below="@+id/checkBoxGame6"
+        android:layout_toStartOf="@+id/textViewGame10"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame8"
+        android:layout_below="@+id/checkBoxGame7"
+        android:layout_toStartOf="@+id/textViewGame10"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame9"
+        android:layout_below="@+id/checkBoxGame8"
+        android:layout_alignEnd="@+id/checkBoxGame8"
+        android:checked="false"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxGame10"
+        android:checked="false"
+        android:layout_alignTop="@+id/textViewGame10"
+        android:layout_alignStart="@+id/checkBoxGame9"
+        android:visibility="invisible" />
+
+    <ListView android:id="@+id/listView1" android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewLoadGame"
+        android:layout_alignBottom="@+id/checkBoxGame9" />
+
+    <requestFocus />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="...."
+        android:id="@+id/textViewLaadGame"
+        android:layout_toEndOf="@+id/checkBoxGame10"
+        android:layout_above="@+id/buttonLoadGame" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Te laden game:"
+        android:id="@+id/textView14"
+        android:layout_above="@+id/buttonLoadGame"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

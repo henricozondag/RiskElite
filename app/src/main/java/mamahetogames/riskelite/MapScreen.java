@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.Objects;
@@ -108,12 +109,17 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         switch (me.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.i("klik locatie", "" + me.getX() + "  " + me.getY());
-                Integer legerCoordinaten[] = zetLeger(intX, intY);
-                nieuwX =  legerCoordinaten[0];
-                nieuwY =  legerCoordinaten[1];
-                floatX = (float) nieuwX;
-                floatY = (float) nieuwY;
-                Log.i("nieuwX "+ nieuwX,"nieuw Y" + nieuwY);
+                if (aantalLegers > 0) {
+                    Integer legerCoordinaten[] = zetLeger(intX, intY);
+                    nieuwX = legerCoordinaten[0];
+                    nieuwY = legerCoordinaten[1];
+                    floatX = (float) nieuwX;
+                    floatY = (float) nieuwY;
+                    Log.i("nieuwX " + nieuwX, "nieuw Y" + nieuwY);
+                }
+                else
+                    Toast.makeText(getApplicationContext(),
+                            "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
                 break;
 
             //case MotionEvent.ACTION_UP:
@@ -202,19 +208,19 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
         Integer legerCoordinaten[] = new Integer[2];
 
-        for (int i = 0; i < ProvinciesLijst.length; i++ ) {
-            if (ProvinciesLijst[i].contains(x,y)){
-                legerCoordinaten[0] = ProvinciesLijst[i].centerX();
-                legerCoordinaten[1] = ProvinciesLijst[i].centerY();
-                aantalLegers--;
+            for (int i = 0; i < ProvinciesLijst.length; i++) {
+                if (ProvinciesLijst[i].contains(x, y)) {
+                    legerCoordinaten[0] = ProvinciesLijst[i].centerX();
+                    legerCoordinaten[1] = ProvinciesLijst[i].centerY();
+                    aantalLegers--;
+                }
             }
-        }
-        if (legerCoordinaten[0] == null) {
-            Log.i("niets"," lege coordinaten");
-            legerCoordinaten[0] = 0;
-            legerCoordinaten[1] = 0;
-        }
-        return legerCoordinaten;
+            if (legerCoordinaten[0] == null) {
+                Log.i("niets", " lege coordinaten");
+                legerCoordinaten[0] = 0;
+                legerCoordinaten[1] = 0;
+            }
+            return legerCoordinaten;
     }
 
     public Integer ScaleX (int integer) {

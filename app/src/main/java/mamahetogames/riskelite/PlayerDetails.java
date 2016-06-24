@@ -27,7 +27,7 @@ import java.util.Random;
 public class PlayerDetails extends AppCompatActivity implements View.OnClickListener{
 
     public ArrayList<Integer> cardList = new ArrayList<>();
-    int player = 1, armieCard, plaatsLegers;
+    int player = 1, armieCard, plaatsLegers,gameID, currentPlayerId;
     // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten
     String status;
     Random ran = new Random();
@@ -36,7 +36,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     ImageView[] imageViewCard = new ImageView[10];
     CheckBox[] checkBoxCard = new CheckBox[10];
     public int[][] cardType = new int[3][10];
-    ImageView imageViewCardType1, imageViewCardType2, imageViewCardType3;
 
     MyDBHandler db = new MyDBHandler(this);
 
@@ -44,6 +43,9 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_details);
+
+        loadSavedPreferences();
+        currentPlayerId = db.currentPlayer(gameID);
 
         // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is de speler waarvoor je de kaarten bekijkt.
         Bundle b = getIntent().getExtras();
@@ -85,7 +87,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         textViewPlaatsenLegers =(TextView)findViewById(R.id.textViewPlaatsenLegers);
 
         // haal op welke kaarten er allemaal actief zijn voor de huidige speler
-        loadSavedPreferences();
         laatKaartenZien(player);
     }
 
@@ -141,7 +142,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         // Ophalen van het type kaart en de hoeveelheid van dat type
         String PACKAGE_NAME = getApplicationContext().getPackageName();
 
-        Cursor playerCards = db.getCards(player);
+        Cursor playerCards = db.getCards(currentPlayerId, gameID);
         playerCards.moveToFirst();
 
         // for loop zo vaak als er kaarten zijn
@@ -221,6 +222,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         armieCard = sharedPreferences.getInt("armieCard", 4);
+        gameID = sharedPreferences.getInt("gameID", 0);
     }
 
     private void savePreferences(String key, int value) {
