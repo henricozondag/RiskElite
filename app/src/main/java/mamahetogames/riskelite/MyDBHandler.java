@@ -193,6 +193,32 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return worlds;
     }
 
+    public int numberOfPlayers(int game_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query;
+
+        query = "select max(" + COLUMN_GAMEPLAYER + ") from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id;
+
+        Cursor numberOfPlayers = db.rawQuery(query, null);
+
+        if (numberOfPlayers.moveToFirst())
+        {
+            numberOfPlayers1 = numberOfPlayers.getInt(0);
+        }
+        return numberOfPlayers1;
+    }
+
+    public void setPlayerName(int game_id, int gameplayer, String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query;
+
+        query = "update " + TABLE_PLAYER + " set " + COLUMN_NAME + " = '" + name + "' where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_GAMEPLAYER + " = " + gameplayer;
+        Log.i("setPlayerName",query);
+
+        db.execSQL(query);
+        db.close();
+    }
+
     public String currentPlayer(int game_id, String type){
         SQLiteDatabase db = this.getWritableDatabase();
         String query;

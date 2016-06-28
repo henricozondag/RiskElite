@@ -43,7 +43,8 @@
         android:id="@+id/textViewSpeler6"
         android:layout_below="@+id/textViewSpeler5"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="31dp" />
+        android:layout_marginTop="31dp"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,7 +54,8 @@
         android:id="@+id/textViewSpeler5"
         android:layout_below="@+id/textViewSpeler4"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="29dp" />
+        android:layout_marginTop="29dp"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,7 +65,8 @@
         android:id="@+id/textViewSpeler4"
         android:layout_below="@+id/textViewSpeler3"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -73,7 +76,8 @@
         android:id="@+id/textViewSpeler3"
         android:layout_below="@+id/textViewSpeler2"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -93,7 +97,7 @@
         android:id="@+id/textViewSpeler1"
         android:layout_marginTop="63dp"
         android:layout_below="@+id/textViewGame"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -101,7 +105,8 @@
         android:id="@+id/editTextSpeler6"
         android:layout_alignBottom="@+id/textViewSpeler6"
         android:layout_alignStart="@+id/buttonPreMove"
-        android:layout_alignEnd="@+id/textViewGameId" />
+        android:layout_alignEnd="@+id/textViewGameId"
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -109,7 +114,8 @@
         android:id="@+id/editTextSpeler5"
         android:layout_alignBottom="@+id/textViewSpeler5"
         android:layout_alignStart="@+id/editTextSpeler6"
-        android:layout_alignEnd="@+id/editTextSpeler6" />
+        android:layout_alignEnd="@+id/editTextSpeler6"
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -117,7 +123,8 @@
         android:id="@+id/editTextSpeler4"
         android:layout_alignBottom="@+id/textViewSpeler4"
         android:layout_alignStart="@+id/editTextSpeler3"
-        android:layout_alignEnd="@+id/editTextSpeler2" />
+        android:layout_alignEnd="@+id/editTextSpeler2"
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -125,7 +132,8 @@
         android:id="@+id/editTextSpeler3"
         android:layout_alignBottom="@+id/textViewSpeler3"
         android:layout_alignEnd="@+id/editTextSpeler2"
-        android:layout_alignStart="@+id/editTextSpeler5" />
+        android:layout_alignStart="@+id/editTextSpeler5"
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -143,33 +151,5 @@
         android:layout_alignStart="@+id/editTextSpeler2"
         android:layout_alignEnd="@+id/editTextSpeler2"
         android:layout_marginTop="50dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="De startspeler is:"
-        android:id="@+id/textView17"
-        android:layout_below="@+id/textViewSpeler6"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textViewStartspeler"
-        android:layout_below="@+id/textView17"
-        android:layout_alignEnd="@+id/textViewGame"
-        android:layout_above="@+id/buttonPreMove"
-        android:layout_alignStart="@+id/textViewGame" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bepaal start speler"
-        android:id="@+id/buttonStartSpeler"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

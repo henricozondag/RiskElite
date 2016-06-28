@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 public class Game extends AppCompatActivity  implements View.OnClickListener {
 
-    TextView textViewGameId, textViewStartspeler;
-    Button   buttonPreMove, buttonStartSpeler;
-    EditText editTextSpeler1, editTextSpeler2, editTextSpeler3, editTextSpeler4, editTextSpeler5, editTextSpeler6;
-    int gameID;
+    TextView textViewGameId;
+    int gameID,numberOfPlayers;
     MyDBHandler db = new MyDBHandler(this);
+    EditText[] editTextSpeler = new EditText[6];
+    TextView[] textViewSpeler = new TextView[6];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +32,32 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
         //invulschermen voor spelernamen maken
 
         // eerst bepalen hoeveel spelers er zijn en dan afhankelijk daarvan het aantal velden laten zien. (dus een array nog van maken dat is makkelijker)
+        editTextSpeler[0] = (EditText) this.findViewById(R.id.editTextSpeler1);
+        editTextSpeler[1] = (EditText) this.findViewById(R.id.editTextSpeler2);
+        editTextSpeler[2] = (EditText) this.findViewById(R.id.editTextSpeler3);
+        editTextSpeler[3] = (EditText) this.findViewById(R.id.editTextSpeler4);
+        editTextSpeler[4] = (EditText) this.findViewById(R.id.editTextSpeler5);
+        editTextSpeler[5] = (EditText) this.findViewById(R.id.editTextSpeler6);
+        textViewSpeler[0] = (TextView) this.findViewById(R.id.textViewSpeler1);
+        textViewSpeler[1] = (TextView) this.findViewById(R.id.textViewSpeler2);
+        textViewSpeler[2] = (TextView) this.findViewById(R.id.textViewSpeler3);
+        textViewSpeler[3] = (TextView) this.findViewById(R.id.textViewSpeler4);
+        textViewSpeler[4] = (TextView) this.findViewById(R.id.textViewSpeler5);
+        textViewSpeler[5] = (TextView) this.findViewById(R.id.textViewSpeler6);
 
-        editTextSpeler1 = (EditText) this.findViewById(R.id.editTextSpeler1);
-        editTextSpeler2 = (EditText) this.findViewById(R.id.editTextSpeler2);
-        editTextSpeler3 = (EditText) this.findViewById(R.id.editTextSpeler3);
-        editTextSpeler4 = (EditText) this.findViewById(R.id.editTextSpeler4);
-        editTextSpeler5 = (EditText) this.findViewById(R.id.editTextSpeler5);
-        editTextSpeler6 = (EditText) this.findViewById(R.id.editTextSpeler6);
+        editTextSpeler[0].requestFocus();
 
-        //buttons
+        // Alleen spelers tonen die in het spel zitten
+        numberOfPlayers = db.numberOfPlayers(gameID);
+
+        for (int i=2; i < numberOfPlayers; i++) {
+            editTextSpeler[i].setVisibility(View.VISIBLE);
+            textViewSpeler[i].setVisibility(View.VISIBLE);
+        }
+
+        //button Start spel
         Button buttonPreMove = (Button) findViewById(R.id.buttonPreMove);
         buttonPreMove.setOnClickListener(this);
-        buttonPreMove.setVisibility(View.INVISIBLE);
-
-        Button buttonStartSpeler = (Button) findViewById(R.id.buttonStartSpeler);
-        buttonStartSpeler.setOnClickListener(this);
-        buttonStartSpeler.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -56,16 +66,14 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.buttonPreMove:
                 i = new Intent(this, PreMove.class);
-                startActivity(i);
-                break;
-            case R.id.buttonStartSpeler:
-                //startspeler bepalen
+
+                //Opslaan namen van spelers
+                for (int j=0; j < numberOfPlayers; j++) {
+                    db.setPlayerName(gameID,j+1,editTextSpeler[j].getText().toString());
+                }
+
                 db.startPlayer(gameID);
-                //spelernaam ophalen van speler die aan de beurt is
-                String player = db.currentPlayer(gameID, "name");
-                textViewStartspeler.setText((player));
-                buttonPreMove.setVisibility(View.VISIBLE);
-                buttonStartSpeler.setVisibility(View.INVISIBLE);
+                startActivity(i);
                 break;
         }
     }
