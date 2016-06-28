@@ -277,20 +277,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     }
 
-//    public int nextPlayer(int game_id) {
-//        int gameplayer = select gameplayer from player where game_id = game_id and status = active;
-//        int nrPlayers = select max(gameplayer) from player where game_id = game_id;
-//        if (gameplayer = nrPlayers) {
-//            gameplayer = 1;
-//            else gameplayer = gameplayer + 1;
-//        }
-//        int nextPlayer = select player_id from player where game_id = game_id and gameplayer = gameplayer;
-//        update player set status = resting where game_id = game_id and status = active;
-//        update player set status = active where game_id = game_id and gameplayer = gameplayer;
-//
-//        return player_id;
-//    }
-
     public int newGame(String name, String world) {
         SQLiteDatabase db = this.getWritableDatabase();
 
