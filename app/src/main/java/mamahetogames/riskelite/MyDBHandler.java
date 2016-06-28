@@ -164,6 +164,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         //db.initCards(Integer.valueOf(players));
     }
 
+    public void loadGame (int gameID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "update " + TABLE_GAME + " set " + COLUMN_STATUS + " = 'ACTIVE' where " + COLUMN_ID + " = " + gameID;
+        Log.i("loadgame", query);
+        db.execSQL(query);
+    }
+
     public void startPlayer(int gameID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
