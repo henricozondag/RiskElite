@@ -36,7 +36,7 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         gameID = db.getActiveGameID();
 
         //speler_id ophalen die aan de beurt is
-        int activePlayer = db.currentPlayer(gameID);
+        int activePlayer = Integer.parseInt(db.currentPlayer(gameID,"ID"));
 
         // aantal te plaatsen legers ophalen
         aantalLegers = db.armyToPlace(activePlayer);

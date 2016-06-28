@@ -24,10 +24,7 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         gameID = db.getActiveGameID();
 
         //speler_id ophalen die aan de beurt is
-        int activePlayer = db.currentPlayer(gameID);
-
-        //spelernaam ophalen van speler die aan de beurt is
-        String player = db.nameCurrentPlayer(activePlayer);
+        String player = db.currentPlayer(gameID,"name");
 
         Button buttonMovePhase1 = (Button) findViewById(R.id.buttonMovePhase1);
         buttonMovePhase1.setOnClickListener(this);

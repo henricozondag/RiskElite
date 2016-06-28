@@ -306,19 +306,20 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return armyToPlace;
     };
 
-    public void updateArmyToPlace(int number, int player_id) {
+    public void updateArmyToPlace(int player_id, int number) {
 
-        String query = "update " + TABLE_PLAYER + " set " + COLUMN_PLACE_ARMIES + " = " + COLUMN_PLACE_ARMIES + " + " + number;
+        String query = "update " + TABLE_PLAYER + " set " + COLUMN_PLACE_ARMIES + " = " + COLUMN_PLACE_ARMIES + " + " + number + " where " + COLUMN_PLAYER_ID + " = " + player_id;
 
         SQLiteDatabase db = this.getWritableDatabase();
+        Log.i("updateArmyToPlace",query);
 
         db.execSQL(query);
         db.close();
     };
 
-    public void addRandomCard(int player) {
+    public void addRandomCard(int player_id) {
         int type = ran.nextInt(3) + 1;
-        String query = "update " + TABLE_CARD + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_GAMEPLAYER + " = " + player + " and " + COLUMN_TYPE + " = " + type;
+        String query = "update " + TABLE_CARD + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_PLAYER_ID + " = " + player_id + " and " + COLUMN_TYPE + " = " + type;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -341,12 +342,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return parameter_value;
     }
 
-    public void removeCards(int player, ArrayList<Integer> cardList) {
+    public void removeCards(int player_id, ArrayList<Integer> cardList) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         for (int i = 0; i <= 2; i++) {
-            String query = "update " + TABLE_CARD + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " -1 where " + COLUMN_GAMEPLAYER + " = " + player + " and " + COLUMN_TYPE + " = " + cardList.get(i);
+            String query = "update " + TABLE_CARD + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " -1 where " + COLUMN_PLAYER_ID + " = " + player_id + " and " + COLUMN_TYPE + " = " + cardList.get(i);
             db.execSQL(query);
         }
         db.close();
@@ -367,29 +368,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return mCursor;
     }
 
-    //games voor de zoekfunctie
-    public Cursor fetchGamesByName(String inputText) throws SQLException {
-        Cursor mCursor = null;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        if (inputText == null  ||  inputText.length () == 0)  {
-            mCursor = db.query(TABLE_GAME, new String[] {COLUMN_ID,
-                            COLUMN_NAME, COLUMN_STATUS},
-                    null, null, null, null, null);
-
-        }
-        else {
-            mCursor = db.query(TABLE_GAME, new String[] {COLUMN_ID,
-                            COLUMN_NAME, COLUMN_STATUS},
-                    COLUMN_NAME + " like '%" + inputText + "%'", null,
-                    null, null, null, null);
-        }
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-
-    }
 
     // te gebruiken bij het aanklikken van het land wat aangevallen wordt.
     // Bij true: Aanval kan doorgaan.

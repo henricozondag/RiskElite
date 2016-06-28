@@ -121,11 +121,6 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-        dataAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-            public Cursor runQuery(CharSequence constraint) {
-                return db.fetchGamesByName(constraint.toString());
-            }
-        });
     }
 
     private void savePreferences(String key, int value) {

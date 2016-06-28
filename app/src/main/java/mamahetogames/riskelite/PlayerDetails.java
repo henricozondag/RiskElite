@@ -212,7 +212,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         db.removeCards(player, cardList);
         laatKaartenZien(player);
     }
-
+// Nog omzetten naar player_id
     public void addRandomCard(int player) {
         MyDBHandler db = new MyDBHandler(this);
         db.addRandomCard(player);
