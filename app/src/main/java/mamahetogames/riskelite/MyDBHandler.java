@@ -161,7 +161,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         }
 
         //Per speler kaarten initialiseren *** Of helemaal hier opnemen
-        db.initCards(Integer.valueOf(players));
+        //db.initCards(Integer.valueOf(players));
     }
 
     public void startPlayer(int gameID) {
