@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
 public class MovePhase3 extends AppCompatActivity implements View.OnClickListener{
+
+    MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,10 @@ public class MovePhase3 extends AppCompatActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.buttonPreMove:
                 i = new Intent(this, PreMove.class);
+
+                //Volgende speler de beurt geven
+                db.nextPlayer(db.getActiveGameID());
+
                 startActivity(i);
                 break;
         }

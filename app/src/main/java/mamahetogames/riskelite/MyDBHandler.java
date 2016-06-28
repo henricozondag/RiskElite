@@ -226,6 +226,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (type == "name") {
             query = "select " + COLUMN_NAME + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
         }
+        else if (type == "gameplayer") {
+            query = "select " + COLUMN_GAMEPLAYER + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
+        }
         else
             query = "select " + COLUMN_ID + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
 
@@ -238,7 +241,34 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return currentPlayer1;
     }
 
-//
+
+    public void nextPlayer(int game_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int gamePlayer = Integer.parseInt(currentPlayer(game_id,"gameplayer"));
+        int numberOfPlayers = numberOfPlayers(game_id);
+        int nextGamePlayer;
+
+        // Huidige speler resting maken
+        String query = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'resting' where " + COLUMN_STATUS + " != 'resting' and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("GameplayerResting",query);
+        db.execSQL(query);
+
+        // Volgende speler bepalen
+        if (gamePlayer == numberOfPlayers) {
+            nextGamePlayer = 1;
+        }
+        else
+            nextGamePlayer = gamePlayer + 1;
+        ;
+
+        // Volgende speler actief maken
+        String query2 = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'ACTIVE' where " + COLUMN_GAMEPLAYER + " = " + nextGamePlayer + " and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("GameplayerActive",query2);
+        db.execSQL(query2);
+
+    }
+
 //    public int nextPlayer(int game_id) {
 //        int gameplayer = select gameplayer from player where game_id = game_id and status = active;
 //        int nrPlayers = select max(gameplayer) from player where game_id = game_id;
@@ -320,8 +350,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "select " + COLUMN_PLACE_ARMIES + " from " + TABLE_PLAYER + " where " + COLUMN_PLAYER_ID + " = " + player_id;
-        Log.i("getMaxGameID", query);
+        String query = "select " + COLUMN_PLACE_ARMIES + " from " + TABLE_PLAYER + " where " + COLUMN_ID + " = " + player_id;
+        Log.i("placearmies", query);
         Cursor army = db.rawQuery(query, null);
 
         if (army.moveToFirst())
