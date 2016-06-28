@@ -169,7 +169,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String query = "select count(" + COLUMN_NAME + ") from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + gameID;
         Log.i("numberofplayers", query);
-        Cursor numberOfPlayers = db.rawQuery(query, null);
+        Cursor numberOfPlayers = db.rawQuery(query, null);//test
 
         if (numberOfPlayers.moveToFirst())
         {
