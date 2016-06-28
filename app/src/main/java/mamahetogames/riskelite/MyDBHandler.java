@@ -44,8 +44,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_COUNTRY_CONTINENT = "country_continent";
 
     Random ran = new Random();
-    int currentPlayer1, gameID, armyToPlace, numberOfPlayers1;
-    String parameter_value, nameCurrentPlayer1;
+    int gameID, armyToPlace, numberOfPlayers1;
+    String parameter_value, currentPlayer1;
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -193,32 +193,23 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return worlds;
     }
 
-    public int currentPlayer(int game_id){   //***MEEGEVEN OF JE NUMMER OF NAAM TERUG WILT KRIJGEN
+    public String currentPlayer(int game_id, String type){
         SQLiteDatabase db = this.getWritableDatabase();
+        String query;
 
-        String query = "select " + COLUMN_ID + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
+        if (type == "name") {
+            query = "select " + COLUMN_NAME + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
+        }
+        else
+            query = "select " + COLUMN_ID + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
+
         Cursor currentPlayer = db.rawQuery(query, null);
-
-        String currentPlayer2 = db.rawQuery(query,null);
 
         if (currentPlayer.moveToFirst())
         {
-            currentPlayer1 = currentPlayer.getInt(0);
+            currentPlayer1 = currentPlayer.getString(0);
         }
         return currentPlayer1;
-    }
-
-    public String nameCurrentPlayer(int player_id){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        String query = "select " + COLUMN_NAME + " from " + TABLE_PLAYER + " where " + COLUMN_ID + " = " + player_id;
-        Cursor nameCurrentPlayer = db.rawQuery(query, null);
-
-        if (nameCurrentPlayer.moveToFirst())
-        {
-            nameCurrentPlayer1 = nameCurrentPlayer.getString(0);
-        }
-        return nameCurrentPlayer1;
     }
 
 //
