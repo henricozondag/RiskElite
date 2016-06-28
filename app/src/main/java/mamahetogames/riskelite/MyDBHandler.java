@@ -159,6 +159,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
             db.execSQL(query);
             Log.i("insertaantalplayers", query);
         }
+
+        //Per speler kaarten initialiseren *** Of helemaal hier opnemen
+        db.initCards(Integer.valueOf(players));
     }
 
     public void startPlayer(int gameID) {
@@ -190,11 +193,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return worlds;
     }
 
-    public int currentPlayer(int game_id){
+    public int currentPlayer(int game_id){   //***MEEGEVEN OF JE NUMMER OF NAAM TERUG WILT KRIJGEN
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "select " + COLUMN_ID + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
         Cursor currentPlayer = db.rawQuery(query, null);
+
+        String currentPlayer2 = db.rawQuery(query,null);
 
         if (currentPlayer.moveToFirst())
         {

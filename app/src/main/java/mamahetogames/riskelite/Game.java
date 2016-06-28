@@ -26,9 +26,6 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
         //actieve game ophalen
         gameID = db.getActiveGameID();
 
-        //Per speler kaarten initialiseren
-        db.initCards(2);
-
         textViewGameId = (TextView) this.findViewById(R.id.textViewGameId);
         textViewGameId.setText(String.valueOf(gameID));
 
