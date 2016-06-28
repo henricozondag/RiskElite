@@ -38,7 +38,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_details);
 
-        currentPlayerId = db.currentPlayer(gameID);
+        currentPlayerId = Integer.parseInt(db.currentPlayer(gameID,"ID"));
         gameID = db.getActiveGameID();
 
         // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is de speler waarvoor je de kaarten bekijkt.
@@ -136,7 +136,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         // Ophalen van het type kaart en de hoeveelheid van dat type
         String PACKAGE_NAME = getApplicationContext().getPackageName();
 
-        Cursor playerCards = db.getCards(currentPlayerId, gameID);
+        Cursor playerCards = db.getCards(currentPlayerId);
         playerCards.moveToFirst();
 
         // for loop zo vaak als er kaarten zijn

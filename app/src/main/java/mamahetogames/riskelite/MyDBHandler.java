@@ -241,7 +241,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(query);
 
         //haal het gameID op
-        int gameID = getGameID(name);
+        int gameID = getActiveGameID();
 
         //Stop alle bij de wereld horende landen in een cursor
         String query2 = "select " + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_CONTINENT + " from " + TABLE_WORLD + " where " + COLUMN_NAME + " = '" + world +  "'";
@@ -267,20 +267,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-    public int getGameID(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        String query = "select max( " + COLUMN_ID + " ) from " + TABLE_GAME + " where " + COLUMN_NAME + " = '" + name + "'";
-        Log.i("getGameID", query);
-        Cursor game_key = db.rawQuery(query, null);
-
-        if (game_key.moveToFirst())
-        {
-            gameID = game_key.getInt(0);
-        }
-        return gameID;
-    }
-
     public int getActiveGameID() {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -295,9 +281,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return gameID;
     }
 
-    // hier moet nog een aanpassing komen omdat we de kaarten ophalen adv het player_id ipv player. Dus moet nog een methode tussen gezet worden.
-    public Cursor getCards(int player_id, int game_id) {
-        String selectQuery = "Select " + COLUMN_TYPE + " , " + COLUMN_NUMBER + " from " + TABLE_CARD + " where " + COLUMN_PLAYER_ID + " = " + player_id + "and " + COLUMN_GAME_ID + " = " + game_id;
+    public Cursor getCards(int player_id) {
+        String selectQuery = "Select " + COLUMN_TYPE + " , " + COLUMN_NUMBER + " from " + TABLE_CARD + " where " + COLUMN_PLAYER_ID + " = " + player_id;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor playerCards = db.rawQuery(selectQuery, null);
