@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 public class PreMove extends AppCompatActivity  implements View.OnClickListener {
 
-    TextView textViewGameKey;
+    TextView textViewGameKey, textViewCurrentPlayer;
     int gameID;
-
+    MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,18 +21,22 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         setContentView(R.layout.activity_pre_move);
 
         //actieve game ophalen
-        loadSavedPreferences();
+        gameID = db.getActiveGameID();
+
+        //speler_id ophalen die aan de beurt is
+        int activePlayer = db.currentPlayer(gameID);
+
+        //spelernaam ophalen van speler die aan de beurt is
+        String player = db.nameCurrentPlayer(activePlayer);
 
         Button buttonMovePhase1 = (Button) findViewById(R.id.buttonMovePhase1);
         buttonMovePhase1.setOnClickListener(this);
 
         textViewGameKey = (TextView) this.findViewById(R.id.textViewGameKey);
         textViewGameKey.setText(String.valueOf(gameID));
-    }
 
-    private void loadSavedPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        gameID = sharedPreferences.getInt("gameID", 0);
+        textViewCurrentPlayer = (TextView) this.findViewById(R.id.textViewCurrentPlayer);
+        textViewCurrentPlayer.setText(player);
     }
 
     @Override
@@ -41,14 +45,9 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.buttonMovePhase1:
                 i = new Intent(this, MovePhase1.class);
-                // Bundle toevoegen aan startActivity zodat de MovePhase1 ook weet hoeveel legers er te plaatsen zijn.
-                Bundle b = new Bundle();
-                b.putInt("plaatsLegers", 3);
-                i.putExtras(b);
                 // Start andere scherm
                 startActivity(i);
                 break;
         }
     }
-
 }

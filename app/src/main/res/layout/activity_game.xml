@@ -21,11 +21,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pre Move"
+        android:text="Start Spel"
         android:id="@+id/buttonPreMove"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="27dp"
-        android:layout_centerVertical="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,4 +34,140 @@
         android:id="@+id/textViewGameId"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Speler 6:"
+        android:id="@+id/textViewSpeler6"
+        android:layout_below="@+id/textViewSpeler5"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="31dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Speler 5:"
+        android:id="@+id/textViewSpeler5"
+        android:layout_below="@+id/textViewSpeler4"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Speler 4:"
+        android:id="@+id/textViewSpeler4"
+        android:layout_below="@+id/textViewSpeler3"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Speler 3:"
+        android:id="@+id/textViewSpeler3"
+        android:layout_below="@+id/textViewSpeler2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Speler 2:"
+        android:id="@+id/textViewSpeler2"
+        android:layout_below="@+id/textViewSpeler1"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="31dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Speler 1:"
+        android:id="@+id/textViewSpeler1"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSpeler6"
+        android:layout_alignBottom="@+id/textViewSpeler6"
+        android:layout_alignStart="@+id/buttonPreMove"
+        android:layout_alignEnd="@+id/textViewGameId" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSpeler5"
+        android:layout_alignBottom="@+id/textViewSpeler5"
+        android:layout_alignStart="@+id/editTextSpeler6"
+        android:layout_alignEnd="@+id/editTextSpeler6" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSpeler4"
+        android:layout_alignBottom="@+id/textViewSpeler4"
+        android:layout_alignStart="@+id/editTextSpeler3"
+        android:layout_alignEnd="@+id/editTextSpeler2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSpeler3"
+        android:layout_alignBottom="@+id/textViewSpeler3"
+        android:layout_alignEnd="@+id/editTextSpeler2"
+        android:layout_alignStart="@+id/editTextSpeler5" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSpeler2"
+        android:layout_alignBottom="@+id/textViewSpeler2"
+        android:layout_alignEnd="@+id/textViewGameId"
+        android:layout_alignStart="@+id/editTextSpeler5" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSpeler1"
+        android:layout_alignBottom="@+id/textViewSpeler1"
+        android:layout_alignStart="@+id/editTextSpeler2"
+        android:layout_alignEnd="@+id/editTextSpeler2"
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="De startspeler is:"
+        android:id="@+id/textView17"
+        android:layout_below="@+id/textViewSpeler6"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/textViewStartspeler"
+        android:layout_above="@+id/buttonPreMove"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bepaal start speler"
+        android:id="@+id/buttonStartSpeler"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

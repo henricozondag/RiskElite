@@ -20,7 +20,6 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
 
     MyDBHandler db = new MyDBHandler(this);
     EditText editTextGameName;
-    int gameID;
     private Spinner spinnerLegers, spinnerPlayers, spinnerWorld;
 
     @Override
@@ -33,6 +32,7 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
         Button buttonGame = (Button) findViewById(R.id.buttonGame);
         buttonGame.setOnClickListener(this);
 
+        // Vul deze spinner een aantal opties
         spinnerLegers = (Spinner) findViewById(R.id.spinnerLegers);
         List<String> list = new ArrayList<String>();
         list.add("4");
@@ -41,6 +41,7 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
         list.add("10");
         list.add("12");
 
+        // Vul deze spinner een aantal opties
         spinnerPlayers = (Spinner) findViewById(R.id.spinnerPlayers);
         List<String> list2 = new ArrayList<String>();
         list2.add("2");
@@ -49,9 +50,8 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
         list2.add("5");
         list2.add("6");
 
+        // Vul deze spinner met al de beschikbare werelden
         spinnerWorld = (Spinner) findViewById(R.id.spinnerWorld);
-        //List<String> list3 = new ArrayList<String>();
-
         Cursor c = db.getWorlds();
         ArrayList<String> list3 = new ArrayList<String>();
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -78,14 +78,6 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
         spinnerLegers.setAdapter(dataAdapter);
         spinnerPlayers.setAdapter(dataAdapter2);
         spinnerWorld.setAdapter(dataAdapter3);
-
-    }
-
-    private void savePreferences(String key, int value) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
     }
 
     @Override

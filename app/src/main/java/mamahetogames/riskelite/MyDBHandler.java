@@ -27,11 +27,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_STATUS = "status";
 
     public static final String TABLE_PLAYER = "player";
+    public static final String COLUMN_PLACE_ARMIES = "placearmies";
 
     public static final String TABLE_COUNTRY = "country";
     public static final String COLUMN_PLAYER_ID = "player_id";
     public static final String COLUMN_CONTINENT = "continent";
     public static final String COLUMN_WORLD = "world";
+
     public static final String TABLE_SETTING = "setting";
     public static final String COLUMN_PARAMETER_NM = "parameter_nm";
     public static final String COLUMN_PARAMETER_VALUE = "parameter_value";
@@ -42,7 +44,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_COUNTRY_CONTINENT = "country_continent";
 
     Random ran = new Random();
-    int currentPlayer1, gameKey;
+    int currentPlayer1, gameID, armyToPlace, numberOfPlayers1;
+    String parameter_value, nameCurrentPlayer1;
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,7 +71,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 TABLE_PLAYER + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_NAME
                 + " TEXT," + COLUMN_GAME_ID + " INTEGER," + COLUMN_GAMEPLAYER
-                + " INTEGER," + COLUMN_STATUS + " TEXT" + ")";
+                + " INTEGER," + COLUMN_STATUS + " TEXT," + COLUMN_PLACE_ARMIES + " INTEGER" + ")";
         db.execSQL(CREATE_PLAYER_TABLE);
 
         String CREATE_SETTING_TABLE = "CREATE TABLE " +
@@ -143,7 +146,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public void startGame (String name, String armyCards, String players, String world) {
         //insert nieuwe game
-       int gameID = newGame(name,world);
+        int gameID = newGame(name,world);
 
         //insert het aantal cards per kaartruil
         setCardArmy(armyCards,gameID);
@@ -156,6 +159,25 @@ public class MyDBHandler extends SQLiteOpenHelper {
             db.execSQL(query);
             Log.i("insertaantalplayers", query);
         }
+    }
+
+    public void startPlayer(int gameID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select count(" + COLUMN_NAME + ") from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + gameID;
+        Log.i("numberofplayers", query);
+        Cursor numberOfPlayers = db.rawQuery(query, null);
+
+        if (numberOfPlayers.moveToFirst())
+        {
+            numberOfPlayers1 = numberOfPlayers.getInt(0);
+        }
+
+        int startPlayer =  ran.nextInt(numberOfPlayers1) + 1;
+
+        String query2 = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'ACTIVE' where " + COLUMN_GAMEPLAYER + " = " + startPlayer + " and " + COLUMN_GAME_ID + " = " + gameID;
+        Log.i("updatestartplayer", query2);
+        db.execSQL(query2);
     }
 
     public Cursor getWorlds () {
@@ -171,7 +193,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public int currentPlayer(int game_id){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "select " + COLUMN_PLAYER_ID + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = active";
+        String query = "select " + COLUMN_ID + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_STATUS + " = 'ACTIVE'";
         Cursor currentPlayer = db.rawQuery(query, null);
 
         if (currentPlayer.moveToFirst())
@@ -180,6 +202,20 @@ public class MyDBHandler extends SQLiteOpenHelper {
         }
         return currentPlayer1;
     }
+
+    public String nameCurrentPlayer(int player_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select " + COLUMN_NAME + " from " + TABLE_PLAYER + " where " + COLUMN_ID + " = " + player_id;
+        Cursor nameCurrentPlayer = db.rawQuery(query, null);
+
+        if (nameCurrentPlayer.moveToFirst())
+        {
+            nameCurrentPlayer1 = nameCurrentPlayer.getString(0);
+        }
+        return nameCurrentPlayer1;
+    }
+
 //
 //    public int nextPlayer(int game_id) {
 //        int gameplayer = select gameplayer from player where game_id = game_id and status = active;
@@ -198,19 +234,25 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public int newGame(String name, String world) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        //zet alle actieve games naar pause
+        String query4 = "update " + TABLE_GAME + " set " + COLUMN_STATUS + " = 'PAUSE' where " + COLUMN_STATUS + " = 'ACTIVE' ";
+        Log.i("updateGames", query4);
+        db.execSQL(query4);
+
+        //insert de nieuwe game met status active
         String query = "insert or replace into " + TABLE_GAME + " ( " + COLUMN_NAME + " , " + COLUMN_STATUS + " ) values ('" + name + "', 'ACTIVE')";
         Log.i("newGameGame", query);
         db.execSQL(query);
 
         //haal het gameID op
-        int gameID = getGameKey(name);
+        int gameID = getGameID(name);
 
-
+        //Stop alle bij de wereld horende landen in een cursor
         String query2 = "select " + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_CONTINENT + " from " + TABLE_WORLD + " where " + COLUMN_NAME + " = '" + world +  "'";
         Log.i("cursorvoorcountryinsert", query2);
         Cursor country = db.rawQuery(query2, null);
 
-
+        //Doorloop de cursor met landen en stop ze 1 voor 1 in de country tabel
         for(country.moveToFirst(); !country.isAfterLast(); country.moveToNext()) {
             String query3 = "insert or replace into " + TABLE_COUNTRY + " ( " + COLUMN_GAME_ID + " , " + COLUMN_WORLD + " , " + COLUMN_NAME + " , " + COLUMN_CONTINENT + ") values (" + gameID + ", '" + world + "', '" + country.getString(0) + "' ,'" + country.getString(1) +"' )";
             Log.i("newGameCountry", query3);
@@ -225,22 +267,36 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "insert or replace into " + TABLE_SETTING + " ( " + COLUMN_GAME_ID + " , " + COLUMN_PARAMETER_NM + " , " + COLUMN_PARAMETER_VALUE + " ) values ('" + gameID + "', 'armyCard', " + armyCard + ")";
-        Log.i("setCardArmy", query);
+        Log.i("setarmyCard", query);
         db.execSQL(query);
     }
 
-    public int getGameKey(String name) {
+    public int getGameID(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "select max( " + COLUMN_ID + " ) from " + TABLE_GAME + " where " + COLUMN_NAME + " = '" + name + "'";
-        Log.i("getGameKey", query);
+        Log.i("getGameID", query);
         Cursor game_key = db.rawQuery(query, null);
 
         if (game_key.moveToFirst())
         {
-            gameKey = game_key.getInt(0);
+            gameID = game_key.getInt(0);
         }
-        return gameKey;
+        return gameID;
+    }
+
+    public int getActiveGameID() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select " + COLUMN_ID + " from " + TABLE_GAME + " where " + COLUMN_STATUS + " = 'ACTIVE'";
+        Log.i("getMaxGameID", query);
+        Cursor game_key = db.rawQuery(query, null);
+
+        if (game_key.moveToFirst())
+        {
+            gameID = game_key.getInt(0);
+        }
+        return gameID;
     }
 
     // hier moet nog een aanpassing komen omdat we de kaarten ophalen adv het player_id ipv player. Dus moet nog een methode tussen gezet worden.
@@ -253,6 +309,32 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return playerCards;
     }
 
+    public int armyToPlace(int player_id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select " + COLUMN_PLACE_ARMIES + " from " + TABLE_PLAYER + " where " + COLUMN_PLAYER_ID + " = " + player_id;
+        Log.i("getMaxGameID", query);
+        Cursor army = db.rawQuery(query, null);
+
+        if (army.moveToFirst())
+        {
+            armyToPlace = army.getInt(0);
+        }
+
+        return armyToPlace;
+    };
+
+    public void updateArmyToPlace(int number, int player_id) {
+
+        String query = "update " + TABLE_PLAYER + " set " + COLUMN_PLACE_ARMIES + " = " + COLUMN_PLACE_ARMIES + " + " + number;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(query);
+        db.close();
+    };
+
     public void addRandomCard(int player) {
         int type = ran.nextInt(3) + 1;
         String query = "update " + TABLE_CARD + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_GAMEPLAYER + " = " + player + " and " + COLUMN_TYPE + " = " + type;
@@ -261,6 +343,21 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         db.execSQL(query);
         db.close();
+    }
+
+    public String getParameter(String parameter_nm, int gameID) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select "+ COLUMN_PARAMETER_VALUE + " from " + TABLE_SETTING + " where " + COLUMN_PARAMETER_NM + " = " + parameter_nm + " and " + COLUMN_GAME_ID + " = " + gameID;
+        Cursor parameterValue = db.rawQuery(query, null);
+
+        if (parameterValue.moveToFirst())
+        {
+            parameter_value = parameterValue.getString(0);
+        }
+
+        return parameter_value;
     }
 
     public void removeCards(int player, ArrayList<Integer> cardList) {
@@ -274,6 +371,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    //geeft een cursor terug met alle games. Gemaakt voor de spinner om de games te laden.
     public Cursor fetchAllGames() {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -288,6 +386,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return mCursor;
     }
 
+    //games voor de zoekfunctie
     public Cursor fetchGamesByName(String inputText) throws SQLException {
         Cursor mCursor = null;
 

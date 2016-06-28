@@ -1,33 +1,27 @@
 package mamahetogames.riskelite;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class PlayerDetails extends AppCompatActivity implements View.OnClickListener{
 
     public ArrayList<Integer> cardList = new ArrayList<>();
-    int player = 1, armieCard, plaatsLegers,gameID, currentPlayerId;
+    int player = 1, armyCard, plaatsLegers,gameID, currentPlayerId;
     // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten
     String status;
     Random ran = new Random();
@@ -44,8 +38,8 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_details);
 
-        loadSavedPreferences();
         currentPlayerId = db.currentPlayer(gameID);
+        gameID = db.getActiveGameID();
 
         // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is de speler waarvoor je de kaarten bekijkt.
         Bundle b = getIntent().getExtras();
@@ -197,7 +191,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     public void addArmies() {
 
         // geef het aantal legers wat geplaatst mag worden door aan variabele
-        plaatsLegers = plaatsLegers + armieCard;
+        plaatsLegers = plaatsLegers + armyCard;
 
         // schermdingen
         textViewAantalLegers.setVisibility(View.VISIBLE);
@@ -206,8 +200,9 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         buttonPlaatsenLegers.setVisibility(View.VISIBLE);
         buttonMovePhase2.setVisibility(View.INVISIBLE);
 
-        armieCard = armieCard + 2;
-        savePreferences("armieCard", armieCard);
+        armyCard = Integer.parseInt((db.getParameter("armyCard",gameID)));
+        armyCard = armyCard + 2;
+        db.setCardArmy(Integer.toString(armyCard),gameID);
     }
 
     public void removeCards() {
@@ -216,20 +211,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         db.removeCards(player, cardList);
         laatKaartenZien(player);
-    }
-
-    private void loadSavedPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        armieCard = sharedPreferences.getInt("armieCard", 4);
-        gameID = sharedPreferences.getInt("gameID", 0);
-    }
-
-    private void savePreferences(String key, int value) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
     }
 
     public void addRandomCard(int player) {

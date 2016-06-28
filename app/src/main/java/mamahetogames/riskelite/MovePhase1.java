@@ -24,25 +24,30 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
     TextView legerBijTeZetten;
     Bitmap armyIcon;
     Paint paint;
+    MyDBHandler db = new MyDBHandler(this);
+    int gameID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_phase1);
 
+        //actieve game ophalen
+        gameID = db.getActiveGameID();
+
+        //speler_id ophalen die aan de beurt is
+        int activePlayer = db.currentPlayer(gameID);
+
+        // aantal te plaatsen legers ophalen
+        aantalLegers = db.armyToPlace(activePlayer);
+
         legerBijTeZetten = (TextView) this.findViewById(R.id.legersBijTeZetten);
-
-
-        // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is het aantal legers dat we hebben.
-        Bundle b = getIntent().getExtras();
-        aantalLegers = b.getInt("plaatsLegers");
         legerBijTeZetten.setText(Integer.toString(aantalLegers));
 
         Button buttonMovePhase2 =       (Button) findViewById(R.id.buttonMovePhase2);
         Button buttonPutArmy =          (Button) findViewById(R.id.buttonPutArmy);
         buttonMovePhase2.setOnClickListener(this);
         buttonPutArmy.setOnClickListener(this);
-
     }
 
     @Override
