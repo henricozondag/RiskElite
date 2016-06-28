@@ -64,10 +64,8 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
             case R.id.buttonStartSpeler:
                 //startspeler bepalen
                 db.startPlayer(gameID);
-                //speler_id ophalen die aan de beurt is
-                int activePlayer = db.currentPlayer(gameID);
                 //spelernaam ophalen van speler die aan de beurt is
-                String player = db.nameCurrentPlayer(activePlayer);
+                String player = db.currentPlayer(gameID, "name");
                 textViewStartspeler.setText((player));
                 buttonPreMove.setVisibility(View.VISIBLE);
                 buttonStartSpeler.setVisibility(View.INVISIBLE);
