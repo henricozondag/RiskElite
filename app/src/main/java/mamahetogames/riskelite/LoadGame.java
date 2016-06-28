@@ -22,7 +22,7 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
 
     MyDBHandler db = new MyDBHandler(this);
     private SimpleCursorAdapter dataAdapter;
-    int backButtonCount = 0;
+    int backButtonCount = 0, gameID;
 
     public ArrayList<String> gameList = new ArrayList<>();
     TextView[] textViewGame = new TextView[10];
@@ -107,13 +107,12 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                 // Query de naam en toon deze
                 String gameNaam =
                         cursor.getString(cursor.getColumnIndexOrThrow("name"));
-                Toast.makeText(getApplicationContext(),
-                        "Het spel '" + gameNaam + "' is geladen!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Het spel '" + gameNaam + "' is geladen!", Toast.LENGTH_SHORT).show();
 
-                // Query het game_id en sla deze op
-                int gameID =
+                // Query het game_id
+                gameID =
                         cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
-                savePreferences("gameID", gameID);
 
                 buttonLoadGame.setVisibility(View.VISIBLE);
                 textViewLaadGame.setText(gameNaam);
@@ -121,13 +120,6 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-    }
-
-    private void savePreferences(String key, int value) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
     }
 
     @Override
@@ -153,6 +145,7 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.buttonLoadGame:
                 i = new Intent(this, PreMove.class);
+                db.loadGame(gameID);
                 startActivity(i);
                 break;
         }
