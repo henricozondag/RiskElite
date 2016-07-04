@@ -1,18 +1,16 @@
 package mamahetogames.riskelite;
 
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "riskElite";
 
     public static final String TABLE_CARD = "card";
@@ -44,7 +42,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_COUNTRY_CONTINENT = "country_continent";
 
     Random ran = new Random();
-    int gameID, armyToPlace, numberOfPlayers1;
+    int gameID, armyToPlace, numberOfPlayers1, player_id;
     String parameter_value, currentPlayer1;
 
     public MyDBHandler(Context context) {
@@ -126,20 +124,23 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-    public void initCards(int players) {
-        int key = 1;
+    public void initCards(int players, int game_id) {
         int player = 1;
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // selecteer player_id van de speler die het land krijgt
+        player_id = getPlayerID(player, game_id);
 
         // Voor elke speler, drie kaarten inserten/updaten naar aantal:0
         for (int i=0; i < players; i++) {
             for (int j=0; j < 3; j++) {
                 int type = j+1;
-                String query = "insert or replace into " + TABLE_CARD + "( " + COLUMN_ID + " , " + COLUMN_GAME_ID + " , " + COLUMN_PLAYER_ID + " , " + COLUMN_TYPE + " , " + COLUMN_NUMBER + " ) values (" + key + ",1," + player + "," + type + ",0)";
+                String query = "insert or replace into " + TABLE_CARD + "( " + COLUMN_GAME_ID + " , " + COLUMN_PLAYER_ID + " , " + COLUMN_TYPE + " , " + COLUMN_NUMBER + " ) values ( " + game_id + " , " + player_id + " , " + type + ",0)";
+                Log.i("insertcardsplayers", query);
                 db.execSQL(query);
-                key++;
             }
             player++;
+            player_id = getPlayerID(player, game_id);
         }
         db.close();
     }
@@ -156,12 +157,59 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         for (int i = 0;i < x; i++) {
             String query = "insert into " + TABLE_PLAYER + "(" + COLUMN_GAME_ID + " , " + COLUMN_NAME + " , " + COLUMN_GAMEPLAYER + " , " + COLUMN_STATUS + " ) values (" + gameID + ",'leeg'," + (i+1) + ",'resting')";
-            db.execSQL(query);
             Log.i("insertaantalplayers", query);
+            db.execSQL(query);
         }
 
-        //Per speler kaarten initialiseren *** Of helemaal hier opnemen
-        //db.initCards(Integer.valueOf(players));
+        // landen verdelen over de spelers
+        divideCountries(gameID, players);
+
+        //Per speler kaarten initialiseren
+        initCards(Integer.valueOf(players), gameID);
+    }
+
+    public void divideCountries(int game_id, String players) {
+
+        // conceptje zodat in ieder geval alle countries een eigenaar hebben. Kan natuurlijk veel beter worden gemaakt.
+        SQLiteDatabase db = this.getWritableDatabase();
+                //kies de eerste speler die een land krijgt
+        int startPlayer =  ran.nextInt(Integer.valueOf(players)) + 1;
+
+        // selecteer alle id's van de landen die in deze wereld zitten
+        String query = "select " + COLUMN_ID + " from " + TABLE_COUNTRY + " where " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("allecountries", query);
+        Cursor countries = db.rawQuery(query, null);
+
+        // for loop door de spelers heen totdat de cursor met alle countries op is
+        for (countries.moveToFirst(); !countries.isAfterLast(); countries.moveToNext()) {
+
+        // selecteer player_id van de speler die het land krijgt
+        player_id = getPlayerID(startPlayer, game_id);
+
+        String query3 = "update " + TABLE_COUNTRY + " set " + COLUMN_PLAYER_ID + " = " +  player_id + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_ID + " = " + countries.getInt(0);
+        Log.i("updatecountrplayerid", query3);
+        db.execSQL(query3);
+
+            if (startPlayer == Integer.valueOf(players)) {
+                startPlayer = 1;            }
+            else
+                startPlayer = startPlayer + 1;
+        }
+    }
+
+    public int getPlayerID (int gameplayer, int game_id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select " + COLUMN_ID + " from " + TABLE_PLAYER + " where " + COLUMN_GAMEPLAYER + " = " + gameplayer + " and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("player_idopgameplayer", query);
+        Cursor playerId = db.rawQuery(query, null);
+
+        if (playerId.moveToFirst())
+        {
+            player_id = playerId.getInt(0);
+        }
+        return player_id;
     }
 
     public void loadGame (int gameID) {
@@ -177,7 +225,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String query = "select count(" + COLUMN_NAME + ") from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + gameID;
         Log.i("numberofplayers", query);
-        Cursor numberOfPlayers = db.rawQuery(query, null);//test
+        Cursor numberOfPlayers = db.rawQuery(query, null);
 
         if (numberOfPlayers.moveToFirst())
         {
@@ -276,20 +324,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(query2);
 
     }
-
-//    public int nextPlayer(int game_id) {
-//        int gameplayer = select gameplayer from player where game_id = game_id and status = active;
-//        int nrPlayers = select max(gameplayer) from player where game_id = game_id;
-//        if (gameplayer = nrPlayers) {
-//            gameplayer = 1;
-//            else gameplayer = gameplayer + 1;
-//        }
-//        int nextPlayer = select player_id from player where game_id = game_id and gameplayer = gameplayer;
-//        update player set status = resting where game_id = game_id and status = active;
-//        update player set status = active where game_id = game_id and gameplayer = gameplayer;
-//
-//        return player_id;
-//    }
 
     public int newGame(String name, String world) {
         SQLiteDatabase db = this.getWritableDatabase();

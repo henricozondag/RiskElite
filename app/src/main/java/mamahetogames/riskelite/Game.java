@@ -29,8 +29,6 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
         textViewGameId = (TextView) this.findViewById(R.id.textViewGameId);
         textViewGameId.setText(String.valueOf(gameID));
 
-        //invulschermen voor spelernamen maken
-
         // eerst bepalen hoeveel spelers er zijn en dan afhankelijk daarvan het aantal velden laten zien. (dus een array nog van maken dat is makkelijker)
         editTextSpeler[0] = (EditText) this.findViewById(R.id.editTextSpeler1);
         editTextSpeler[1] = (EditText) this.findViewById(R.id.editTextSpeler2);
