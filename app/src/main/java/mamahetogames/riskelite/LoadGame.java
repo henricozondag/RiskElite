@@ -146,6 +146,7 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
             case R.id.buttonLoadGame:
                 i = new Intent(this, PreMove.class);
                 db.loadGame(gameID);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;
         }

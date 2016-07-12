@@ -29,20 +29,23 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.buttonHighScore:
                 i = new Intent(this, HighScore.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;
             case R.id.buttonSettings:
                 i = new Intent(this, Settings.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;
             case R.id.buttonToGame:
                 i = new Intent(this, StartGame.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;
             case R.id.buttonLoadGame:
-                Intent intent = new Intent(Menu.this, LoadGame.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                i = new Intent(this, LoadGame.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 break;
         }
     }

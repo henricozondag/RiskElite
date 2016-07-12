@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_NAME = "riskElite";
 
     public static final String TABLE_CARD = "card";
@@ -31,6 +31,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_PLAYER_ID = "player_id";
     public static final String COLUMN_CONTINENT = "continent";
     public static final String COLUMN_WORLD = "world";
+    public static final String COLUMN_COUNTRY_ARMIES = "country_armies";
 
     public static final String TABLE_SETTING = "setting";
     public static final String COLUMN_PARAMETER_NM = "parameter_nm";
@@ -83,7 +84,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 TABLE_COUNTRY + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_GAME_ID
                 + " INTEGER," + COLUMN_PLAYER_ID + " INTEGER," + COLUMN_WORLD + " TEXT," + COLUMN_NAME
-                + " TEXT," + COLUMN_CONTINENT + " TEXT" + ")";
+                + " TEXT," + COLUMN_CONTINENT + " TEXT," + COLUMN_COUNTRY_ARMIES + " INTEGER)";
         db.execSQL(CREATE_COUNTRY_TABLE);
 
         String CREATE_WORLD_TABLE = "CREATE TABLE " +
@@ -155,8 +156,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         //insert het aantal players
         Integer x = Integer.valueOf(players);
         SQLiteDatabase db = this.getWritableDatabase();
+        // Tijdelijk toegevoegd dat elke speler 2 armies mag plaatsen (Voor Thomas zijn code)
         for (int i = 0;i < x; i++) {
-            String query = "insert into " + TABLE_PLAYER + "(" + COLUMN_GAME_ID + " , " + COLUMN_NAME + " , " + COLUMN_GAMEPLAYER + " , " + COLUMN_STATUS + " ) values (" + gameID + ",'leeg'," + (i+1) + ",'resting')";
+            String query = "insert into " + TABLE_PLAYER + "(" + COLUMN_GAME_ID + " , " + COLUMN_NAME + " , " + COLUMN_GAMEPLAYER + " , " + COLUMN_STATUS + " , " + COLUMN_PLACE_ARMIES + ") values (" + gameID + ",'leeg'," + (i+1) + ",'resting', 2)";
             Log.i("insertaantalplayers", query);
             db.execSQL(query);
         }
@@ -186,7 +188,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         // selecteer player_id van de speler die het land krijgt
         player_id = getPlayerID(startPlayer, game_id);
 
-        String query3 = "update " + TABLE_COUNTRY + " set " + COLUMN_PLAYER_ID + " = " +  player_id + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_ID + " = " + countries.getInt(0);
+        String query3 = "update " + TABLE_COUNTRY + " set " + COLUMN_PLAYER_ID + " = " +  player_id + ", " + COLUMN_COUNTRY_ARMIES + " = 1 where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_ID + " = " + countries.getInt(0);
         Log.i("updatecountrplayerid", query3);
         db.execSQL(query3);
 
@@ -196,6 +198,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 startPlayer = startPlayer + 1;
         }
     }
+
+    //public void setPlayerStatus(int game_id, )
 
     public int getPlayerID (int gameplayer, int game_id) {
 
@@ -328,7 +332,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public int newGame(String name, String world) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        //zet alle actieve games naar pause
+        //zet alle actieve games naar pause moet eigenlijk naar onicreate van menu (alleen het op pauze zetten)
         String query4 = "update " + TABLE_GAME + " set " + COLUMN_STATUS + " = 'PAUSE' where " + COLUMN_STATUS + " = 'ACTIVE' ";
         Log.i("updateGames", query4);
         db.execSQL(query4);

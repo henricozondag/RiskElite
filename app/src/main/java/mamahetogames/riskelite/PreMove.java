@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PreMove extends AppCompatActivity  implements View.OnClickListener {
 
     TextView textViewGameKey, textViewCurrentPlayer;
-    int gameID;
+    int gameID,backButtonCount;
     MyDBHandler db = new MyDBHandler(this);
 
     @Override
@@ -37,12 +38,30 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
     }
 
     @Override
+    public void onBackPressed()
+    {
+        if(backButtonCount >= 1)
+        {
+            Intent i = new Intent(Intent.ACTION_MAIN);
+            i.addCategory(Intent.CATEGORY_HOME);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
+        else
+        {
+            Toast.makeText(this, "Druk nog een keer op de back om terug te gaan naar het menu.", Toast.LENGTH_SHORT).show();
+            backButtonCount++;
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         Intent i;
         switch (v.getId()) {
             case R.id.buttonMovePhase1:
                 i = new Intent(this, MovePhase1.class);
                 // Start andere scherm
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;
         }
