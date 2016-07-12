@@ -17,6 +17,7 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         db.initWorlds();
+        db.initNeighbours();
         // Wacht 2500ms en ga door naar menu
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
