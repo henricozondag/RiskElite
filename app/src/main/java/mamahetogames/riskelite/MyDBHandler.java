@@ -23,24 +23,37 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String TABLE_GAME = "game";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_DICE_ATTACK_1 = "dice_attack_1";
+    public static final String COLUMN_DICE_ATTACK_2 = "dice_attack_2";
+    public static final String COLUMN_DICE_ATTACK_3 = "dice_attack_3";
+    public static final String COLUMN_DICE_DEFEND_1 = "dice_defend_1";
+    public static final String COLUMN_DICE_DEFEND_2 = "dice_defend_2";
 
     public static final String TABLE_PLAYER = "player";
-    public static final String COLUMN_PLACE_ARMIES = "placearmies";
+    public static final String COLUMN_TOTAL_ARMIES = "total_armies";
+    public static final String COLUMN_PLACE_ARMIES = "place_armies";
+    public static final String COLUMN_ARMIES_WON = "armies_won";
+    public static final String COLUMN_ARMIES_LOST = "armies_lost";
+    public static final String COLUMN_COUNTRIES_WON = "countries_won";
+    public static final String COLUMN_COUNTRIES_LOST = "countries_lost";
 
-    public static final String TABLE_COUNTRY = "country";
+    public static final String TABLE_COUNTRY = "game_map";
     public static final String COLUMN_PLAYER_ID = "player_id";
-    public static final String COLUMN_CONTINENT = "continent";
-    public static final String COLUMN_WORLD = "world";
+    public static final String COLUMN_CONTINENT = "country_continent";
     public static final String COLUMN_COUNTRY_ARMIES = "country_armies";
+    public static final String COLUMN_WORLD = "world";
 
     public static final String TABLE_SETTING = "setting";
     public static final String COLUMN_PARAMETER_NM = "parameter_nm";
     public static final String COLUMN_PARAMETER_VALUE = "parameter_value";
 
-    public static final String TABLE_WORLD = "world";
+    public static final String TABLE_WORLD = "map";
     public static final String COLUMN_COUNTRY_ID = "country_id";
     public static final String COLUMN_COUNTRY_NAME = "country_name";
     public static final String COLUMN_COUNTRY_CONTINENT = "country_continent";
+
+    public static final String TABLE_NEIGHBOUR = "neighbour";
+    public static final String COLUMN_COUNTRY_ID_2 = "country_id_2";
 
     Random ran = new Random();
     int gameID, armyToPlace, numberOfPlayers1, player_id;
@@ -52,47 +65,70 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CARD_TABLE = "CREATE TABLE " +
-                TABLE_CARD + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_GAME_ID
-                + " INTEGER," + COLUMN_PLAYER_ID + " INTEGER," + COLUMN_TYPE
-                + " INTEGER," + COLUMN_NUMBER
-                + " INTEGER" + ")";
+        String CREATE_CARD_TABLE = "CREATE TABLE " + TABLE_CARD + "("
+                + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
+                + COLUMN_GAME_ID            + " INTEGER,"
+                + COLUMN_PLAYER_ID          + " INTEGER,"
+                + COLUMN_TYPE               + " INTEGER,"
+                + COLUMN_NUMBER             + " INTEGER" + ")";
         db.execSQL(CREATE_CARD_TABLE);
 
-        String CREATE_GAME_TABLE = "CREATE TABLE " +
-                TABLE_GAME + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_NAME
-                + " TEXT," + COLUMN_STATUS + " TEXT" + ")";
+        String CREATE_GAME_TABLE = "CREATE TABLE " + TABLE_GAME + "("
+                + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
+                + COLUMN_NAME               + " TEXT,"
+                + COLUMN_STATUS             + " TEXT,"
+                + COLUMN_DICE_ATTACK_1      + " TEXT,"
+                + COLUMN_DICE_ATTACK_2      + " TEXT,"
+                + COLUMN_DICE_ATTACK_3      + " TEXT,"
+                + COLUMN_DICE_DEFEND_1      + " TEXT,"
+                + COLUMN_DICE_DEFEND_2      + " TEXT)";
         db.execSQL(CREATE_GAME_TABLE);
 
-        String CREATE_PLAYER_TABLE = "CREATE TABLE " +
-                TABLE_PLAYER + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_NAME
-                + " TEXT," + COLUMN_GAME_ID + " INTEGER," + COLUMN_GAMEPLAYER
-                + " INTEGER," + COLUMN_STATUS + " TEXT," + COLUMN_PLACE_ARMIES + " INTEGER" + ")";
+        String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_PLAYER + "("
+                + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
+                + COLUMN_GAME_ID            + " INTEGER,"
+                + COLUMN_NAME               + " TEXT,"
+                + COLUMN_GAMEPLAYER         + " INTEGER,"
+                + COLUMN_STATUS             + " TEXT,"
+                + COLUMN_TOTAL_ARMIES       + " INTEGER,"
+                + COLUMN_PLACE_ARMIES       + " INTEGER,"
+                + COLUMN_ARMIES_WON         + " INTEGER,"
+                + COLUMN_ARMIES_LOST        + " INTEGER,"
+                + COLUMN_COUNTRIES_WON      + " INTEGER,"
+                + COLUMN_COUNTRIES_LOST     + " INTEGER)";
         db.execSQL(CREATE_PLAYER_TABLE);
 
-        String CREATE_SETTING_TABLE = "CREATE TABLE " +
-                TABLE_SETTING + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_GAME_ID
-                + " INTEGER," + COLUMN_PARAMETER_NM + " TEXT," + COLUMN_PARAMETER_VALUE
-                + " TEXT" + ")";
+        String CREATE_SETTING_TABLE = "CREATE TABLE " + TABLE_SETTING + "("
+                + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
+                + COLUMN_GAME_ID            + " INTEGER,"
+                + COLUMN_PARAMETER_NM       + " TEXT,"
+                + COLUMN_PARAMETER_VALUE    + " TEXT" + ")";
         db.execSQL(CREATE_SETTING_TABLE);
 
-        String CREATE_COUNTRY_TABLE = "CREATE TABLE " +
-                TABLE_COUNTRY + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_GAME_ID
-                + " INTEGER," + COLUMN_PLAYER_ID + " INTEGER," + COLUMN_WORLD + " TEXT," + COLUMN_NAME
-                + " TEXT," + COLUMN_CONTINENT + " TEXT," + COLUMN_COUNTRY_ARMIES + " INTEGER)";
+        String CREATE_COUNTRY_TABLE = "CREATE TABLE " + TABLE_COUNTRY + "("
+                + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
+                + COLUMN_GAME_ID            + " INTEGER,"
+                + COLUMN_PLAYER_ID          + " INTEGER,"
+                + COLUMN_WORLD              + " TEXT,"
+                + COLUMN_COUNTRY_ID         + " INTEGER,"
+                + COLUMN_COUNTRY_NAME       + " TEXT,"
+                + COLUMN_CONTINENT          + " TEXT,"
+                + COLUMN_COUNTRY_ARMIES     + " INTEGER)";
         db.execSQL(CREATE_COUNTRY_TABLE);
 
-        String CREATE_WORLD_TABLE = "CREATE TABLE " +
-                TABLE_WORLD + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_NAME
-                + " TEXT," + COLUMN_COUNTRY_ID + " INTEGER," + COLUMN_COUNTRY_NAME
-                + " TEXT," + COLUMN_COUNTRY_CONTINENT + " TEXT" + ")";
+        String CREATE_WORLD_TABLE = "CREATE TABLE " + TABLE_WORLD + "("
+                + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
+                + COLUMN_WORLD              + " TEXT,"
+                + COLUMN_COUNTRY_ID         + " INTEGER,"
+                + COLUMN_COUNTRY_NAME       + " TEXT,"
+                + COLUMN_COUNTRY_CONTINENT  + " TEXT)";
         db.execSQL(CREATE_WORLD_TABLE);
+
+        String CREATE_NEIGHBOUR_TABLE = "CREATE TABLE " + TABLE_NEIGHBOUR + "("
+                + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
+                + COLUMN_COUNTRY_ID         + " INTEGER,"
+                + COLUMN_COUNTRY_ID_2       + " INTEGER)";
+        db.execSQL(CREATE_NEIGHBOUR_TABLE);
     }
 
     @Override
@@ -104,24 +140,42 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTING);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTRY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORLD);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEIGHBOUR);
         onCreate(db);
     }
 
     public void initWorlds() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "insert or replace into " + TABLE_WORLD + "(" + COLUMN_ID + " , " + COLUMN_NAME + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_COUNTRY_CONTINENT + " ) " +
-                "values (12, 'Nederland','1','Noord Brabant','Zuid Nederland')," +
-                "(1, 'Nederland','2','Zeeland','Zuid Nederland')," +
-                "(2, 'Nederland','3','Limburg','Zuid Nederland')," +
-                "(3, 'Nederland','4','Noord Holland','West Nederland')," +
-                "(4, 'Nederland','5','Zuid Holland','West Nederland')," +
-                "(5, 'Nederland','6','Utrecht','West Nederland')," +
-                "(6, 'Nederland','7','Gelderland','Oost Nederland')," +
-                "(7, 'Nederland','8','Overijssel','Oost Nederland')," +
-                "(8, 'Nederland','9','Flevoland','Oost Nederland')," +
-                "(9, 'Nederland','10','Groningen','Noord Nederland')," +
-                "(10, 'Nederland','11','Friesland','Noord Nederland')," +
-                "(11, 'Nederland','12','Assen','Noord Nederland')";
+        String query = "insert or replace into " + TABLE_WORLD + "(" + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_COUNTRY_CONTINENT + " ) " +
+                "values ('Nederland','1','Noord Brabant','Zuid Nederland')," +
+                "('Nederland','2','Zeeland','Zuid Nederland')," +
+                "('Nederland','3','Limburg','Zuid Nederland')," +
+                "('Nederland','4','Noord Holland','West Nederland')," +
+                "('Nederland','5','Zuid Holland','West Nederland')," +
+                "('Nederland','6','Utrecht','West Nederland')," +
+                "('Nederland','7','Gelderland','Oost Nederland')," +
+                "('Nederland','8','Overijssel','Oost Nederland')," +
+                "('Nederland','9','Flevoland','Oost Nederland')," +
+                "('Nederland','10','Groningen','Noord Nederland')," +
+                "('Nederland','11','Friesland','Noord Nederland')," +
+                "('Nederland','12','Drenthe','Noord Nederland')";
+        db.execSQL(query);
+    }
+
+    public void initNeighbours() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "insert or replace into " + TABLE_NEIGHBOUR + "(" + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_ID_2 + " ) " +
+                "values (1,2),(1,3),(1,5),(1,7)," +
+                "(2,5)," +
+                "(3,7)," +
+                "(4,5),(4,6),(4,9),(4,11)," +
+                "(5,6),(5,7)," +
+                "(6,7),(6,9)," +
+                "(7,8),(7,9)," +
+                "(8,9),(8,11),(8,12)," +
+                "(9,11),(9,12)," +
+                "(10,11),(10,12)," +
+                "(11,12)";
         db.execSQL(query);
     }
 
@@ -247,7 +301,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "select distinct(" + COLUMN_NAME + ") from " + TABLE_WORLD;
+        String query = "select distinct(" + COLUMN_WORLD + ") from " + TABLE_WORLD;
         Cursor worlds = db.rawQuery(query, null);
 
         return worlds;
@@ -346,13 +400,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
         int gameID = getActiveGameID();
 
         //Stop alle bij de wereld horende landen in een cursor
-        String query2 = "select " + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_CONTINENT + " from " + TABLE_WORLD + " where " + COLUMN_NAME + " = '" + world +  "'";
+        String query2 = "select " + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_CONTINENT + " from " + TABLE_WORLD + " where " + COLUMN_WORLD + " = '" + world +  "'";
         Log.i("cursorvoorcountryinsert", query2);
         Cursor country = db.rawQuery(query2, null);
 
         //Doorloop de cursor met landen en stop ze 1 voor 1 in de country tabel
         for(country.moveToFirst(); !country.isAfterLast(); country.moveToNext()) {
-            String query3 = "insert or replace into " + TABLE_COUNTRY + " ( " + COLUMN_GAME_ID + " , " + COLUMN_WORLD + " , " + COLUMN_NAME + " , " + COLUMN_CONTINENT + ") values (" + gameID + ", '" + world + "', '" + country.getString(0) + "' ,'" + country.getString(1) +"' )";
+            String query3 = "insert or replace into " + TABLE_COUNTRY + " ( " + COLUMN_GAME_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_CONTINENT + ") values (" + gameID + ", '" + world + "', '" + country.getString(0) + "' ,'" + country.getString(1) +"' )";
             Log.i("newGameCountry", query3);
             db.execSQL(query3);
         }
