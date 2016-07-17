@@ -11,19 +11,26 @@ public class MoveActionResult extends AppCompatActivity implements View.OnClickL
 
     String winnaar;
     TextView textViewWinnaar, textViewLostA, textViewLostD;
-    int totalLostA, totalLostD;
+    int totalLostA, totalLostD, gameID;
     Button buttonMovePhase2;
+    MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_action_result);
 
+        //actieve game ophalen
+        gameID = db.getActiveGameID();
+
         // getdata
         Bundle b = getIntent().getExtras();
         totalLostA = b.getInt("totalLostA");
         totalLostD = b.getInt("totalLostD");
         winnaar = b.getString("winnaar");
+
+        // alle runtime veldslagdata verwijderen
+        db.resetCountries(gameID);
 
         // scherm vullen
         textViewWinnaar = (TextView) this.findViewById(R.id.textViewWinnaar);

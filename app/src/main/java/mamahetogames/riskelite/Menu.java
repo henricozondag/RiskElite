@@ -8,6 +8,8 @@ import android.widget.Button;
 
 public class Menu extends AppCompatActivity implements View.OnClickListener {
 
+    MyDBHandler db = new MyDBHandler(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +23,8 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         buttonToGame.setOnClickListener(this);
         Button buttonLoadGame = (Button) findViewById(R.id.buttonLoadGame);
         buttonLoadGame.setOnClickListener(this);
+
+        db.pauseGames();
     }
 
     @Override

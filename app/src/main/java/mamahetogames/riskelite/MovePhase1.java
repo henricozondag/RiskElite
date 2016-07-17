@@ -35,6 +35,9 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         //actieve game ophalen
         gameID = db.getActiveGameID();
 
+        //status zetten van speler
+        db.setPlayerStatus(gameID, "phase1");
+
         //speler_id ophalen die aan de beurt is
         int activePlayer = Integer.parseInt(db.currentPlayer(gameID,"ID"));
 

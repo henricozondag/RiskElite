@@ -10,11 +10,18 @@ import android.widget.Button;
 public class MovePhase3 extends AppCompatActivity implements View.OnClickListener{
 
     MyDBHandler db = new MyDBHandler(this);
+    int gameID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_phase3);
+
+        //actieve game ophalen
+        gameID = db.getActiveGameID();
+
+        //status zetten van speler
+        db.setPlayerStatus(gameID, "phase3");
 
         Button buttonPreMove = (Button) findViewById(R.id.buttonPreMove);
         buttonPreMove.setOnClickListener(this);

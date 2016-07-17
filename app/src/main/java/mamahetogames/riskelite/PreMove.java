@@ -24,11 +24,16 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         //actieve game ophalen
         gameID = db.getActiveGameID();
 
-        //speler_id ophalen die aan de beurt is
+        //status zetten van speler
+        db.setPlayerStatus(gameID, "premove");
+
+        //speler_name ophalen die aan de beurt is
         String player = db.currentPlayer(gameID,"name");
 
         Button buttonMovePhase1 = (Button) findViewById(R.id.buttonMovePhase1);
         buttonMovePhase1.setOnClickListener(this);
+        Button buttonMenu = (Button) findViewById(R.id.buttonMenu);
+        buttonMenu.setOnClickListener(this);
 
         textViewGameKey = (TextView) this.findViewById(R.id.textViewGameKey);
         textViewGameKey.setText(String.valueOf(gameID));
@@ -60,6 +65,12 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.buttonMovePhase1:
                 i = new Intent(this, MovePhase1.class);
+                // Start andere scherm
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                break;
+            case R.id.buttonMenu:
+                i = new Intent(this, Menu.class);
                 // Start andere scherm
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);

@@ -1,16 +1,13 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -107,8 +104,6 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                 // Query de naam en toon deze
                 String gameNaam =
                         cursor.getString(cursor.getColumnIndexOrThrow("name"));
-//                Toast.makeText(getApplicationContext(),
-//                        "Het spel '" + gameNaam + "' is geladen!", Toast.LENGTH_SHORT).show();
 
                 // Query het game_id
                 gameID =
@@ -144,8 +139,29 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
         Intent i;
         switch (v.getId()) {
             case R.id.buttonLoadGame:
-                i = new Intent(this, PreMove.class);
-                db.loadGame(gameID);
+                String status = db.loadGame(gameID);
+                switch (status) {
+                    case "premove":
+                        i = new Intent(this, PreMove.class);
+                        break;
+                    case "phase1":
+                        i = new Intent(this, MovePhase1.class);
+                        break;
+                    case "phase2":
+                        i = new Intent(this, MovePhase2.class);
+                        break;
+                    case "phase3":
+                        i = new Intent(this, MovePhase3.class);
+                        break;
+                    case "moveaction":
+                        i = new Intent(this, MoveAction.class);
+                        break;
+                    default:
+                        i = new Intent(this, Menu.class);
+                        break;
+                }
+                Toast.makeText(getApplicationContext(),
+                        "Speler '" + db.currentPlayer(gameID, "name") + "' is aan de beurt!", Toast.LENGTH_SHORT).show();
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 break;

@@ -55,7 +55,7 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
         Cursor c = db.getWorlds();
         ArrayList<String> list3 = new ArrayList<String>();
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-              list3.add(c.getString(0));
+            list3.add(c.getString(0));
         }
         c.close();
 

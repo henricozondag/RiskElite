@@ -42,49 +42,40 @@
         android:layout_below="@+id/textViewMovePhase2"
         android:layout_alignParentStart="true" />
 
-    <TextView
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Aanvaller"
-        android:id="@+id/textView11"
-        android:layout_marginTop="121dp"
-        android:layout_below="@+id/buttonMoveAction"
+        android:id="@+id/spinnerAttackCountry"
+        android:layout_below="@+id/buttonMovePhase3"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentTop="false" />
+        android:layout_marginTop="37dp"
+        android:layout_toStartOf="@+id/buttonMovePhase3"
+        android:layout_alignEnd="@+id/buttonPlayerDetails" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerDefendCountry"
+        android:layout_below="@+id/spinnerAttackCountry"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/spinnerAttackCountry" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Verdediger"
-        android:id="@+id/textView12"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewAttackArmies"
+        android:layout_alignTop="@+id/spinnerAttackCountry"
+        android:layout_alignStart="@+id/buttonMovePhase3" />
 
-    <EditText
-        android:layout_width="40dp"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/editTextArmiesAttacker"
-        android:layout_alignStart="@+id/buttonPlayerDetails"
-        android:text="5"
-        android:layout_alignTop="@+id/textView11"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentTop="false"
-        android:textAlignment="center" />
-
-    <EditText
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/editTextArmiesDefender"
-        android:text="5"
-        android:textAlignment="center"
-        android:layout_alignTop="@+id/textView12"
-        android:layout_alignStart="@+id/editTextArmiesAttacker" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewDefendArmies"
+        android:layout_below="@+id/spinnerAttackCountry"
+        android:layout_alignStart="@+id/textViewAttackArmies" />
 
 </RelativeLayout>

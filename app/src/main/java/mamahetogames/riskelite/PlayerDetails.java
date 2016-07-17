@@ -1,14 +1,13 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,15 +20,14 @@ import java.util.Random;
 public class PlayerDetails extends AppCompatActivity implements View.OnClickListener{
 
     public ArrayList<Integer> cardList = new ArrayList<>();
-    int player = 1, armyCard, plaatsLegers,gameID, currentPlayerId;
-    // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten
+    int player, armyCard, plaatsLegers,gameID, currentPlayerId;
     String status;
     Random ran = new Random();
     TextView textViewAantalLegers, textViewPlaatsenLegers;
     Button buttonPlaatsenLegers, buttonMovePhase2, buttonRuilKaarten, buttonAddRandomCard;
     ImageView[] imageViewCard = new ImageView[10];
     CheckBox[] checkBoxCard = new CheckBox[10];
-    public int[][] cardType = new int[3][10];
+    public int[] cardType = new int[10];
 
     MyDBHandler db = new MyDBHandler(this);
 
@@ -38,13 +36,11 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_details);
 
-        currentPlayerId = Integer.parseInt(db.currentPlayer(gameID,"ID"));
         gameID = db.getActiveGameID();
-
-        // Haal waarde op uit bundle die meegestuurd is bij opstarten scherm, dit is de speler waarvoor je de kaarten bekijkt.
-        Bundle b = getIntent().getExtras();
-        player = b.getInt("player");
-        status = b.getString("status");
+        currentPlayerId = Integer.parseInt(db.currentPlayer(gameID,"ID"));
+        player = Integer.parseInt(db.currentPlayer(gameID,"gameplayer"));
+        // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten dit moet nog wel geimplementeerd worden (knop wel niet tonen)
+        status = db.currentPlayer(gameID, "status");
 
         buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
@@ -81,7 +77,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         textViewPlaatsenLegers =(TextView)findViewById(R.id.textViewPlaatsenLegers);
 
         // haal op welke kaarten er allemaal actief zijn voor de huidige speler
-        laatKaartenZien(player);
+        showCards();
     }
 
     //bitmap geneuzel
@@ -122,7 +118,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public void laatKaartenZien (int player) {
+    public void showCards () {
 
         // standaard beginnen met een leeg scherm
         for (int n = 0; n <= 9; n++) {
@@ -146,8 +142,8 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
             for (int cardNr = 1; cardNr <= playerCards.getInt(1); cardNr++) {
 
                 //type van de kaart ophalen
-                cardType[player][showCard] = playerCards.getInt(0);
-                int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card" + cardType[player][showCard], null, null);
+                cardType[showCard] = playerCards.getInt(0);
+                int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/card" + cardType[showCard], null, null);
                 imageViewCard[showCard].setImageBitmap(decodeSampledBitmapFromResource(getResources(), imgId, 100, 100));
                 checkBoxCard[showCard].setVisibility(View.VISIBLE);
                 showCard++;
@@ -156,7 +152,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void ruilKaarten() {
+    public void convertCards() {
 
         int counter = 0;
         cardList.clear();
@@ -164,7 +160,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
             // tellen hoeveel er zijn gecheckt
             if (checkBoxCard[card].isChecked()) {
                 counter++;
-                cardList.add(cardType[player][card]);
+                cardList.add(cardType[card]);
             }
         }
         //Bekijken welk soort setje is ingeleverd: (drie dezelfde? drie verschillende? fout?)
@@ -191,6 +187,9 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     public void addArmies() {
 
         // geef het aantal legers wat geplaatst mag worden door aan variabele
+        armyCard = Integer.parseInt((db.getParameter("armyCard",gameID)));
+        Log.i("armycardophalen", (db.getParameter("armyCard",gameID)));
+        db.updateArmiesToPlace(currentPlayerId,armyCard);
         plaatsLegers = plaatsLegers + armyCard;
 
         // schermdingen
@@ -200,23 +199,22 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         buttonPlaatsenLegers.setVisibility(View.VISIBLE);
         buttonMovePhase2.setVisibility(View.INVISIBLE);
 
-        armyCard = Integer.parseInt((db.getParameter("armyCard",gameID)));
         armyCard = armyCard + 2;
-        db.setCardArmy(Integer.toString(armyCard),gameID);
+        db.setParameter("armyCard", armyCard, gameID,"update");
     }
 
     public void removeCards() {
 
         MyDBHandler db = new MyDBHandler(this);
 
-        db.removeCards(player, cardList);
-        laatKaartenZien(player);
+        db.removeCards(currentPlayerId, cardList);
+        showCards();
     }
 // Nog omzetten naar player_id
-    public void addRandomCard(int player) {
+    public void addRandomCard(int player_id) {
         MyDBHandler db = new MyDBHandler(this);
-        db.addRandomCard(player);
-        laatKaartenZien(player);
+        db.addRandomCard(player_id);
+        showCards();
     }
 
     @Override
@@ -228,15 +226,14 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
                 startActivity(i);
                 break;
             case R.id.buttonRuilKaarten:
-                ruilKaarten();
+                convertCards();
                 break;
             case R.id.buttonPlaatsenLegers:
                 i = new Intent(this, MovePhase1.class);
-                i.putExtra("plaatsLegers", plaatsLegers);
                 startActivity(i);
                 break;
             case R.id.buttonAddRandomCard:
-                addRandomCard(player);
+                addRandomCard(currentPlayerId);
                 break;
         }
     }
