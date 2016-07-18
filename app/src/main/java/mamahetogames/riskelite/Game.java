@@ -1,8 +1,6 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +10,11 @@ import android.widget.TextView;
 
 public class Game extends AppCompatActivity  implements View.OnClickListener {
 
-    TextView textViewGameId;
-    int gameID,numberOfPlayers;
-    MyDBHandler db = new MyDBHandler(this);
-    EditText[] editTextSpeler = new EditText[6];
-    TextView[] textViewSpeler = new TextView[6];
+    private int gameID;
+    private int numberOfPlayers;
+    private final MyDBHandler db = new MyDBHandler(this);
+    private final EditText[] editTextSpeler = new EditText[6];
+    private final TextView[] textViewSpeler = new TextView[6];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +24,7 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
         //actieve game ophalen
         gameID = db.getActiveGameID();
 
-        textViewGameId = (TextView) this.findViewById(R.id.textViewGameId);
+        TextView textViewGameId = (TextView) this.findViewById(R.id.textViewGameId);
         textViewGameId.setText(String.valueOf(gameID));
 
         // eerst bepalen hoeveel spelers er zijn en dan afhankelijk daarvan het aantal velden laten zien. (dus een array nog van maken dat is makkelijker)

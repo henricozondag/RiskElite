@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class SplashScreen extends AppCompatActivity {
 
-    MyDBHandler db = new MyDBHandler(this);
+    private final MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

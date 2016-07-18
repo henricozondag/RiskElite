@@ -21,11 +21,11 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
     Context context;
     int armieCard;
     private int aantalLegers;
-    TextView legerBijTeZetten;
+    private TextView legerBijTeZetten;
     Bitmap armyIcon;
     Paint paint;
-    MyDBHandler db = new MyDBHandler(this);
-    int gameID;
+    private final MyDBHandler db = new MyDBHandler(this);
+    private int gameID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    public void legerBijZetten() {
+    private void legerBijZetten() {
         if (aantalLegers >= 1) {
             aantalLegers = aantalLegers - 1;
             legerBijTeZetten.setText("" + aantalLegers);

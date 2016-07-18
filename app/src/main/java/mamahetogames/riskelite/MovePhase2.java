@@ -17,10 +17,14 @@ import java.util.ArrayList;
 
 public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-    int gameID, currentPlayerId, armiesAttacker, armiesDefender;
-    MyDBHandler db = new MyDBHandler(this);
+    private int gameID;
+    private int currentPlayerId;
+    private int armiesAttacker;
+    private int armiesDefender;
+    private final MyDBHandler db = new MyDBHandler(this);
     private Spinner spinnerAttackCountry, spinnerDefendCountry;
-    TextView textViewAttackArmies, textViewDefendArmies;
+    private TextView textViewAttackArmies;
+    private TextView textViewDefendArmies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +108,12 @@ public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemS
         //zodat de spinners niet gaan flippen
     }
 
-    public void checkAttack(Boolean start) {
+    private void checkAttack(Boolean start) {
 
         if  (db.isOwner(currentPlayerId,String.valueOf(spinnerAttackCountry.getSelectedItem()),gameID)) {
             // check of het verdedigende land NIET van de aanvaller is
             Log.i("isowner","true");
-            if (db.isOwner(currentPlayerId,String.valueOf(spinnerDefendCountry.getSelectedItem()),gameID) == false) {
+            if (!(db.isOwner(currentPlayerId,String.valueOf(spinnerDefendCountry.getSelectedItem()),gameID))) {
                 //Check of de landen aan elkaar grenzen
                 Log.i("isowner","false dus goed");
                 if (db.isNeighbour(String.valueOf(spinnerAttackCountry.getSelectedItem()),String.valueOf(spinnerDefendCountry.getSelectedItem()),gameID)) {

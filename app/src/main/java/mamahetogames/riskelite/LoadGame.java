@@ -13,19 +13,18 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class LoadGame extends AppCompatActivity implements View.OnClickListener {
 
-    MyDBHandler db = new MyDBHandler(this);
+    private final MyDBHandler db = new MyDBHandler(this);
     private SimpleCursorAdapter dataAdapter;
-    int backButtonCount = 0, gameID;
+    private int backButtonCount = 0;
+    private int gameID;
 
-    public ArrayList<String> gameList = new ArrayList<>();
-    TextView[] textViewGame = new TextView[10];
-    CheckBox[] checkBoxGame = new CheckBox[10];
-    Button buttonLoadGame;
-    TextView textViewLaadGame;
+    //public ArrayList<String> gameList = new ArrayList<>();
+    private final TextView[] textViewGame = new TextView[10];
+    private final CheckBox[] checkBoxGame = new CheckBox[10];
+    private Button buttonLoadGame;
+    private TextView textViewLaadGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

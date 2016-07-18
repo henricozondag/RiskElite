@@ -1,8 +1,6 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,9 +10,11 @@ import android.widget.Toast;
 
 public class PreMove extends AppCompatActivity  implements View.OnClickListener {
 
-    TextView textViewGameKey, textViewCurrentPlayer;
-    int gameID,backButtonCount;
-    MyDBHandler db = new MyDBHandler(this);
+    private TextView textViewGameKey;
+    private TextView textViewCurrentPlayer;
+    private int gameID;
+    private int backButtonCount;
+    private final MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

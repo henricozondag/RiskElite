@@ -18,18 +18,34 @@ import java.util.Random;
 
 public class MoveAction extends AppCompatActivity implements View.OnClickListener {
 
-    int numberOfDice, numberOfDiceDefend, lostA, lostD, totalLostA, totalLostD, gameID, armiesAttacker, armiesDefender;
-    String attackCountry, defendCountry;
-    ArrayList<Integer> topA = new ArrayList<>();
-    ArrayList<Integer> topD = new ArrayList<>();
-    Random ran = new Random();
-    RadioGroup radioGroupAttack, radioGroupDefend;
-    TextView textViewALost, textViewDLost, textViewAttArmies, textViewDefArmies;
-    Button buttonGooiAttack, buttonMovePhase2, buttonGooiDefend, buttonAanvallen;
-    ImageView[] imageDice = new ImageView[5];
-    RadioButton[] radioButtonDice = new RadioButton[5];
+    private int numberOfDice;
+    private int numberOfDiceDefend;
+    private int lostA;
+    private int lostD;
+    private int totalLostA;
+    private int totalLostD;
+    private int gameID;
+    private int armiesAttacker;
+    private int armiesDefender;
+    private String attackCountry;
+    private String defendCountry;
+    private final ArrayList<Integer> topA = new ArrayList<>();
+    private final ArrayList<Integer> topD = new ArrayList<>();
+    private final Random ran = new Random();
+    private RadioGroup radioGroupAttack;
+    private RadioGroup radioGroupDefend;
+    private TextView textViewALost;
+    private TextView textViewDLost;
+    private TextView textViewAttArmies;
+    private TextView textViewDefArmies;
+    private Button buttonGooiAttack;
+    private Button buttonMovePhase2;
+    private Button buttonGooiDefend;
+    private Button buttonAanvallen;
+    private final ImageView[] imageDice = new ImageView[5];
+    private final RadioButton[] radioButtonDice = new RadioButton[5];
 
-    MyDBHandler db = new MyDBHandler(this);
+    private final MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +124,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    public int getNumberDiceThrown(int game_id) {
+    private int getNumberDiceThrown(int game_id) {
         int number;
         if (db.diceThrown(game_id, 3)) {
             number = 3;
@@ -120,14 +136,14 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         return number;
     }
 
-    public void setDiceImage (int dice, int resultDice) {
+    private void setDiceImage(int dice, int resultDice) {
         String PACKAGE_NAME = getApplicationContext().getPackageName();
         String fnm = "dice_" + Integer.toString(resultDice);
         int imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + fnm, null, null);
         imageDice[dice].setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
     }
 
-    public void setupDiceAttacker(int armiesAttacker) {
+    private void setupDiceAttacker(int armiesAttacker) {
         switch (armiesAttacker) {
             case 1:
                 radioButtonDice[0].setVisibility(View.VISIBLE);
@@ -147,7 +163,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    public void rollDiceAttack(int numberOfDice) {
+    private void rollDiceAttack(int numberOfDice) {
         topA.clear();
 
         for(int dice=0; dice<numberOfDice; dice++) {
@@ -167,7 +183,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         setupDiceDefender(armiesDefender);
     }
 
-    public void setupDiceDefender(int armiesDefender) {
+    private void setupDiceDefender(int armiesDefender) {
         //Wat dingen verdwijnen en verschijnen
         radioButtonDice[0].setVisibility(View.INVISIBLE);
         radioButtonDice[1].setVisibility(View.INVISIBLE);
@@ -189,7 +205,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
                 buttonMovePhase2.setVisibility(View.INVISIBLE);
     }
 
-    public void rollDiceDefend(int numberOfDiceDefend) {
+    private void rollDiceDefend(int numberOfDiceDefend) {
         topD.clear();
         int diceValue = 0;
         for(int dice=3; dice<numberOfDiceDefend+3; dice++) {
@@ -218,7 +234,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
     public void onBackPressed() {
     }
 
-    public void calculateResult() {
+    private void calculateResult() {
         lostA = 0;
         lostD = 0;
 
@@ -237,7 +253,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         updateArmies();
     }
 
-    public void updateArmies() {
+    private void updateArmies() {
         // Tonen van het aantal verloren legers van deze aanval
         textViewALost.setText(String.valueOf(lostA));
         textViewDLost.setText(String.valueOf(lostD));
@@ -250,13 +266,12 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         armiesAttacker = armiesAttacker - lostA;
         db.setCountryArmies(attackCountry,lostA,"min",gameID);
         Log.i("lostA", Integer.toString(lostA));
+        //db.updateTotal
 
-        //db.setCountryArmies(country_id_attacker, lostA,"MIN");
         armiesDefender = armiesDefender - lostD;
         db.setCountryArmies(defendCountry,lostD,"min",gameID);
         Log.i("lostD", Integer.toString(lostD));
 
-        //db.setCountryArmies(country_id_defender, lostD,"MIN");
         textViewAttArmies.setText(String.valueOf(armiesAttacker));
         textViewDefArmies.setText(String.valueOf(armiesDefender));
 

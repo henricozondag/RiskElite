@@ -15,21 +15,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Objects;
 
 public class PlayerDetails extends AppCompatActivity implements View.OnClickListener{
 
-    public ArrayList<Integer> cardList = new ArrayList<>();
-    int player, armyCard, plaatsLegers,gameID, currentPlayerId;
-    String status;
-    Random ran = new Random();
-    TextView textViewAantalLegers, textViewPlaatsenLegers;
-    Button buttonPlaatsenLegers, buttonMovePhase2, buttonRuilKaarten, buttonAddRandomCard;
-    ImageView[] imageViewCard = new ImageView[10];
-    CheckBox[] checkBoxCard = new CheckBox[10];
-    public int[] cardType = new int[10];
+    private final ArrayList<Integer> cardList = new ArrayList<>();
+    private int armyCard;
+    private int plaatsLegers;
+    private int gameID;
+    private int currentPlayerId;
+    private TextView textViewAantalLegers;
+    private TextView textViewPlaatsenLegers;
+    private Button buttonPlaatsenLegers;
+    private Button buttonMovePhase2;
+    private Button buttonRuilKaarten;
+    private Button buttonAddRandomCard;
+    private final ImageView[] imageViewCard = new ImageView[10];
+    private final CheckBox[] checkBoxCard = new CheckBox[10];
+    private final int[] cardType = new int[10];
 
-    MyDBHandler db = new MyDBHandler(this);
+    private final MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +43,9 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         gameID = db.getActiveGameID();
         currentPlayerId = Integer.parseInt(db.currentPlayer(gameID,"ID"));
-        player = Integer.parseInt(db.currentPlayer(gameID,"gameplayer"));
+        //player = Integer.parseInt(db.currentPlayer(gameID,"gameplayer"));
         // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten dit moet nog wel geimplementeerd worden (knop wel niet tonen)
-        status = db.currentPlayer(gameID, "status");
+        //status = db.currentPlayer(gameID, "status");
 
         buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
@@ -81,7 +86,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     }
 
     //bitmap geneuzel
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -102,8 +107,8 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                         int reqWidth, int reqHeight) {
+    private static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                          int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -118,7 +123,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public void showCards () {
+    private void showCards() {
 
         // standaard beginnen met een leeg scherm
         for (int n = 0; n <= 9; n++) {
@@ -152,7 +157,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void convertCards() {
+    private void convertCards() {
 
         int counter = 0;
         cardList.clear();
@@ -165,12 +170,13 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         }
         //Bekijken welk soort setje is ingeleverd: (drie dezelfde? drie verschillende? fout?)
         if (counter == 3) {
-            if (cardList.get(0) == cardList.get(1) && cardList.get(0) == cardList.get(2)) {
+            if (cardList.get(0).equals(cardList.get(1)) && cardList.get(0).equals(cardList.get(2))) {
                 Toast.makeText(PlayerDetails.this, "Heel goed, je hebt drie dezelfde aangevinkt!",  Toast.LENGTH_LONG).show();
                 addArmies();
                 removeCards();
             }
-            else if (cardList.get(0) != cardList.get(1) && cardList.get(0) != cardList.get(2) && cardList.get(1) != cardList.get(2)) {
+            //else if (cardList.get(0) != cardList.get(1) && cardList.get(0) != cardList.get(2) && cardList.get(1) != cardList.get(2)) {
+            else if (!Objects.equals(cardList.get(0), cardList.get(1)) && !Objects.equals(cardList.get(0), cardList.get(2)) && !Objects.equals(cardList.get(1), cardList.get(2))) {
                 Toast.makeText(PlayerDetails.this, "Heel goed, je hebt drie verschillende aangevinkt!",  Toast.LENGTH_LONG).show();
                 addArmies();
                 removeCards();
@@ -184,7 +190,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void addArmies() {
+    private void addArmies() {
 
         // geef het aantal legers wat geplaatst mag worden door aan variabele
         armyCard = Integer.parseInt((db.getParameter("armyCard",gameID)));
@@ -203,7 +209,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         db.setParameter("armyCard", armyCard, gameID,"update");
     }
 
-    public void removeCards() {
+    private void removeCards() {
 
         MyDBHandler db = new MyDBHandler(this);
 
@@ -211,7 +217,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         showCards();
     }
 // Nog omzetten naar player_id
-    public void addRandomCard(int player_id) {
+private void addRandomCard(int player_id) {
         MyDBHandler db = new MyDBHandler(this);
         db.addRandomCard(player_id);
         showCards();
