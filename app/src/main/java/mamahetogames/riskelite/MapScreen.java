@@ -2,6 +2,8 @@ package mamahetogames.riskelite;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -28,9 +30,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     Bitmap armyIcon;
     Bitmap landKaart;
     float floatX,floatY;
-    int nieuwX, nieuwY, screenWidth, screenHeight, aantalLegers;
+    int nieuwX, nieuwY, screenWidth, screenHeight, aantalLegers, active_game_id;
 
     Paint black, white;
+    MyDBHandler db = new MyDBHandler(this);
 
     Rect[] ProvinciesLijst = new Rect[12];
     Bitmap[] BezettingLegers = new Bitmap[12];
@@ -155,6 +158,19 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 c.drawText("Legers zetten: ", ScaleX(25), ScaleY(70), black);
                 c.drawText( "" + aantalLegers , ScaleX(350) , ScaleY(70), black);
 
+                active_game_id = db.getActiveGameID();
+                Cursor cursor = db.getSituation(active_game_id);
+
+                Log.i(""," hierna ");
+
+                for(cursor.moveToNext(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    Log.i(cursor.getString(0),"cursor 0");
+                    Log.i(cursor.getString(1),"cursor 1");
+                    Log.i(cursor.getString(2),"cursor 2");
+                    Log.i(cursor.getString(3),"cursor 3");
+                }
+                cursor.close();
+
                 // Als er in een provincievlak gedrukt is, zet daar legertje neer!
                 if (floatX != 0) {
 
@@ -164,10 +180,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     c.drawText("1", floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), black);
                     c.drawText("1", floatX, floatY, white);
                 }
-
                 holder.unlockCanvasAndPost(c);
-
-
             }
         }
 

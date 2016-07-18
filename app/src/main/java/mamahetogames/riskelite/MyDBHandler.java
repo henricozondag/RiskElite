@@ -11,7 +11,7 @@ import java.util.Random;
 
 class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
     private static final String DATABASE_NAME = "riskElite";
 
     private static final String TABLE_CARD = "card";
@@ -40,11 +40,11 @@ class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_COUNTRIES_WON = "countries_won";
     private static final String COLUMN_COUNTRIES_LOST = "countries_lost";
 
-    private static final String TABLE_COUNTRY = "game_map";
-    private static final String COLUMN_PLAYER_ID = "player_id";
-    private static final String COLUMN_CONTINENT = "country_continent";
-    private static final String COLUMN_COUNTRY_ARMIES = "country_armies";
-    private static final String COLUMN_WORLD = "world";
+    public static final String TABLE_GAME_MAP = "game_map";
+    public static final String COLUMN_PLAYER_ID = "player_id";
+    public static final String COLUMN_CONTINENT = "country_continent";
+    public static final String COLUMN_COUNTRY_ARMIES = "country_armies";
+    public static final String COLUMN_WORLD = "world";
 
     private static final String TABLE_SETTING = "setting";
     private static final String COLUMN_PARAMETER_NM = "parameter_nm";
@@ -118,7 +118,7 @@ class MyDBHandler extends SQLiteOpenHelper {
                 + COLUMN_PARAMETER_VALUE    + " TEXT" + ")";
         db.execSQL(CREATE_SETTING_TABLE);
 
-        String CREATE_COUNTRY_TABLE = "CREATE TABLE " + TABLE_COUNTRY + "("
+        String CREATE_COUNTRY_TABLE = "CREATE TABLE " + TABLE_GAME_MAP + "("
                 + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
                 + COLUMN_GAME_ID            + " INTEGER,"
                 + COLUMN_PLAYER_ID          + " INTEGER,"
@@ -151,7 +151,7 @@ class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTING);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTRY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME_MAP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORLD);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEIGHBOUR);
         onCreate(db);
@@ -242,11 +242,11 @@ class MyDBHandler extends SQLiteOpenHelper {
 
         // conceptje zodat in ieder geval alle countries een eigenaar hebben. Kan natuurlijk veel beter worden gemaakt.
         SQLiteDatabase db = this.getWritableDatabase();
-                //kies de eerste speler die een land krijgt
+        //kies de eerste speler die een land krijgt
         int startPlayer =  ran.nextInt(Integer.valueOf(players)) + 1;
 
         // selecteer alle id's van de landen die in deze wereld zitten
-        String query = "select " + COLUMN_ID + " from " + TABLE_COUNTRY + " where " + COLUMN_GAME_ID + " = " + game_id;
+        String query = "select " + COLUMN_ID + " from " + TABLE_GAME_MAP + " where " + COLUMN_GAME_ID + " = " + game_id;
         Log.i("allecountries", query);
         Cursor countries = db.rawQuery(query, null);
 
@@ -256,7 +256,7 @@ class MyDBHandler extends SQLiteOpenHelper {
             // selecteer player_id van de speler die het land krijgt
             player_id = getPlayerID(startPlayer, game_id);
 
-            String query3 = "update " + TABLE_COUNTRY + " set " + COLUMN_PLAYER_ID + " = " +  player_id + ", " + COLUMN_COUNTRY_ARMIES + " = 3 where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_ID + " = " + countries.getInt(0);
+            String query3 = "update " + TABLE_GAME_MAP + " set " + COLUMN_PLAYER_ID + " = " +  player_id + ", " + COLUMN_COUNTRY_ARMIES + " = 3 where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_ID + " = " + countries.getInt(0);
             Log.i("updatecountryplayerid", query3);
             db.execSQL(query3);
 
@@ -347,9 +347,9 @@ class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query;
         if (type.equals("owner")) {
-            query = "select " + COLUMN_COUNTRY_NAME + " from " + TABLE_COUNTRY + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_PLAYER_ID + " = " + player_id;
+            query = "select " + COLUMN_COUNTRY_NAME + " from " + TABLE_GAME_MAP + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_PLAYER_ID + " = " + player_id;
         } else
-            query = "select " + COLUMN_COUNTRY_NAME + " from " + TABLE_COUNTRY + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_PLAYER_ID + " <> " + player_id;
+            query = "select " + COLUMN_COUNTRY_NAME + " from " + TABLE_GAME_MAP + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_PLAYER_ID + " <> " + player_id;
         Log.i("getcountries",query);
 
         return db.rawQuery(query, null);
@@ -359,7 +359,7 @@ class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query;
 
-        query = "select " + COLUMN_COUNTRY_ARMIES + " from " + TABLE_COUNTRY + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_COUNTRY_NAME + " = '" + country_name + "'";
+        query = "select " + COLUMN_COUNTRY_ARMIES + " from " + TABLE_GAME_MAP + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_COUNTRY_NAME + " = '" + country_name + "'";
         Log.i("getcountryarmies",query);
         Cursor numberOfArmies = db.rawQuery(query, null);
 
@@ -491,7 +491,7 @@ class MyDBHandler extends SQLiteOpenHelper {
 
         //Doorloop de cursor met landen en stop ze 1 voor 1 in de country tabel
         for(country.moveToFirst(); !country.isAfterLast(); country.moveToNext()) {
-            String query3 = "insert or replace into " + TABLE_COUNTRY + " ( " + COLUMN_GAME_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_CONTINENT + ") values (" + gameID + ", '" + world + "', " +  country.getString(2) + ", '" + country.getString(0) + "' ,'" + country.getString(1) +"' )";
+            String query3 = "insert or replace into " + TABLE_GAME_MAP + " ( " + COLUMN_GAME_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_CONTINENT + ") values (" + gameID + ", '" + world + "', " +  country.getString(2) + ", '" + country.getString(0) + "' ,'" + country.getString(1) +"' )";
             Log.i("newGameCountry", query3);
             db.execSQL(query3);
         }
@@ -619,7 +619,7 @@ class MyDBHandler extends SQLiteOpenHelper {
 
     private int getCountryId(String name, int game_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "select " + COLUMN_COUNTRY_ID + " from " + TABLE_COUNTRY + " where " + COLUMN_COUNTRY_NAME + " = '" + name + "' and " + COLUMN_GAME_ID + " = " + game_id;
+        String query = "select " + COLUMN_COUNTRY_ID + " from " + TABLE_GAME_MAP + " where " + COLUMN_COUNTRY_NAME + " = '" + name + "' and " + COLUMN_GAME_ID + " = " + game_id;
         Log.i("getcountryid", query);
         Cursor cursor = db.rawQuery(query, null);
 
@@ -657,7 +657,7 @@ class MyDBHandler extends SQLiteOpenHelper {
     // Bij false: Dan mag het een verdedig land zijn
     public boolean isOwner(int player_id, String country_name, int game_id) {
         boolean result = false;
-        String query = "select * from " + TABLE_COUNTRY + " where " + COLUMN_PLAYER_ID + " = " + player_id + " and " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
+        String query = "select * from " + TABLE_GAME_MAP + " where " + COLUMN_PLAYER_ID + " = " + player_id + " and " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
         SQLiteDatabase db = this.getWritableDatabase();
         Log.i("isowner", query);
         Cursor cursor = db.rawQuery(query, null);
@@ -682,11 +682,11 @@ class MyDBHandler extends SQLiteOpenHelper {
         String query;
 
         if (Objects.equals(type, "PLUS")) {
-            query = "update " + TABLE_COUNTRY + " set " + COLUMN_COUNTRY_ARMIES + " = " + COLUMN_COUNTRY_ARMIES + " + " + number + " where " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
+            query = "update " + TABLE_GAME_MAP + " set " + COLUMN_COUNTRY_ARMIES + " = " + COLUMN_COUNTRY_ARMIES + " + " + number + " where " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
             Log.i("PLUS", query);
         }
         else {
-            query = "update " + TABLE_COUNTRY + " set " + COLUMN_COUNTRY_ARMIES + " = " + COLUMN_COUNTRY_ARMIES + " - " + number + " where " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
+            query = "update " + TABLE_GAME_MAP + " set " + COLUMN_COUNTRY_ARMIES + " = " + COLUMN_COUNTRY_ARMIES + " - " + number + " where " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
             Log.i("MIN", query);
         }
         db.execSQL(query);
@@ -776,4 +776,14 @@ class MyDBHandler extends SQLiteOpenHelper {
         return value;
     }
 
+    // deze cursor haalt de 'situatie' op waarin de landkaart verkeerd: hoeveel legers van welke spelers staan op welk landje?
+    public Cursor getSituation(int gameID) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "select " + COLUMN_PLAYER_ID + "," + COLUMN_WORLD + "," + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_ARMIES + " from " + TABLE_GAME_MAP  + " where " + COLUMN_GAME_ID + " = " + gameID;
+
+        Cursor situation = db.rawQuery(selectQuery, null);
+
+        return situation;
+    }
 }
