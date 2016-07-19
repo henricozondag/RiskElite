@@ -25,8 +25,10 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
     private int totalLostA;
     private int totalLostD;
     private int gameID;
-    private int armiesAttacker;
-    private int armiesDefender;
+    private int attackArmies;
+    private int defendArmies;
+    private int attackPlayer;
+    private int defendPlayer;
     private String attackCountry;
     private String defendCountry;
     private final ArrayList<Integer> topA = new ArrayList<>();
@@ -69,19 +71,23 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         //status zetten van speler
         db.setPlayerStatus(gameID, "moveaction");
 
-        // Haal waarde op van de betrokken legers.
+        //Naam van aanvaller, aantal armies van aanvaller, player_id van aanvaller
         attackCountry = db.getGameCountry("ATTACK", gameID);
+        attackArmies = db.getCountryArmies(attackCountry, gameID);
+        attackPlayer = db.getCountryOwner(attackCountry, gameID);
+        Log.i("attackArmies", Integer.toString(attackArmies));
+
+        //player_id van verdediger ophalen
         defendCountry = db.getGameCountry("DEFEND", gameID);
-        armiesAttacker = db.getCountryArmies(attackCountry, gameID);
-        armiesDefender = db.getCountryArmies(defendCountry, gameID);
-        Log.i("armiesAttacker", Integer.toString(armiesAttacker));
-        Log.i("armiesDefender", Integer.toString(armiesDefender));
+        defendArmies = db.getCountryArmies(defendCountry, gameID);
+        defendPlayer = db.getCountryOwner(defendCountry, gameID);
+        Log.i("defendArmies", Integer.toString(defendArmies));
 
         // textviews die het aantal armies bevatten waarmee aangevallen en verdedigt wordt
         textViewAttArmies = (TextView) this.findViewById(R.id.textViewAttArmies);
         textViewDefArmies = (TextView) this.findViewById(R.id.textViewDefArmies);
-        textViewAttArmies.setText(String.valueOf(armiesAttacker));
-        textViewDefArmies.setText(String.valueOf(armiesDefender));
+        textViewAttArmies.setText(String.valueOf(attackArmies));
+        textViewDefArmies.setText(String.valueOf(defendArmies));
 
         // button om terug te gaan naar MovePhase2
         buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
@@ -115,12 +121,12 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
                 setDiceImage(dice,topA.get(dice));
             }
             //Scherm klaar maken voor verdediger
-            setupDiceDefender(armiesDefender);
+            setupDiceDefender(defendArmies);
 
         }
         else {
             // Scherm klaar maken voor aanvaller
-            setupDiceAttacker(armiesAttacker);
+            setupDiceAttacker(attackArmies);
         }
     }
 
@@ -143,8 +149,8 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         imageDice[dice].setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
     }
 
-    private void setupDiceAttacker(int armiesAttacker) {
-        switch (armiesAttacker) {
+    private void setupDiceAttacker(int attackArmies) {
+        switch (attackArmies) {
             case 1:
                 radioButtonDice[0].setVisibility(View.VISIBLE);
                 radioGroupAttack.check(radioButtonDice[0].getId());
@@ -180,10 +186,10 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
             db.setDice("ATTACK", topA.get(dice), dice, gameID);
         }
 
-        setupDiceDefender(armiesDefender);
+        setupDiceDefender(defendArmies);
     }
 
-    private void setupDiceDefender(int armiesDefender) {
+    private void setupDiceDefender(int defendArmies) {
         //Wat dingen verdwijnen en verschijnen
         radioButtonDice[0].setVisibility(View.INVISIBLE);
         radioButtonDice[1].setVisibility(View.INVISIBLE);
@@ -191,7 +197,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         buttonGooiDefend.setVisibility(View.VISIBLE);
         buttonGooiAttack.setVisibility(View.INVISIBLE);
         // aantal dobbelstenen voor de verdediger aanpassen aan de legers die nog beschikbaar zijn
-        switch (armiesDefender) {
+        switch (defendArmies) {
             case 1:
                 radioButtonDice[3].setVisibility(View.VISIBLE);
                 radioGroupDefend.check(radioButtonDice[3].getId());
@@ -262,33 +268,36 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         totalLostA = totalLostA + lostA;
         totalLostD = totalLostD + lostD;
 
-        //Bijwerken van het aantal legers welke nog op de landen staan
-        armiesAttacker = armiesAttacker - lostA;
+        //Bijwerken van het aantal legers welke nog op de landen staan en bijwerken database totalen
+        attackArmies = attackArmies - lostA;
         db.setCountryArmies(attackCountry,lostA,"min",gameID);
+        db.updateArmyResult(attackPlayer,"LOST",lostA);
+        db.updateArmyResult(defendPlayer,"WON",lostA);
         Log.i("lostA", Integer.toString(lostA));
-        //db.updateTotal
 
-        armiesDefender = armiesDefender - lostD;
+        defendArmies = defendArmies - lostD;
         db.setCountryArmies(defendCountry,lostD,"min",gameID);
+        db.updateArmyResult(attackPlayer,"WON",lostD);
+        db.updateArmyResult(defendPlayer,"LOST",lostD);
         Log.i("lostD", Integer.toString(lostD));
 
-        textViewAttArmies.setText(String.valueOf(armiesAttacker));
-        textViewDefArmies.setText(String.valueOf(armiesDefender));
+        textViewAttArmies.setText(String.valueOf(attackArmies));
+        textViewDefArmies.setText(String.valueOf(defendArmies));
 
         //Controleren of de aanvaller of verdediger de slag verloren heeft
-        if (armiesAttacker == 0) {
+        if (attackArmies == 0) {
             // open een nieuwe activity met een attacker lost animatie
             Intent i = new Intent(this, MoveActionResult.class);
-            i.putExtra("winnaar", "Verdediger");
+            i.putExtra("winnaar", defendPlayer);
             i.putExtra("totalLostA", totalLostA);
             i.putExtra("totalLostD", totalLostD);
             startActivity(i);
         }
-        else if (armiesDefender == 0) {
+        else if (defendArmies == 0) {
             // open een nieuwe activity met een defender lost animatie
             // en met de statistieken van de veldslag
             Intent i = new Intent(this, MoveActionResult.class);
-            i.putExtra("winnaar", "Aanvaller");
+            i.putExtra("winnaar", attackPlayer);
             i.putExtra("totalLostA", totalLostA);
             i.putExtra("totalLostD", totalLostD);
             startActivity(i);
@@ -301,7 +310,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.buttonMovePhase2:
                 i = new Intent(this, MoveActionResult.class);
-                i.putExtra("winnaar", "Geen winnaar.....");
+                i.putExtra("winnaar", 0);
                 i.putExtra("totalLostA", totalLostA);
                 i.putExtra("totalLostD", totalLostD);
                 startActivity(i);
@@ -332,7 +341,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
                 break;
             case R.id.buttonAanvallen:
                 //Aantal dobbelstenen voor de aanvaller aanpassen aan de legers die nog beschikbaar zijn
-                setupDiceAttacker(armiesAttacker);
+                setupDiceAttacker(attackArmies);
                 buttonGooiAttack.setVisibility(View.VISIBLE);
                 buttonAanvallen.setVisibility(View.INVISIBLE);
                 imageDice[0].setImageResource(R.mipmap.black);

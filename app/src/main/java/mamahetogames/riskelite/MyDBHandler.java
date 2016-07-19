@@ -11,7 +11,7 @@ import java.util.Random;
 
 class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 19;
     private static final String DATABASE_NAME = "riskElite";
 
     private static final String TABLE_CARD = "card";
@@ -50,7 +50,7 @@ class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_PARAMETER_NM = "parameter_nm";
     private static final String COLUMN_PARAMETER_VALUE = "parameter_value";
 
-    private static final String TABLE_WORLD = "map";
+    private static final String TABLE_MAP = "map";
     private static final String COLUMN_COUNTRY_ID = "country_id";
     private static final String COLUMN_COUNTRY_NAME = "country_name";
     private static final String COLUMN_COUNTRY_CONTINENT = "country_continent";
@@ -69,6 +69,7 @@ class MyDBHandler extends SQLiteOpenHelper {
     private String currentPlayer1;
     private String status;
     private String name;
+    private String playerName;
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -129,7 +130,7 @@ class MyDBHandler extends SQLiteOpenHelper {
                 + COLUMN_COUNTRY_ARMIES     + " INTEGER)";
         db.execSQL(CREATE_COUNTRY_TABLE);
 
-        String CREATE_WORLD_TABLE = "CREATE TABLE " + TABLE_WORLD + "("
+        String CREATE_WORLD_TABLE = "CREATE TABLE " + TABLE_MAP + "("
                 + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
                 + COLUMN_WORLD              + " TEXT,"
                 + COLUMN_COUNTRY_ID         + " INTEGER,"
@@ -152,14 +153,14 @@ class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTING);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME_MAP);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORLD);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEIGHBOUR);
         onCreate(db);
     }
 
     public void initWorlds() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "insert or replace into " + TABLE_WORLD + "(" + COLUMN_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_COUNTRY_CONTINENT + " ) " +
+        String query = "insert or replace into " + TABLE_MAP + "(" + COLUMN_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_COUNTRY_CONTINENT + " ) " +
                 "values ('1','Nederland','1','Noord Brabant','Zuid Nederland')," +
                 "('2','Nederland','2','Zeeland','Zuid Nederland')," +
                 "('3','Nederland','3','Limburg','Zuid Nederland')," +
@@ -226,7 +227,9 @@ class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         // Tijdelijk toegevoegd dat elke speler 2 armies mag plaatsen (Voor Thomas zijn code)
         for (int i = 0;i < x; i++) {
-            String query = "insert into " + TABLE_PLAYER + "(" + COLUMN_GAME_ID + " , " + COLUMN_NAME + " , " + COLUMN_GAMEPLAYER + " , " + COLUMN_STATUS + " , " + COLUMN_PLACE_ARMIES + ") values (" + gameID + ",'leeg'," + (i+1) + ",'resting', 2)";
+            String query = "insert into " + TABLE_PLAYER +
+                    "(" + COLUMN_GAME_ID    + " , " + COLUMN_NAME + "   , " + COLUMN_GAMEPLAYER + " , " + COLUMN_STATUS + " , " + COLUMN_PLACE_ARMIES + "   , " + COLUMN_ARMIES_LOST + "    , " + COLUMN_ARMIES_WON + " , " + COLUMN_COUNTRIES_LOST + "    , " + COLUMN_COUNTRIES_WON + ") values " +
+                    "(" + gameID            + " , 'leeg'                , " + (i+1) + "             , 'resting'             , 2                             , 0                             , 0                         , 0                             , 0)";
             Log.i("insertaantalplayers", query);
             db.execSQL(query);
         }
@@ -337,7 +340,7 @@ class MyDBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "select distinct(" + COLUMN_WORLD + ") from " + TABLE_WORLD;
+        String query = "select distinct(" + COLUMN_WORLD + ") from " + TABLE_MAP;
 
         return db.rawQuery(query, null);
     }
@@ -424,6 +427,20 @@ class MyDBHandler extends SQLiteOpenHelper {
         return currentPlayer1;
     }
 
+    public String getPlayerName(int game_id, int player_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select " + COLUMN_NAME + " from " + TABLE_PLAYER + " where " + COLUMN_ID + " = " + player_id + " and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("playerName", query);
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            playerName = cursor.getString(0);
+        }
+        cursor.close();
+        return playerName;
+
+    }
+
 
     public void nextPlayer(int game_id) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -485,7 +502,7 @@ class MyDBHandler extends SQLiteOpenHelper {
         int gameID = getActiveGameID();
 
         //Stop alle bij de wereld horende landen in een cursor
-        String query2 = "select " + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_CONTINENT + "," + COLUMN_COUNTRY_ID + " from " + TABLE_WORLD + " where " + COLUMN_WORLD + " = '" + world +  "'";
+        String query2 = "select " + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_CONTINENT + "," + COLUMN_COUNTRY_ID + " from " + TABLE_MAP + " where " + COLUMN_WORLD + " = '" + world +  "'";
         Log.i("cursorvoorcountryinsert", query2);
         Cursor country = db.rawQuery(query2, null);
 
@@ -786,4 +803,33 @@ class MyDBHandler extends SQLiteOpenHelper {
 
         return situation;
     }
+
+    //deze methode update het totaal aantal verloren / gewonnen legers van een specifieke speler
+    public void updateArmyResult (int player_id, String lostWon, int number) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String column = "ARMIES_" + lostWon;
+
+        String query = "update " + TABLE_PLAYER + " set "
+                + column + " = " + column + " + " +  number +
+                " where " + COLUMN_ID + " = " + player_id;
+        Log.i("resetCountries", query);
+        db.execSQL(query);
+
+    }
+
+    //deze methode geeft het player_id terug van de owner van het land
+    public int getCountryOwner(String countryname, int game_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select " + COLUMN_PLAYER_ID + " from " + TABLE_GAME_MAP + " where " + COLUMN_COUNTRY_NAME + " = '" + countryname + "' and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("getCountryOwner", query);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            player_id = cursor.getInt(0);
+        }
+        cursor.close();
+        return player_id;
+    }
+
 }

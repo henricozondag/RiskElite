@@ -23,7 +23,10 @@ public class MoveActionResult extends AppCompatActivity implements View.OnClickL
         Bundle b = getIntent().getExtras();
         int totalLostA = b.getInt("totalLostA");
         int totalLostD = b.getInt("totalLostD");
-        String winnaar = b.getString("winnaar");
+        int winnaar_id = b.getInt("winnaar");
+
+        // winnaar naam ophalen aan de hand van id
+        String winnaar = db.getPlayerName(winnaar_id,gameID);
 
         // alle runtime veldslagdata verwijderen
         db.resetCountries(gameID);
