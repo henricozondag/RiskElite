@@ -161,18 +161,18 @@ class MyDBHandler extends SQLiteOpenHelper {
     public void initWorlds() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "insert or replace into " + TABLE_MAP + "(" + COLUMN_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_COUNTRY_CONTINENT + " ) " +
-                "values ('1','Nederland','1','Noord Brabant','Zuid Nederland')," +
-                "('2','Nederland','2','Zeeland','Zuid Nederland')," +
-                "('3','Nederland','3','Limburg','Zuid Nederland')," +
-                "('4','Nederland','4','Noord Holland','West Nederland')," +
-                "('5','Nederland','5','Zuid Holland','West Nederland')," +
-                "('6','Nederland','6','Utrecht','West Nederland')," +
-                "('7','Nederland','7','Gelderland','Oost Nederland')," +
-                "('8','Nederland','8','Overijssel','Oost Nederland')," +
-                "('9','Nederland','9','Flevoland','Oost Nederland')," +
-                "('10','Nederland','10','Groningen','Noord Nederland')," +
-                "('11','Nederland','11','Friesland','Noord Nederland')," +
-                "('12','Nederland','12','Drenthe','Noord Nederland')";
+                "values ('1','Nederland','1','NoordBrabant','ZuidNederland')," +
+                "('2','Nederland','2','Zeeland','ZuidNederland')," +
+                "('3','Nederland','3','Limburg','ZuidNederland')," +
+                "('4','Nederland','4','NoordHolland','WestNederland')," +
+                "('5','Nederland','5','ZuidHolland','WestNederland')," +
+                "('6','Nederland','6','Utrecht','WestNederland')," +
+                "('7','Nederland','7','Gelderland','OostNederland')," +
+                "('8','Nederland','8','Overijssel','OostNederland')," +
+                "('9','Nederland','9','Flevoland','OostNederland')," +
+                "('10','Nederland','10','Groningen','NoordNederland')," +
+                "('11','Nederland','11','Friesland','NoordNederland')," +
+                "('12','Nederland','12','Drenthe','NoordNederland')";
         db.execSQL(query);
     }
 

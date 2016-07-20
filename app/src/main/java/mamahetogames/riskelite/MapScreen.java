@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -21,22 +20,19 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.util.Objects;
 
 public class MapScreen extends Activity implements View.OnTouchListener {
 
     mapView v;
-    Bitmap armyIcon;
+    Bitmap armyIcon, armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
     Bitmap landKaart;
-    float floatX,floatY;
-    int nieuwX, nieuwY, screenWidth, screenHeight, aantalLegers, active_game_id;
+    float coordX, coordY;
+    int screenWidth, screenHeight, aantalLegers, active_game_id;
 
     Paint black, white;
     MyDBHandler db = new MyDBHandler(this);
 
     Rect[] ProvinciesLijst = new Rect[12];
-    Bitmap[] BezettingLegers = new Bitmap[12];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,16 +84,20 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         ProvinciesLijst[10] = NoordBrabant;
         ProvinciesLijst[11] = ZuidHolland;
 
-        armyIcon = BitmapFactory.decodeResource(getResources(),R.mipmap.toy_soldier_clip_art_small);
+        armyRed = BitmapFactory.decodeResource(getResources(),R.mipmap.red_soldier);
+        armyBlue = BitmapFactory.decodeResource(getResources(),R.mipmap.blue_soldier);
+        armyYellow = BitmapFactory.decodeResource(getResources(),R.mipmap.yellow_soldier);
+        armyGreen = BitmapFactory.decodeResource(getResources(),R.mipmap.green_soldier);
         landKaart = BitmapFactory.decodeResource(getResources(), R.mipmap.provincieskaart);
-        armyIcon = Bitmap.createScaledBitmap(armyIcon, screenWidth / 15 , screenHeight / 15, false);
+        armyRed = Bitmap.createScaledBitmap(armyRed, screenWidth / 15 , screenHeight / 15, false);
+        armyBlue = Bitmap.createScaledBitmap(armyBlue, screenWidth / 15 , screenHeight / 15, false);
+        armyYellow = Bitmap.createScaledBitmap(armyYellow, screenWidth / 15 , screenHeight / 15, false);
+        armyGreen = Bitmap.createScaledBitmap(armyGreen, screenWidth / 15 , screenHeight / 15, false);
+
+        active_game_id = db.getActiveGameID();
+
         landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
-
-        //Bitmap BezetZeeland = new Bitmap();
-
-
         setContentView(v);
-
     }
 
     @Override
@@ -113,12 +113,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 Log.i("klik locatie", "" + me.getX() + "  " + me.getY());
                 if (aantalLegers > 0) {
-                    Integer legerCoordinaten[] = zetLeger(intX, intY);
-                    nieuwX = legerCoordinaten[0];
-                    nieuwY = legerCoordinaten[1];
-                    floatX = (float) nieuwX;
-                    floatY = (float) nieuwY;
-                    Log.i("nieuwX " + nieuwX, "nieuw Y" + nieuwY);
+                    zetLeger(intX, intY);
                 }
                 else
                     Toast.makeText(getApplicationContext(),
@@ -158,28 +153,85 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 c.drawText("Legers zetten: ", ScaleX(25), ScaleY(70), black);
                 c.drawText( "" + aantalLegers , ScaleX(350) , ScaleY(70), black);
 
-                active_game_id = db.getActiveGameID();
+                // definieer de cursor uit de database handler en loop door de records heen
                 Cursor cursor = db.getSituation(active_game_id);
-
-                Log.i(""," hierna ");
-
-                for(cursor.moveToNext(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    Log.i(cursor.getString(0),"cursor 0");
-                    Log.i(cursor.getString(1),"cursor 1");
-                    Log.i(cursor.getString(2),"cursor 2");
-                    Log.i(cursor.getString(3),"cursor 3");
+                for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    // bepaal de kleur van het leger voor deze rij
+                    //Log.i("cursor: ", " player_id: " + cursor.getString(0) + " world: " + cursor.getString(1) + " country_name: " + cursor.getString(2) + " country_armies: " + cursor.getString(3));
+                    switch (cursor.getString(0)) {
+                        case "1":
+                            countryArmy = armyRed;
+                            break;
+                        case "2":
+                            countryArmy = armyBlue;
+                            break;
+                        case "3":
+                            countryArmy = armyYellow;
+                            break;
+                        case "4":
+                            countryArmy = armyGreen;
+                            break;
+                    }
+                    // zet de coordinaten van het leger voor deze rij
+                    switch (cursor.getString(2)) {
+                        case "NoordBrabant":
+                            coordX = ProvinciesLijst[10].centerX();
+                            coordY = ProvinciesLijst[10].centerY();
+                            break;
+                        case "Zeeland":
+                            coordX = ProvinciesLijst[0].centerX();
+                            coordY = ProvinciesLijst[0].centerY();
+                            break;
+                        case "Limburg":
+                            coordX = ProvinciesLijst[9].centerX();
+                            coordY = ProvinciesLijst[9].centerY();
+                            break;
+                        case "NoordHolland":
+                            coordX = ProvinciesLijst[6].centerX();
+                            coordY = ProvinciesLijst[6].centerY();
+                            break;
+                        case "ZuidHolland":
+                            coordX = ProvinciesLijst[11].centerX();
+                            coordY = ProvinciesLijst[11].centerY();
+                            break;
+                        case "Utrecht":
+                            coordX = ProvinciesLijst[7].centerX();
+                            coordY = ProvinciesLijst[7].centerY();
+                            break;
+                        case "Gelderland":
+                            coordX = ProvinciesLijst[8].centerX();
+                            coordY = ProvinciesLijst[8].centerY();
+                            break;
+                        case "Overijssel":
+                            coordX = ProvinciesLijst[5].centerX();
+                            coordY = ProvinciesLijst[5].centerY();
+                            break;
+                        case "Flevoland":
+                            coordX = ProvinciesLijst[4].centerX();
+                            coordY = ProvinciesLijst[4].centerY();
+                            break;
+                        case "Groningen":
+                            coordX = ProvinciesLijst[2].centerX();
+                            coordY = ProvinciesLijst[2].centerY();
+                            break;
+                        case "Friesland":
+                            coordX = ProvinciesLijst[1].centerX();
+                            coordY = ProvinciesLijst[1].centerY();
+                            break;
+                        case "Drenthe":
+                            coordX = ProvinciesLijst[3].centerX();
+                            coordY = ProvinciesLijst[3].centerY();
+                            break;
+                    }
+                    // teken het soldaatje met de juiste kleur op de juiste plaats
+                    c.drawBitmap(countryArmy, coordX - (countryArmy.getWidth() / 2), coordY - (countryArmy.getHeight() / 2), null);
+                    c.drawCircle(coordX - ScaleY(25), coordY - ScaleY(80), ScaleY(30), black);
+                    c.drawCircle(coordX - ScaleX(25), coordY - ScaleX(80), ScaleX(28), white);
+                    c.drawText(cursor.getString(3), coordX - (countryArmy.getWidth() / 2), coordY - (countryArmy.getHeight() / 2), black);
+                    c.drawText(cursor.getString(3), coordX, coordY, white);
                 }
                 cursor.close();
 
-                // Als er in een provincievlak gedrukt is, zet daar legertje neer!
-                if (floatX != 0) {
-
-                    c.drawBitmap(armyIcon, floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), null);
-                    c.drawCircle(floatX - ScaleY(25), floatY - ScaleY(80), ScaleY(30), black);
-                    c.drawCircle(floatX - ScaleX(25), floatY - ScaleX(80), ScaleX(28), white);
-                    c.drawText("1", floatX - (armyIcon.getWidth() / 2), floatY - (armyIcon.getHeight() / 2), black);
-                    c.drawText("1", floatX, floatY, white);
-                }
                 holder.unlockCanvasAndPost(c);
             }
         }
@@ -217,23 +269,60 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         v.pause();
     }
 
-    public Integer[] zetLeger (int x, int y) {
+    public void zetLeger (int x, int y) {
 
-        Integer legerCoordinaten[] = new Integer[2];
-
-            for (int i = 0; i < ProvinciesLijst.length; i++) {
-                if (ProvinciesLijst[i].contains(x, y)) {
-                    legerCoordinaten[0] = ProvinciesLijst[i].centerX();
-                    legerCoordinaten[1] = ProvinciesLijst[i].centerY();
+                if (ProvinciesLijst[0].contains(x, y)) {
+                    db.setCountryArmies("Zeeland", 1, "PLUS", active_game_id );
                     aantalLegers--;
                 }
-            }
-            if (legerCoordinaten[0] == null) {
-                Log.i("niets", " lege coordinaten");
-                legerCoordinaten[0] = 0;
-                legerCoordinaten[1] = 0;
-            }
-            return legerCoordinaten;
+                else if (ProvinciesLijst[1].contains(x, y)) {
+                    db.setCountryArmies("Friesland", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[2].contains(x, y)) {
+                    db.setCountryArmies("Groningen", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[3].contains(x, y)) {
+                    db.setCountryArmies("Drenthe", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[4].contains(x, y)) {
+                    db.setCountryArmies("Flevoland", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[5].contains(x, y)) {
+                    db.setCountryArmies("Overijssel", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[6].contains(x, y)) {
+                    db.setCountryArmies("NoordHolland", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[7].contains(x, y)) {
+                    db.setCountryArmies("Utrecht", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[8].contains(x, y)) {
+                    db.setCountryArmies("Gelderland", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[9].contains(x, y)) {
+                    db.setCountryArmies("Limburg", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[10].contains(x, y)) {
+                    db.setCountryArmies("NoordBrabant", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else if (ProvinciesLijst[11].contains(x, y)) {
+                    db.setCountryArmies("ZuidHolland", 1, "PLUS", active_game_id );
+                    aantalLegers--;
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),
+                            "Klik een land aan!", Toast.LENGTH_SHORT).show();
+                }
     }
 
     public Integer ScaleX (int integer) {
