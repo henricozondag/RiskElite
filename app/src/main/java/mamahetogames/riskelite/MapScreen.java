@@ -2,8 +2,8 @@ package mamahetogames.riskelite;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -24,7 +24,7 @@ import android.widget.Toast;
 public class MapScreen extends Activity implements View.OnTouchListener {
 
     mapView v;
-    Bitmap armyIcon, armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
+    Bitmap armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
     Bitmap landKaart;
     float coordX, coordY;
     int screenWidth, screenHeight, aantalLegers, active_game_id;
@@ -114,15 +114,21 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 Log.i("klik locatie", "" + me.getX() + "  " + me.getY());
                 if (aantalLegers > 0) {
                     zetLeger(intX, intY);
+                    if (aantalLegers == 0) {
+                        // als er geen legers meer te plaatsen zijn, wacht dan 1 seconde en ga naar het volgende scherm
+                        Intent i = new Intent(this, MovePhase2.class);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ie) {
+                        }
+                        startActivity(i);
+                    }
                 }
-                else
-                    Toast.makeText(getApplicationContext(),
-                            "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(getApplicationContext(), "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
+                }
                 break;
-
-            //case MotionEvent.ACTION_UP:
-            //    break;
-        }
+            }
         // return true zodat je meer dan een keer kan klikken met effect
         return true;
     }
