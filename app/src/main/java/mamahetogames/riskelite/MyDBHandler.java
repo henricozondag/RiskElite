@@ -160,13 +160,13 @@ class MyDBHandler extends SQLiteOpenHelper {
 
     public void initWorlds() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "insert or replace into " + TABLE_WORLD + "(" + COLUMN_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_COUNTRY_CONTINENT + " ) " +
+        String query = "insert or replace into " + TABLE_MAP + "(" + COLUMN_ID + " , " + COLUMN_WORLD + " , " + COLUMN_COUNTRY_ID + " , " + COLUMN_COUNTRY_NAME + " , " + COLUMN_COUNTRY_CONTINENT + " ) " +
                 "values ('1','Nederland','1','NoordBrabant','ZuidNederland')," +
                 "('2','Nederland','2','Zeeland','ZuidNederland')," +
                 "('3','Nederland','3','Limburg','ZuidNederland')," +
                 "('4','Nederland','4','NoordHolland','WestNederland')," +
                 "('5','Nederland','5','ZuidHolland','WestNederland')," +
-                "('6','Nederland','6','Utrecht','West Nederland')," +
+                "('6','Nederland','6','Utrecht','WestNederland')," +
                 "('7','Nederland','7','Gelderland','OostNederland')," +
                 "('8','Nederland','8','Overijssel','OostNederland')," +
                 "('9','Nederland','9','Flevoland','OostNederland')," +
