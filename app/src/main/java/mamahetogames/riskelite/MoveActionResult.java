@@ -9,11 +9,7 @@ import android.widget.TextView;
 
 public class MoveActionResult extends AppCompatActivity implements View.OnClickListener{
 
-    String winnaar;
-    TextView textViewWinnaar, textViewLostA, textViewLostD;
-    int totalLostA, totalLostD, gameID;
-    Button buttonMovePhase2;
-    MyDBHandler db = new MyDBHandler(this);
+    private final MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,26 +17,29 @@ public class MoveActionResult extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_move_action_result);
 
         //actieve game ophalen
-        gameID = db.getActiveGameID();
+        int gameID = db.getActiveGameID();
 
         // getdata
         Bundle b = getIntent().getExtras();
-        totalLostA = b.getInt("totalLostA");
-        totalLostD = b.getInt("totalLostD");
-        winnaar = b.getString("winnaar");
+        int totalLostA = b.getInt("totalLostA");
+        int totalLostD = b.getInt("totalLostD");
+        int winnaar_id = b.getInt("winnaar");
+
+        // winnaar naam ophalen aan de hand van id
+        String winnaar = db.getPlayerName(winnaar_id,gameID);
 
         // alle runtime veldslagdata verwijderen
         db.resetCountries(gameID);
 
         // scherm vullen
-        textViewWinnaar = (TextView) this.findViewById(R.id.textViewWinnaar);
-        textViewLostD = (TextView) this.findViewById(R.id.textViewLostD);
-        textViewLostA = (TextView) this.findViewById(R.id.textViewLostA);
+        TextView textViewWinnaar = (TextView) this.findViewById(R.id.textViewWinnaar);
+        TextView textViewLostD = (TextView) this.findViewById(R.id.textViewLostD);
+        TextView textViewLostA = (TextView) this.findViewById(R.id.textViewLostA);
         textViewWinnaar.setText(winnaar);
-        textViewLostA.setText(Integer.toString(totalLostA));
-        textViewLostD.setText(Integer.toString(totalLostD));
+        textViewLostA.setText(String.valueOf(totalLostA));
+        textViewLostD.setText(String.valueOf(totalLostD));
 
-        buttonMovePhase2 = (Button) findViewById(R.id.buttonBackMovePhase2);
+        Button buttonMovePhase2 = (Button) findViewById(R.id.buttonBackMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
     }
 

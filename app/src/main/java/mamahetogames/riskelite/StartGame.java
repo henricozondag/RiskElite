@@ -1,9 +1,7 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +16,8 @@ import java.util.List;
 
 public class StartGame extends AppCompatActivity  implements View.OnClickListener {
 
-    MyDBHandler db = new MyDBHandler(this);
-    EditText editTextGameName;
+    private final MyDBHandler db = new MyDBHandler(this);
+    private EditText editTextGameName;
     private Spinner spinnerLegers, spinnerPlayers, spinnerWorld;
 
     @Override
@@ -34,7 +32,7 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
 
         // Vul deze spinner een aantal opties
         spinnerLegers = (Spinner) findViewById(R.id.spinnerLegers);
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("4");
         list.add("6");
         list.add("8");
@@ -43,7 +41,7 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
 
         // Vul deze spinner een aantal opties
         spinnerPlayers = (Spinner) findViewById(R.id.spinnerPlayers);
-        List<String> list2 = new ArrayList<String>();
+        List<String> list2 = new ArrayList<>();
         list2.add("2");
         list2.add("3");
         list2.add("4");
@@ -53,20 +51,20 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
         // Vul deze spinner met al de beschikbare werelden
         spinnerWorld = (Spinner) findViewById(R.id.spinnerWorld);
         Cursor c = db.getWorlds();
-        ArrayList<String> list3 = new ArrayList<String>();
+        ArrayList<String> list3 = new ArrayList<>();
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             list3.add(c.getString(0));
         }
         c.close();
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_spinner_item,list);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>
+                (this, android.R.layout.simple_spinner_item, list);
 
-        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>
-                (this, android.R.layout.simple_spinner_item,list2);
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<>
+                (this, android.R.layout.simple_spinner_item, list2);
 
-        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<String>
-                (this, android.R.layout.simple_spinner_item,list3);
+        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>
+                (this, android.R.layout.simple_spinner_item, list3);
 
         dataAdapter.setDropDownViewResource
                 (android.R.layout.simple_spinner_dropdown_item);

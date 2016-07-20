@@ -9,8 +9,8 @@ import android.widget.Button;
 
 public class MovePhase3 extends AppCompatActivity implements View.OnClickListener{
 
-    MyDBHandler db = new MyDBHandler(this);
-    int gameID;
+    private final MyDBHandler db = new MyDBHandler(this);
+    private int gameID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

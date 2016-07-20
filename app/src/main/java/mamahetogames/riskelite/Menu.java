@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class Menu extends AppCompatActivity implements View.OnClickListener {
 
-    MyDBHandler db = new MyDBHandler(this);
+    private final MyDBHandler db = new MyDBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -54,7 +54,6 @@
                 android:id="@+id/legersBijTeZetten"
                 android:layout_column="5"
                 android:layout_gravity="center_horizontal"
-                android:editable="true"
                 android:enabled="true"
                 android:layout_alignTop="@+id/textAantalLegers"
                 android:layout_toEndOf="@+id/textViewMovePhase1" />
