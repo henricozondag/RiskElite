@@ -59,7 +59,7 @@ class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_COUNTRY_ID_2 = "country_id_2";
 
     private final Random ran = new Random();
-    private int gameID;
+    private int gameID, passArmies;
     private int armyToPlace;
     private int numberOfPlayers1;
     private int player_id;
@@ -296,12 +296,16 @@ class MyDBHandler extends SQLiteOpenHelper {
         return player_id;
     }
 
-    public String loadGame (int gameID) {
+    public void loadGame (int gameID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "update " + TABLE_GAME + " set " + COLUMN_STATUS + " = 'active' where " + COLUMN_ID + " = " + gameID;
         Log.i("loadgame", query);
         db.execSQL(query);
+    }
+
+    public String getPlayerStatus(int gameID) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
         String query2 = "select " + COLUMN_STATUS + " from " + TABLE_PLAYER + " where " + COLUMN_GAME_ID + " = " + gameID + " and " + COLUMN_STATUS + " <> 'resting'";
         Log.i("statusPlayer", query2);
@@ -568,13 +572,29 @@ class MyDBHandler extends SQLiteOpenHelper {
     }
 
     public void addRandomCard(int player_id) {
-        int type = ran.nextInt(3) + 1;
-        String query = "update " + TABLE_CARD + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_PLAYER_ID + " = " + player_id + " and " + COLUMN_TYPE + " = " + type;
-
         SQLiteDatabase db = this.getWritableDatabase();
 
+        int type = ran.nextInt(3) + 1;
+        String query = "update " + TABLE_CARD + " set " + COLUMN_NUMBER + " = " + COLUMN_NUMBER + " + 1 where " + COLUMN_PLAYER_ID + " = " + player_id + " and " + COLUMN_TYPE + " = " + type;
+        Log.i("addrandomcard",query);
+
         db.execSQL(query);
-        db.close();
+    }
+
+    public int countCards(int player_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int cards = 0;
+        String query = "select sum("+ COLUMN_NUMBER + ") from " + TABLE_CARD + " where " + COLUMN_PLAYER_ID + " = " + player_id;
+        Log.i("countCards", query);
+        Cursor nrCards = db.rawQuery(query, null);
+
+        if (nrCards.moveToFirst())
+        {
+            cards = nrCards.getInt(0);
+        }
+        nrCards.close();
+        return cards;
     }
 
     public String getParameter(String parameter_nm, int gameID) {
@@ -813,9 +833,21 @@ class MyDBHandler extends SQLiteOpenHelper {
         String query = "update " + TABLE_PLAYER + " set "
                 + column + " = " + column + " + " +  number +
                 " where " + COLUMN_ID + " = " + player_id;
-        Log.i("resetCountries", query);
+        Log.i("updatearmyresult", query);
         db.execSQL(query);
+    }
 
+    //deze methode update het totaal aantal verloren / gewonnen countries van een specifieke speler
+    public void updateCountryResult (int player_id, String lostWon, int number) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String column = "COUNTRIES_" + lostWon;
+
+        String query = "update " + TABLE_PLAYER + " set "
+                + column + " = " + column + " + " +  number +
+                " where " + COLUMN_ID + " = " + player_id;
+        Log.i("updatecountryresult", query);
+        db.execSQL(query);
     }
 
     //deze methode geeft het player_id terug van de owner van het land
@@ -832,4 +864,34 @@ class MyDBHandler extends SQLiteOpenHelper {
         return player_id;
     }
 
+    //methode die als een speler past gaat uitrekenen hoeveel legers hij er bij krijgt
+    public int passArmies(int player_id, int game_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "select count(" + COLUMN_COUNTRY_NAME + ") from " + TABLE_GAME_MAP + " where " + COLUMN_PLAYER_ID + " = " + player_id + " and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("passarmies", query);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            passArmies = cursor.getInt(0);
+        }
+        cursor.close();
+
+        double n = passArmies/3;
+        passArmies = (int) Math.round(n);
+        if (passArmies < 3) {
+            passArmies = 3;
+        }
+        return passArmies;
+    }
+
+    //updaten van een country owner
+    public void updateCountryOwner (String country_name,int active_player, int game_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "update " + TABLE_GAME_MAP + " set "
+                + COLUMN_PLAYER_ID + " = " + active_player +
+                " where " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("updateCountryOwner", query);
+        db.execSQL(query);
+    }
 }

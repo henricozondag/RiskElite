@@ -76,7 +76,7 @@
             <Button
                 android:layout_width="130dp"
                 android:layout_height="50dp"
-                android:text="MovePhase2"
+                android:text="Verder"
                 android:id="@+id/buttonMovePhase2"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/legersBijTeZetten"

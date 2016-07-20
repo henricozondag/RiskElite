@@ -138,7 +138,8 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
         Intent i;
         switch (v.getId()) {
             case R.id.buttonLoadGame:
-                String status = db.loadGame(gameID);
+                db.loadGame(gameID);
+                String status = db.getPlayerStatus(gameID);
                 switch (status) {
                     case "premove":
                         i = new Intent(this, PreMove.class);
@@ -154,6 +155,9 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                         break;
                     case "moveaction":
                         i = new Intent(this, MoveAction.class);
+                        break;
+                    case "pas":
+                        i = new Intent(this, MovePhase1.class);
                         break;
                     default:
                         i = new Intent(this, Menu.class);

@@ -26,8 +26,7 @@
         android:text="Medium Text"
         android:id="@+id/textViewWinnaar"
         android:layout_below="@+id/textView8"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,28 +34,27 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/textViewLostA"
+        android:layout_alignBottom="@+id/textView9"
+        android:layout_toEndOf="@+id/textViewWinnaar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Aanvaller lost:"
+        android:id="@+id/textView9"
         android:layout_below="@+id/textViewWinnaar"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="163dp" />
+        android:layout_marginTop="32dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Aanvaller verloren:"
-        android:id="@+id/textView9"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Verdediger verloren:"
+        android:text="Verdediger lost:"
         android:id="@+id/textView10"
-        android:layout_below="@+id/textViewLostA"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="48dp" />
+        android:layout_below="@+id/textView9"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -64,9 +62,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/textViewLostD"
-        android:layout_below="@+id/textView10"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="33dp" />
+        android:layout_alignBottom="@+id/textView10"
+        android:layout_alignStart="@+id/textViewLostA" />
 
     <Button
         android:layout_width="wrap_content"
@@ -75,5 +72,23 @@
         android:id="@+id/buttonBackMovePhase2"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+
+    <SeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:layout_centerVertical="true"
+        android:layout_alignEnd="@+id/textViewLostD"
+        android:layout_alignParentStart="true"
+        android:indeterminate="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewSeekBar"
+        android:layout_below="@+id/seekBar"
+        android:layout_alignStart="@+id/textViewWinnaar" />
 
 </RelativeLayout>

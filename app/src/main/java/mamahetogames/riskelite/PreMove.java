@@ -10,9 +10,8 @@ import android.widget.Toast;
 
 public class PreMove extends AppCompatActivity  implements View.OnClickListener {
 
-    private TextView textViewGameKey;
     private TextView textViewCurrentPlayer;
-    private int gameID;
+    private int gameID, currentPlayerId;
     private int backButtonCount;
     private final MyDBHandler db = new MyDBHandler(this);
 
@@ -29,14 +28,14 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
 
         //speler_name ophalen die aan de beurt is
         String player = db.currentPlayer(gameID,"name");
+        currentPlayerId = Integer.parseInt(db.currentPlayer(gameID,"ID"));
 
         Button buttonMovePhase1 = (Button) findViewById(R.id.buttonMovePhase1);
         buttonMovePhase1.setOnClickListener(this);
         Button buttonMenu = (Button) findViewById(R.id.buttonMenu);
         buttonMenu.setOnClickListener(this);
-
-        textViewGameKey = (TextView) this.findViewById(R.id.textViewGameKey);
-        textViewGameKey.setText(String.valueOf(gameID));
+        Button buttonPas = (Button) findViewById(R.id.buttonPas);
+        buttonPas.setOnClickListener(this);
 
         textViewCurrentPlayer = (TextView) this.findViewById(R.id.textViewCurrentPlayer);
         textViewCurrentPlayer.setText(player);
@@ -64,15 +63,30 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         Intent i;
         switch (v.getId()) {
             case R.id.buttonMovePhase1:
-                i = new Intent(this, MovePhase1.class);
-                // Start andere scherm
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
+                //checken of speler meer dan 4 kaarten heeft, dan moet hij eerst kaarten wisselen namelijk
+                if (db.countCards(currentPlayerId) > 4) {
+                    i = new Intent(this, PlayerDetails.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                } else {
+                    // Start andere scherm
+                    i = new Intent(this, MovePhase1.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    db.setPlayerStatus(gameID, "phase1");
+                    startActivity(i);
+                }
                 break;
             case R.id.buttonMenu:
                 i = new Intent(this, Menu.class);
                 // Start andere scherm
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                break;
+            case R.id.buttonPas:
+                i = new Intent(this, MovePhase1.class);
+                // Start andere scherm
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                db.setPlayerStatus(gameID, "pas");
                 startActivity(i);
                 break;
         }

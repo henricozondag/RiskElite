@@ -83,6 +83,12 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         // haal op welke kaarten er allemaal actief zijn voor de huidige speler
         showCards();
+
+        // check of er niet al een maximum van 10 kaarten is bereikt
+        if (db.countCards(currentPlayerId) > 4) {
+            buttonAddRandomCard.setVisibility(View.INVISIBLE);
+            buttonMovePhase2.setVisibility(View.INVISIBLE);
+        }
     }
 
     //bitmap geneuzel
@@ -233,6 +239,10 @@ private void addRandomCard(int player_id) {
                 break;
             case R.id.buttonRuilKaarten:
                 convertCards();
+                if (db.countCards(currentPlayerId) < 5) {
+                    buttonAddRandomCard.setVisibility(View.VISIBLE);
+                    buttonMovePhase2.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.buttonPlaatsenLegers:
                 i = new Intent(this, MovePhase1.class);
@@ -240,6 +250,10 @@ private void addRandomCard(int player_id) {
                 break;
             case R.id.buttonAddRandomCard:
                 addRandomCard(currentPlayerId);
+                if (db.countCards(currentPlayerId) > 4) {
+                    buttonAddRandomCard.setVisibility(View.INVISIBLE);
+                    buttonMovePhase2.setVisibility(View.INVISIBLE);
+                }
                 break;
         }
     }

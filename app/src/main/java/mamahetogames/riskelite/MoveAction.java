@@ -29,6 +29,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
     private int defendArmies;
     private int attackPlayer;
     private int defendPlayer;
+    private int activePlayer;
     private String attackCountry;
     private String defendCountry;
     private final ArrayList<Integer> topA = new ArrayList<>();
@@ -67,6 +68,9 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
 
         //actieve game ophalen
         gameID = db.getActiveGameID();
+
+        //actieve speler ophalen
+        activePlayer = Integer.parseInt(db.currentPlayer(gameID,"ID"));
 
         //status zetten van speler
         db.setPlayerStatus(gameID, "moveaction");
@@ -287,19 +291,26 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         //Controleren of de aanvaller of verdediger de slag verloren heeft
         if (attackArmies == 0) {
             // open een nieuwe activity met een attacker lost animatie
+            db.updateCountryResult(attackPlayer,"WON",1);
+            db.updateCountryResult(defendPlayer,"LOST",1);
             Intent i = new Intent(this, MoveActionResult.class);
             i.putExtra("winnaar", defendPlayer);
             i.putExtra("totalLostA", totalLostA);
             i.putExtra("totalLostD", totalLostD);
+            i.putExtra("dices", 0);
             startActivity(i);
         }
         else if (defendArmies == 0) {
             // open een nieuwe activity met een defender lost animatie
-            // en met de statistieken van de veldslag
+            db.updateCountryResult(attackPlayer,"WON",1);
+            db.updateCountryResult(defendPlayer,"LOST",1);
+            db.updateCountryOwner(defendCountry,activePlayer, gameID);
+            db.addRandomCard(attackPlayer);
             Intent i = new Intent(this, MoveActionResult.class);
             i.putExtra("winnaar", attackPlayer);
             i.putExtra("totalLostA", totalLostA);
             i.putExtra("totalLostD", totalLostD);
+            i.putExtra("dices", numberOfDice);
             startActivity(i);
         }
     }
@@ -313,6 +324,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
                 i.putExtra("winnaar", 0);
                 i.putExtra("totalLostA", totalLostA);
                 i.putExtra("totalLostD", totalLostD);
+                i.putExtra("dices", 0);
                 startActivity(i);
                 break;
             case R.id.buttonGooiAttack:

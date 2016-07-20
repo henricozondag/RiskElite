@@ -21,11 +21,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MovePhase2"
+        android:text="Terug"
         android:id="@+id/buttonMovePhase2"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_toStartOf="@+id/checkBoxCard7" />
 
     <ImageView
         android:layout_width="45dp"
@@ -243,17 +242,17 @@
         android:layout_height="wrap_content"
         android:text="Plaatsen"
         android:id="@+id/buttonPlaatsenLegers"
+        android:visibility="invisible"
         android:layout_alignTop="@+id/buttonMovePhase2"
-        android:layout_alignEnd="@+id/checkBoxCard10"
-        android:visibility="invisible" />
+        android:layout_alignStart="@+id/buttonAddRandomCard" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="add Card"
         android:id="@+id/buttonAddRandomCard"
-        android:layout_below="@+id/textViewAantalLegers"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/textViewPlaatsenLegers"
+        android:layout_toEndOf="@+id/textViewAantalLegers" />
 
     <ImageView
         android:layout_width="wrap_content"

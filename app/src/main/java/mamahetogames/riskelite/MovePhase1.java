@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class MovePhase1 extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +27,7 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
     Paint paint;
     private final MyDBHandler db = new MyDBHandler(this);
     private int gameID;
+    private String playerStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +38,16 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         gameID = db.getActiveGameID();
 
         //status zetten van speler
-        db.setPlayerStatus(gameID, "phase1");
+        //gebeurt al in de stap hiervoor ivm pas enzo
 
         //speler_id ophalen die aan de beurt is
         int activePlayer = Integer.parseInt(db.currentPlayer(gameID,"ID"));
+        playerStatus = db.getPlayerStatus(gameID);
+
+        //als een speler past dan krijgt hij het aantal landen gedeeld door 3 aan legers erbij
+        if (Objects.equals(playerStatus, "pas")) {
+            db.updateArmiesToPlace(activePlayer,db.passArmies(activePlayer, gameID));
+        }
 
         // aantal te plaatsen legers ophalen
         aantalLegers = db.armyToPlace(activePlayer);
@@ -58,7 +66,13 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         Intent i;
         switch (v.getId()) {
             case R.id.buttonMovePhase2:
-                i = new Intent(this, MovePhase2.class);
+                if (Objects.equals(playerStatus, "phase1")) {
+                    i = new Intent(this, MovePhase2.class);
+                    Log.i("1", playerStatus);
+                } else {
+                    i = new Intent(this, MovePhase3.class);
+                    Log.i("2", playerStatus);
+                }
                 startActivity(i);
                 break;
             case R.id.buttonPutArmy:
