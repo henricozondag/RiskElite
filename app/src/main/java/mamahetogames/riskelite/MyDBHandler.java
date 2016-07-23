@@ -560,9 +560,9 @@ class MyDBHandler extends SQLiteOpenHelper {
         return armyToPlace;
     }
 
-    public void updateArmiesToPlace(int player_id, int number) {
+    public void updateArmiesToPlace(int player_id, int number, String type) {
 
-        String query = "update " + TABLE_PLAYER + " set " + COLUMN_PLACE_ARMIES + " = " + COLUMN_PLACE_ARMIES + " + " + number + " where " + COLUMN_ID + " = " + player_id;
+        String query = "update " + TABLE_PLAYER + " set " + COLUMN_PLACE_ARMIES + " = " + COLUMN_PLACE_ARMIES + type + number + " where " + COLUMN_ID + " = " + player_id;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Log.i("updateArmyToPlace",query);
@@ -814,14 +814,16 @@ class MyDBHandler extends SQLiteOpenHelper {
     }
 
     // deze cursor haalt de 'situatie' op waarin de landkaart verkeerd: hoeveel legers van welke spelers staan op welk landje?
-    public Cursor getSituation(int gameID) {
+    public Cursor getSituation(int game_id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String selectQuery = "select " + COLUMN_PLAYER_ID + "," + COLUMN_WORLD + "," + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_ARMIES + " from " + TABLE_GAME_MAP  + " where " + COLUMN_GAME_ID + " = " + gameID;
-
-        Cursor situation = db.rawQuery(selectQuery, null);
-
-        return situation;
+        //String query = "select " + COLUMN_PLAYER_ID + "," + COLUMN_WORLD + "," + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_ARMIES + " from " + TABLE_GAME_MAP  + " where " + COLUMN_GAME_ID + " = " + gameID;
+        String query = "select play." + COLUMN_GAMEPLAYER + ", gmap." + COLUMN_WORLD + ", gmap." + COLUMN_COUNTRY_NAME + ",gmap." + COLUMN_COUNTRY_ARMIES +
+                " from " + TABLE_GAME_MAP + " gmap," + TABLE_PLAYER + " play" +
+                " where gmap." + COLUMN_GAME_ID + " = " + game_id +
+                " and gmap." + COLUMN_PLAYER_ID + " = play." + COLUMN_ID;
+        Log.i("currentsituation", query);
+        return db.rawQuery(query, null);
     }
 
     //deze methode update het totaal aantal verloren / gewonnen legers van een specifieke speler

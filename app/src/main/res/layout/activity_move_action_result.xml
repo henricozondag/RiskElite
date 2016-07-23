@@ -68,27 +68,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Terug"
+        android:text="Verder"
         android:id="@+id/buttonBackMovePhase2"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
-    <SeekBar
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
+        android:id="@+id/spinnerArmies"
         android:layout_centerVertical="true"
-        android:layout_alignEnd="@+id/textViewLostD"
-        android:layout_alignParentStart="true"
-        android:indeterminate="false" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textViewSeekBar"
-        android:layout_below="@+id/seekBar"
-        android:layout_alignStart="@+id/textViewWinnaar" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

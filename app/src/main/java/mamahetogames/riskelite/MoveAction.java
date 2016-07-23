@@ -77,7 +77,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
 
         //Naam van aanvaller, aantal armies van aanvaller, player_id van aanvaller
         attackCountry = db.getGameCountry("ATTACK", gameID);
-        attackArmies = db.getCountryArmies(attackCountry, gameID);
+        attackArmies = db.getCountryArmies(attackCountry, gameID)-1;
         attackPlayer = db.getCountryOwner(attackCountry, gameID);
         Log.i("attackArmies", Integer.toString(attackArmies));
 
@@ -291,8 +291,8 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
         //Controleren of de aanvaller of verdediger de slag verloren heeft
         if (attackArmies == 0) {
             // open een nieuwe activity met een attacker lost animatie
-            db.updateCountryResult(attackPlayer,"WON",1);
-            db.updateCountryResult(defendPlayer,"LOST",1);
+//            db.updateCountryResult(attackPlayer,"LOST",1);
+//            db.updateCountryResult(defendPlayer,"WON",1);
             Intent i = new Intent(this, MoveActionResult.class);
             i.putExtra("winnaar", defendPlayer);
             i.putExtra("totalLostA", totalLostA);

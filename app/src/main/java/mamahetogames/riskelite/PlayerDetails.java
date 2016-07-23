@@ -201,7 +201,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         // geef het aantal legers wat geplaatst mag worden door aan variabele
         armyCard = Integer.parseInt((db.getParameter("armyCard",gameID)));
         Log.i("armycardophalen", (db.getParameter("armyCard",gameID)));
-        db.updateArmiesToPlace(currentPlayerId,armyCard);
+        db.updateArmiesToPlace(currentPlayerId,armyCard,"+");
         plaatsLegers = plaatsLegers + armyCard;
 
         // schermdingen
@@ -210,6 +210,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         textViewPlaatsenLegers.setVisibility(View.VISIBLE);
         buttonPlaatsenLegers.setVisibility(View.VISIBLE);
         buttonMovePhase2.setVisibility(View.INVISIBLE);
+        buttonAddRandomCard.setVisibility(View.INVISIBLE);
 
         armyCard = armyCard + 2;
         db.setParameter("armyCard", armyCard, gameID,"update");

@@ -50,7 +50,6 @@ public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemS
         textViewAttackArmies = (TextView) this.findViewById(R.id.textViewAttackArmies);
         textViewDefendArmies = (TextView) this.findViewById(R.id.textViewDefendArmies);
 
-
         // spinners om 2 landen te selecteren waarmee je wil aanvallen
         // Vul deze spinner met al de beschikbare werelden
         spinnerAttackCountry = (Spinner) findViewById(R.id.spinnerAttackCountry);
@@ -90,7 +89,7 @@ public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemS
         switch (parentView.getId()) {
             case R.id.spinnerAttackCountry:
                 String attack = spinnerAttackCountry.getItemAtPosition(position).toString();
-                armiesAttacker = db.getCountryArmies(attack, gameID);
+                armiesAttacker = db.getCountryArmies(attack, gameID)-1;
                 textViewAttackArmies.setText(String.valueOf(armiesAttacker));
                 break;
             case R.id.spinnerDefendCountry:
@@ -144,7 +143,7 @@ public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemS
                 startActivity(i);
                 break;
             case R.id.buttonMoveAction:
-                //Checken of aanvallen land wel van de actieve speler is
+                //Checken of aanval land wel van de actieve speler is
                 checkAttack(true);
                 break;
             case R.id.buttonPlayerDetails:

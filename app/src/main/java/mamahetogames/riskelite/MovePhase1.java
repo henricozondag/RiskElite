@@ -46,7 +46,7 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
 
         //als een speler past dan krijgt hij het aantal landen gedeeld door 3 aan legers erbij
         if (Objects.equals(playerStatus, "pas")) {
-            db.updateArmiesToPlace(activePlayer,db.passArmies(activePlayer, gameID));
+            db.updateArmiesToPlace(activePlayer,db.passArmies(activePlayer, gameID),"+");
         }
 
         // aantal te plaatsen legers ophalen
