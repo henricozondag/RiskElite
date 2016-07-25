@@ -11,7 +11,7 @@ import java.util.Random;
 
 class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
     private static final String DATABASE_NAME = "riskElite";
 
     private static final String TABLE_CARD = "card";
@@ -568,7 +568,6 @@ class MyDBHandler extends SQLiteOpenHelper {
         Log.i("updateArmyToPlace",query);
 
         db.execSQL(query);
-        db.close();
     }
 
     public void addRandomCard(int player_id) {

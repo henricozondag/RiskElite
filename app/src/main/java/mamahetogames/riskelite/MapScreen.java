@@ -27,7 +27,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     Bitmap armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
     Bitmap landKaart;
     float coordX, coordY;
-    int screenWidth, screenHeight, aantalLegers, active_game_id, active_player_id;
+    int screenWidth, screenHeight, aantalLegers, active_game_id, active_player_id, count;
 
     Paint black, white;
     MyDBHandler db = new MyDBHandler(this);
@@ -41,13 +41,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         v = new mapView(this);
         v.setOnTouchListener(this);
 
-        // actieve game en player ophalen
-        active_game_id = db.getActiveGameID();
-        active_player_id = Integer.parseInt(db.currentPlayer(active_game_id,"ID"));
-
-        // aantal te plaatsen legers ophalen
-        aantalLegers = db.armyToPlace(active_player_id);
-        //aantalLegers = 3;
+        aantalLegers = 3;
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -113,6 +107,9 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         armyYellow = Bitmap.createScaledBitmap(armyYellow, screenWidth / 15 , screenHeight / 15, false);
         armyGreen = Bitmap.createScaledBitmap(armyGreen, screenWidth / 15 , screenHeight / 15, false);
 
+        active_game_id = db.getActiveGameID();
+        active_player_id = Integer.parseInt(db.currentPlayer(active_game_id,"ID"));
+
         landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
         setContentView(v);
     }
@@ -131,20 +128,20 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 Log.i("klik locatie", "" + me.getX() + "  " + me.getY());
                 if (aantalLegers > 0) {
                     zetLeger(intX, intY);
-                    if (aantalLegers == 0) {
-                        // als er geen legers meer te plaatsen zijn, wacht dan 1 seconde en ga naar het volgende scherm
-                        Intent i = new Intent(this, MovePhase2.class);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                        }
-                        startActivity(i);
-                    }
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
+                    // als er geen legers meer te plaatsen zijn, wacht dan 1 seconde en ga naar het volgende scherm
+                    Intent i = new Intent(this, MovePhase2.class);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                    }
+                    startActivity(i);
                 }
                 break;
+            //case MotionEvent.ACTION_UP:
+            //    break;
             }
         // return true zodat je meer dan een keer kan klikken met effect
         return true;
@@ -253,8 +250,9 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     c.drawText(cursor.getString(3), coordX - (countryArmy.getWidth() / 2), coordY - (countryArmy.getHeight() / 2), black);
                     c.drawText(cursor.getString(3), coordX, coordY, white);
                 }
-                holder.unlockCanvasAndPost(c);
                 cursor.close();
+
+                holder.unlockCanvasAndPost(c);
             }
         }
 
@@ -292,11 +290,15 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     }
 
     public void zetLeger (int x, int y) {
+        // loop door de landen heen om te zien of dit land van de actieve speler is
         for (int i=0; i <12;i++) {
-            if (ProvinciesLijst[i].contains(x, y)) {
-                db.setCountryArmies(ProvincieStringNaam[i], 1, "PLUS", active_game_id);
-                aantalLegers--;
-                db.updateArmiesToPlace(active_player_id,1,"-");
+            // zet alleen iets neer als dat land ook van de actieve speler is
+            if (db.isOwner(active_player_id, ProvincieStringNaam[i] , active_game_id)) {
+                if (ProvinciesLijst[i].contains(x, y)) {
+                    db.setCountryArmies(ProvincieStringNaam[i], 1, "PLUS", active_game_id);
+                    aantalLegers--;
+                    db.updateArmiesToPlace(active_player_id, 1, "-");
+                }
             }
         }
     }
