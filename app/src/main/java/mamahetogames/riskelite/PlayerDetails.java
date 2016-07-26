@@ -20,7 +20,6 @@ import java.util.Objects;
 public class PlayerDetails extends AppCompatActivity implements View.OnClickListener{
 
     private final ArrayList<Integer> cardList = new ArrayList<>();
-    private int armyCard;
     private int plaatsLegers;
     private int gameID;
     private int currentPlayerId;
@@ -199,7 +198,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     private void addArmies() {
 
         // geef het aantal legers wat geplaatst mag worden door aan variabele
-        armyCard = Integer.parseInt((db.getParameter("armyCard",gameID)));
+        int armyCard = Integer.parseInt((db.getParameter("armyCard",gameID)));
         Log.i("armycardophalen", (db.getParameter("armyCard",gameID)));
         db.updateArmiesToPlace(currentPlayerId,armyCard,"+");
         plaatsLegers = plaatsLegers + armyCard;
