@@ -29,7 +29,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     Bitmap landKaart, armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
     int screenWidth, screenHeight, aantalLegers, gameID, active_player_id, coordX, coordY, attackCoordX, attackCoordY, defendCoordX, defendCoordY;
     boolean attackTurnBoolean, firstAttackclick;
-    String attackCountry, defendCountry;
+    public String defendCountry, attackCountry;
     Paint black, white, cyan;
 
     MyDBHandler db = new MyDBHandler(this);
@@ -117,10 +117,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     // als dit een aanvalsbeurt is:
                     if(!firstAttackclick) {
                         // als attackTurnBoolean is true (er is nog niet eerder op een land geklikt): probeer dan een attack country te maken
-                        attackCountry = selectAttackCountry(intX, intY);
+                        selectAttackCountry(intX, intY);
                     }
                     else {
-                        selectDefendCountry(intX, intY, attackCountry);
+                        selectDefendCountry(intX, intY);
                         // als attackTurnBoolean is false (er is al één keer geklikt): probeer dan een defend country te maken
                     }
                     // db.initAttack(String attacker, String defender, int game_id)
@@ -261,7 +261,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         }
     }
 
-    public String selectAttackCountry (int x, int y) {
+    public void selectAttackCountry (int x, int y) {
         for (int i=0; i <12;i++) {
             if (db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
                 // zet alleen iets neer als dat land ook van de actieve speler is
@@ -271,27 +271,36 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     attackCoordY = ProvinciesLijst[i].centerY();
                     firstAttackclick = true;
                     attackCountry = ProvincieStringNaam[i];
+                    Log.i("sel attack " , attackCountry);
                 }
             }
         }
-        return attackCountry;
     }
 
-    public void selectDefendCountry (int x, int y, String attackCountry) {
+    public void selectDefendCountry (int x, int y) {
         for (int i=0; i <12;i++) {
             if (!db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
                 // zet alleen iets neer als dat land NIET van de actieve speler is
                 if (ProvinciesLijst[i].contains(x, y)) {
-                    // en als er in een land geklikt wordt
-                    defendCoordX = ProvinciesLijst[i].centerX();
-                    defendCoordY = ProvinciesLijst[i].centerY();
                     defendCountry = ProvincieStringNaam[i];
-                    firstAttackclick = false;
-                    db.initAttack(attackCountry, defendCountry, gameID);
-                    Log.i("aanv en verd ", "" + attackCountry + " en " + defendCountry);
-                    Intent intent = new Intent(this, MoveAction.class);
-                    startActivity(intent);
+                    // en als er in een land geklikt wordt
+                    if(db.isNeighbour(attackCountry, defendCountry, gameID)) {
+                        defendCoordX = ProvinciesLijst[i].centerX();
+                        defendCoordY = ProvinciesLijst[i].centerY();
+                        firstAttackclick = false;
+                        db.initAttack(attackCountry, defendCountry, gameID);
+                        Log.i("aanv en verd ", "" + attackCountry + " en " + defendCountry);
+                        Intent intent = new Intent(this, MoveAction.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Log.i("isneighbour " , attackCountry + " en " + defendCountry);
+                        Toast.makeText(getApplicationContext(), "Deze landen zijn geen buren!", Toast.LENGTH_SHORT).show();
+                    }
                 }
+            }
+            else {
+                selectAttackCountry(x, y);
             }
         }
     }
