@@ -34,6 +34,9 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
         buttonLoadGame = (Button) findViewById(R.id.buttonLoadGame);
         buttonLoadGame.setOnClickListener(this);
 
+        Button buttonMenu = (Button) findViewById(R.id.buttonMenu);
+        buttonMenu.setOnClickListener(this);
+
         // de games
         textViewGame[0] = (TextView)findViewById(R.id.textViewGame1);
         checkBoxGame[0] = (CheckBox)findViewById(R.id.checkBoxGame1);
@@ -159,6 +162,9 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                     case "pas":
                         i = new Intent(this, MovePhase1.class);
                         break;
+                    case "game":
+                        i = new Intent(this, Game.class);
+                        break;
                     default:
                         i = new Intent(this, Menu.class);
                         break;
@@ -166,6 +172,10 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                 Toast.makeText(getApplicationContext(),
                         "Speler '" + db.currentPlayer(gameID, "name") + "' is aan de beurt!", Toast.LENGTH_SHORT).show();
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                break;
+            case R.id.buttonMenu:
+                i = new Intent(this, Menu.class);
                 startActivity(i);
                 break;
         }
