@@ -24,6 +24,6 @@ public class SplashScreen extends AppCompatActivity {
                 i = new Intent(SplashScreen.this, Menu.class);
                 startActivity(i);
             }
-        }, 25);
+        }, 250);
     }
 }

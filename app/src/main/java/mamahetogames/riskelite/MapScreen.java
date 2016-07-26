@@ -27,11 +27,11 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
     mapView v;
     Bitmap landKaart, armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
-    float coordX, coordY;
-    int screenWidth, screenHeight, aantalLegers, active_game_id, active_player_id;
-    boolean attackTurnBoolean;
+    int screenWidth, screenHeight, aantalLegers, gameID, active_player_id, coordX, coordY, attackCoordX, attackCoordY, defendCoordX, defendCoordY;
+    boolean attackTurnBoolean, firstAttackclick;
+    String attackCountry, defendCountry;
+    Paint black, white, cyan;
 
-    Paint black, white;
     MyDBHandler db = new MyDBHandler(this);
 
     Rect[] ProvinciesLijst = new Rect[12];
@@ -40,6 +40,8 @@ public class MapScreen extends Activity implements View.OnTouchListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         attackTurnBoolean = false;
+        firstAttackclick = false;
+
         super.onCreate(savedInstanceState);
         v = new mapView(this);
         v.setOnTouchListener(this);
@@ -55,36 +57,26 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
         black = new Paint();
         black.setColor(Color.BLACK);
-        black.setTextSize(50);
+        black.setTextSize(ScaleX(50));
 
         white = new Paint();
         white.setColor(Color.WHITE);
 
-        Rect Zeeland =      new Rect(ScaleX(8),     ScaleY(1139),   ScaleX(239),    ScaleY(1464));
-        Rect Friesland =    new Rect(ScaleX(617),   ScaleY(154),    ScaleX(790),    ScaleY(436));
-        Rect Groningen =    new Rect(ScaleX(825),   ScaleY(107),    ScaleX(1065),   ScaleY(289));
-        Rect Drenthe =      new Rect(ScaleX(813),   ScaleY(313),    ScaleX(992),    ScaleY(576));
-        Rect Flevoland =    new Rect(ScaleX(553),   ScaleY(523),    ScaleX(723),    ScaleY(764));
-        Rect Overijssel =   new Rect(ScaleX(784),   ScaleY(614),    ScaleX(1018),   ScaleY(825));
-        Rect NoordHolland = new Rect(ScaleX(289),   ScaleY(409),    ScaleX(506),    ScaleY(811));
-        Rect Utrecht =      new Rect(ScaleX(430),   ScaleY(857),    ScaleX(594),    ScaleY(998));
-        Rect Gelderland =   new Rect(ScaleX(623),   ScaleY(846),    ScaleX(926),    ScaleY(1089));
-        Rect Limburg =      new Rect(ScaleX(652),   ScaleY(1262),   ScaleX(810),    ScaleY(1698));
-        Rect NoordBrabant = new Rect(ScaleX(289),   ScaleY(1139),   ScaleX(651),    ScaleY(1408));
-        Rect ZuidHolland =  new Rect(ScaleX(169),   ScaleY(866),    ScaleX(409),    ScaleY(1115));
+        cyan = new Paint();
+        cyan.setColor(Color.CYAN);
 
-        ProvinciesLijst[0] = Zeeland;               ProvincieStringNaam[0] = "Zeeland";
-        ProvinciesLijst[1] = Friesland;             ProvincieStringNaam[1] = "Friesland";
-        ProvinciesLijst[2] = Groningen;             ProvincieStringNaam[2] = "Groningen";
-        ProvinciesLijst[3] = Drenthe;               ProvincieStringNaam[3] = "Drenthe";
-        ProvinciesLijst[4] = Flevoland;             ProvincieStringNaam[4] = "Flevoland";
-        ProvinciesLijst[5] = Overijssel;            ProvincieStringNaam[5] = "Overijssel";
-        ProvinciesLijst[6] = NoordHolland;          ProvincieStringNaam[6] = "NoordHolland";
-        ProvinciesLijst[7] = Utrecht;               ProvincieStringNaam[7] = "Utrecht";
-        ProvinciesLijst[8] = Gelderland;            ProvincieStringNaam[8] = "Gelderland";
-        ProvinciesLijst[9] = Limburg;               ProvincieStringNaam[9] = "Limburg";
-        ProvinciesLijst[10] = NoordBrabant;         ProvincieStringNaam[10] = "NoordBrabant";
-        ProvinciesLijst[11] = ZuidHolland;          ProvincieStringNaam[11] = "ZuidHolland";
+        Rect Zeeland =      new Rect(ScaleX(8),     ScaleY(1139),   ScaleX(239),    ScaleY(1464));          ProvinciesLijst[0] = Zeeland;               ProvincieStringNaam[0] = "Zeeland";
+        Rect Friesland =    new Rect(ScaleX(617),   ScaleY(154),    ScaleX(790),    ScaleY(436));           ProvinciesLijst[1] = Friesland;             ProvincieStringNaam[1] = "Friesland";
+        Rect Groningen =    new Rect(ScaleX(825),   ScaleY(107),    ScaleX(1065),   ScaleY(289));           ProvinciesLijst[2] = Groningen;             ProvincieStringNaam[2] = "Groningen";
+        Rect Drenthe =      new Rect(ScaleX(813),   ScaleY(313),    ScaleX(992),    ScaleY(576));           ProvinciesLijst[3] = Drenthe;               ProvincieStringNaam[3] = "Drenthe";
+        Rect Flevoland =    new Rect(ScaleX(553),   ScaleY(523),    ScaleX(723),    ScaleY(764));           ProvinciesLijst[4] = Flevoland;             ProvincieStringNaam[4] = "Flevoland";
+        Rect Overijssel =   new Rect(ScaleX(784),   ScaleY(614),    ScaleX(1018),   ScaleY(825));           ProvinciesLijst[5] = Overijssel;            ProvincieStringNaam[5] = "Overijssel";
+        Rect NoordHolland = new Rect(ScaleX(289),   ScaleY(409),    ScaleX(506),    ScaleY(811));           ProvinciesLijst[6] = NoordHolland;          ProvincieStringNaam[6] = "NoordHolland";
+        Rect Utrecht =      new Rect(ScaleX(430),   ScaleY(857),    ScaleX(594),    ScaleY(998));           ProvinciesLijst[7] = Utrecht;               ProvincieStringNaam[7] = "Utrecht";
+        Rect Gelderland =   new Rect(ScaleX(623),   ScaleY(846),    ScaleX(926),    ScaleY(1089));          ProvinciesLijst[8] = Gelderland;            ProvincieStringNaam[8] = "Gelderland";
+        Rect Limburg =      new Rect(ScaleX(652),   ScaleY(1262),   ScaleX(810),    ScaleY(1698));          ProvinciesLijst[9] = Limburg;               ProvincieStringNaam[9] = "Limburg";
+        Rect NoordBrabant = new Rect(ScaleX(289),   ScaleY(1139),   ScaleX(651),    ScaleY(1408));          ProvinciesLijst[10] = NoordBrabant;         ProvincieStringNaam[10] = "NoordBrabant";
+        Rect ZuidHolland =  new Rect(ScaleX(169),   ScaleY(866),    ScaleX(409),    ScaleY(1115));          ProvinciesLijst[11] = ZuidHolland;          ProvincieStringNaam[11] = "ZuidHolland";
 
         armyRed = BitmapFactory.decodeResource(getResources(),R.mipmap.red_soldier);        armyRed = Bitmap.createScaledBitmap(armyRed, screenWidth / 15 , screenHeight / 15, false);
         armyBlue = BitmapFactory.decodeResource(getResources(),R.mipmap.blue_soldier);      armyBlue = Bitmap.createScaledBitmap(armyBlue, screenWidth / 15 , screenHeight / 15, false);
@@ -92,17 +84,19 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         armyGreen = BitmapFactory.decodeResource(getResources(),R.mipmap.green_soldier);    armyGreen = Bitmap.createScaledBitmap(armyGreen, screenWidth / 15 , screenHeight / 15, false);
         landKaart = BitmapFactory.decodeResource(getResources(), R.mipmap.provincieskaart);
 
-        active_game_id = db.getActiveGameID();
-        active_player_id = Integer.parseInt(db.currentPlayer(active_game_id,"ID"));
+        gameID = db.getActiveGameID();
+        active_player_id = Integer.parseInt(db.currentPlayer(gameID,"ID"));
 
+        Log.i("", "gameID: " + gameID);
         // check of deze beurt een aanvalsbeurt is
-        if (db.getPlayerStatus(active_game_id) == "aanval"){
+        if (Objects.equals(db.getPlayerStatus(gameID), "phase2")){
             attackTurnBoolean = true;
         }
         // als het geen aanvalsbeurt is; haal dan het aantal legers op dat de speler mag zetten
         else {
             aantalLegers = db.armyToPlace(active_player_id);
         }
+        Log.i("", "attakcturn boolean: " + attackTurnBoolean);
         // maak de landkaart aan
         landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
         setContentView(v);
@@ -121,8 +115,16 @@ public class MapScreen extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 if(attackTurnBoolean){
                     // als dit een aanvalsbeurt is:
-                    db.initAttack("Zeeland", "NoordBrabant", active_game_id);
-                    //db.initAttack(String attacker, String defender, int game_id)
+                    if(!firstAttackclick) {
+                        // als attackTurnBoolean is true (er is nog niet eerder op een land geklikt): probeer dan een attack country te maken
+                        selectAttackCountry(intX, intY);
+                    }
+                    else {
+                        selectDefendCountry(intX, intY);
+                        // als attackTurnBoolean is false (er is al één keer geklikt): probeer dan een defend country te maken
+                    }
+                    // db.initAttack(String attacker, String defender, int game_id)
+                    // db.initAttack("Zeeland", "NoordBrabant", gameID);
                 }
                 else {
                     // als het geen aanvalsbeurt is:
@@ -142,7 +144,6 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     }
                     break;
                 }
-
         }
         // return true zodat je meer dan een keer kan klikken met effect
         return true;
@@ -157,7 +158,6 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         public mapView (Context context) {
             super(context);
             holder = getHolder();
-
         }
 
         @Override
@@ -175,7 +175,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 c.drawText( "" + aantalLegers , ScaleX(350) , ScaleY(70), black);
 
                 // definieer de cursor uit de database handler en loop door de records heen
-                Cursor cursor = db.getSituation(active_game_id);
+                Cursor cursor = db.getSituation(gameID);
                 for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                     // bepaal de kleur van het leger voor deze rij
                     //Log.i("cursor: ", " player_id: " + cursor.getString(0) + " world: " + cursor.getString(1) + " country_name: " + cursor.getString(2) + " country_armies: " + cursor.getString(3));
@@ -205,11 +205,12 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     c.drawBitmap(countryArmy, coordX - (countryArmy.getWidth() / 2), coordY - (countryArmy.getHeight() / 2), null);
                     c.drawCircle(coordX - ScaleY(25), coordY - ScaleY(80), ScaleY(30), black);
                     c.drawCircle(coordX - ScaleX(25), coordY - ScaleX(80), ScaleX(28), white);
-                    c.drawText(cursor.getString(3), coordX - (countryArmy.getWidth() / 2), coordY - (countryArmy.getHeight() / 2), black);
-                    c.drawText(cursor.getString(3), coordX, coordY, white);
+                    c.drawText(cursor.getString(3), coordX - ScaleX(40), coordY - ScaleY(65), black);
+                    // teken een rondje op het aanvals- en verdedigingsland
+                    c.drawCircle(attackCoordX - ScaleY(25), attackCoordY - ScaleY(80), ScaleY(70), cyan);
+                    c.drawCircle(defendCoordX - ScaleX(25), defendCoordY - ScaleX(80), ScaleX(50), cyan);
                 }
                 cursor.close();
-
                 holder.unlockCanvasAndPost(c);
             }
         }
@@ -223,7 +224,6 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     e.printStackTrace();
                 }
                 break;
-
             }
             t = null;
         }
@@ -251,11 +251,42 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         // loop door de landen heen om te zien of dit land van de actieve speler is
         for (int i=0; i <12;i++) {
             // zet alleen iets neer als dat land ook van de actieve speler is
-            if (db.isOwner(active_player_id, ProvincieStringNaam[i] , active_game_id)) {
+            if (db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
                 if (ProvinciesLijst[i].contains(x, y)) {
-                    db.setCountryArmies(ProvincieStringNaam[i], 1, "PLUS", active_game_id);
+                    db.setCountryArmies(ProvincieStringNaam[i], 1, "PLUS", gameID);
                     aantalLegers--;
                     db.updateArmiesToPlace(active_player_id, 1, "-");
+                }
+            }
+        }
+    }
+
+    public void selectAttackCountry (int x, int y) {
+        for (int i=0; i <12;i++) {
+            // zet alleen iets neer als dat land ook van de actieve speler is
+            if (db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
+                if (ProvinciesLijst[i].contains(x, y)) {
+                    attackCoordX = ProvinciesLijst[i].centerX();
+                    attackCoordY = ProvinciesLijst[i].centerY();
+                    firstAttackclick = true;
+                    defendCountry = ProvincieStringNaam[i];
+                }
+            }
+        }
+    }
+
+    public void selectDefendCountry (int x, int y) {
+        for (int i=0; i <12;i++) {
+            // zet alleen iets neer als dat land ook van de actieve speler is
+            if (!db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
+                if (ProvinciesLijst[i].contains(x, y)) {
+                    defendCoordX = ProvinciesLijst[i].centerX();
+                    defendCoordY = ProvinciesLijst[i].centerY();
+                    defendCountry = ProvincieStringNaam[i];
+                    firstAttackclick = false;
+                    db.initAttack(attackCountry, defendCountry, gameID);
+                    Intent intent = new Intent(this, MoveAction.class);
+                    startActivity(intent);
                 }
             }
         }

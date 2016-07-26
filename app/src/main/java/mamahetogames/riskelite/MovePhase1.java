@@ -19,12 +19,8 @@ import java.util.Objects;
 
 public class MovePhase1 extends AppCompatActivity implements View.OnClickListener {
 
-    Context context;
-    int armieCard;
     private int aantalLegers;
     private TextView legerBijTeZetten;
-    Bitmap armyIcon;
-    Paint paint;
     private final MyDBHandler db = new MyDBHandler(this);
     private int gameID;
     private String playerStatus;

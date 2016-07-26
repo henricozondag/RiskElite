@@ -140,9 +140,10 @@ public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemS
                 startActivity(i);
                 break;
             case R.id.buttonMoveAction:
-                db.setPlayerStatus(currentPlayerId, "aanval");
+                db.setPlayerStatus(gameID, "phase2");
                 //Checken of aanval land wel van de actieve speler is
-                checkAttack(true);
+                i = new Intent(this, MapScreen.class);
+                startActivity(i);
                 break;
             case R.id.buttonPlayerDetails:
                 i = new Intent(this, PlayerDetails.class);

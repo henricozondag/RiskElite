@@ -11,7 +11,7 @@ import java.util.Random;
 
 class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
     private static final String DATABASE_NAME = "riskElite";
 
     private static final String TABLE_CARD = "card";
@@ -821,7 +821,7 @@ class MyDBHandler extends SQLiteOpenHelper {
                 " from " + TABLE_GAME_MAP + " gmap," + TABLE_PLAYER + " play" +
                 " where gmap." + COLUMN_GAME_ID + " = " + game_id +
                 " and gmap." + COLUMN_PLAYER_ID + " = play." + COLUMN_ID;
-        Log.i("currentsituation", query);
+        //Log.i("currentsituation", query);
         return db.rawQuery(query, null);
     }
 
