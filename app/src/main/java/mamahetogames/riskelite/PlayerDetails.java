@@ -28,7 +28,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
     private Button buttonPlaatsenLegers;
     private Button buttonMovePhase2;
     private Button buttonRuilKaarten;
-    private Button buttonAddRandomCard;
     private final ImageView[] imageViewCard = new ImageView[10];
     private final CheckBox[] checkBoxCard = new CheckBox[10];
     private final int[] cardType = new int[10];
@@ -52,8 +51,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         buttonRuilKaarten.setOnClickListener(this);
         buttonPlaatsenLegers = (Button) findViewById(R.id.buttonPlaatsenLegers);
         buttonPlaatsenLegers.setOnClickListener(this);
-        buttonAddRandomCard = (Button) findViewById(R.id.buttonAddRandomCard);
-        buttonAddRandomCard.setOnClickListener(this);
 
         // de kaarten
         imageViewCard[0] = (ImageView)findViewById(R.id.imageViewCard1);
@@ -85,7 +82,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         // check of er niet al een maximum van 10 kaarten is bereikt
         if (db.countCards(currentPlayerId) > 4) {
-            buttonAddRandomCard.setVisibility(View.INVISIBLE);
             buttonMovePhase2.setVisibility(View.INVISIBLE);
         }
     }
@@ -209,7 +205,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         textViewPlaatsenLegers.setVisibility(View.VISIBLE);
         buttonPlaatsenLegers.setVisibility(View.VISIBLE);
         buttonMovePhase2.setVisibility(View.INVISIBLE);
-        buttonAddRandomCard.setVisibility(View.INVISIBLE);
 
         armyCard = armyCard + 2;
         db.setParameter("armyCard", armyCard, gameID,"update");
@@ -222,40 +217,31 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         db.removeCards(currentPlayerId, cardList);
         showCards();
     }
-// Nog omzetten naar player_id
-private void addRandomCard(int player_id) {
-        MyDBHandler db = new MyDBHandler(this);
-        db.addRandomCard(player_id);
-        showCards();
-    }
 
     @Override
     public void onClick(View v) {
         Intent i;
         switch (v.getId()) {
             case R.id.buttonMovePhase2:
-                i = new Intent(this, MovePhase2.class);
-                //status zetten van speler
-                db.setPlayerStatus(gameID, "phase2");
+                if (Objects.equals(db.getPlayerStatus(gameID),"pas")) {
+                    i = new Intent(this, MovePhase1.class);
+                } else {
+                    i = new Intent(this, MovePhase2.class);
+                    //status zetten van speler
+                    db.setPlayerStatus(gameID, "phase2");
+                }
                 startActivity(i);
                 break;
             case R.id.buttonRuilKaarten:
                 convertCards();
                 if (db.countCards(currentPlayerId) < 5) {
-                    buttonAddRandomCard.setVisibility(View.VISIBLE);
                     buttonMovePhase2.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.buttonPlaatsenLegers:
                 i = new Intent(this, MovePhase1.class);
+                db.setPlayerStatus(gameID, "phase1");
                 startActivity(i);
-                break;
-            case R.id.buttonAddRandomCard:
-                addRandomCard(currentPlayerId);
-                if (db.countCards(currentPlayerId) > 4) {
-                    buttonAddRandomCard.setVisibility(View.INVISIBLE);
-                    buttonMovePhase2.setVisibility(View.INVISIBLE);
-                }
                 break;
         }
     }

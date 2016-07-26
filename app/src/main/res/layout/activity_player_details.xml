@@ -243,16 +243,8 @@
         android:text="Plaatsen"
         android:id="@+id/buttonPlaatsenLegers"
         android:visibility="invisible"
-        android:layout_alignTop="@+id/buttonMovePhase2"
-        android:layout_alignStart="@+id/buttonAddRandomCard" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="add Card"
-        android:id="@+id/buttonAddRandomCard"
-        android:layout_above="@+id/textViewPlaatsenLegers"
-        android:layout_toEndOf="@+id/textViewAantalLegers" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:layout_width="wrap_content"

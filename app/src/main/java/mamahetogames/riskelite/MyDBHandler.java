@@ -31,6 +31,7 @@ class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_DEFEND_COUNTRY = "defend_country";
     private static final String COLUMN_DICE_DEFEND_1 = "dice_defend_1";
     private static final String COLUMN_DICE_DEFEND_2 = "dice_defend_2";
+    private static final String COLUMN_CARD = "card";
 
     private static final String TABLE_PLAYER = "player";
     private static final String COLUMN_TOTAL_ARMIES = "total_armies";
@@ -68,8 +69,7 @@ class MyDBHandler extends SQLiteOpenHelper {
     private String parameter_value;
     private String currentPlayer1;
     private String status;
-    private String name;
-    private String playerName;
+    private String name, playerName, checkCard1;
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -82,7 +82,7 @@ class MyDBHandler extends SQLiteOpenHelper {
                 + COLUMN_GAME_ID            + " INTEGER,"
                 + COLUMN_PLAYER_ID          + " INTEGER,"
                 + COLUMN_TYPE               + " INTEGER,"
-                + COLUMN_NUMBER             + " INTEGER" + ")";
+                + COLUMN_NUMBER             + " INTEGER)";
         db.execSQL(CREATE_CARD_TABLE);
 
         String CREATE_GAME_TABLE = "CREATE TABLE " + TABLE_GAME + "("
@@ -95,7 +95,8 @@ class MyDBHandler extends SQLiteOpenHelper {
                 + COLUMN_DICE_ATTACK_3      + " TEXT,"
                 + COLUMN_DEFEND_COUNTRY     + " TEXT,"
                 + COLUMN_DICE_DEFEND_1      + " TEXT,"
-                + COLUMN_DICE_DEFEND_2      + " TEXT)";
+                + COLUMN_DICE_DEFEND_2      + " TEXT,"
+                + COLUMN_CARD               + " TEXT)";
         db.execSQL(CREATE_GAME_TABLE);
 
         String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_PLAYER + "("
@@ -116,7 +117,7 @@ class MyDBHandler extends SQLiteOpenHelper {
                 + COLUMN_ID                 + " INTEGER PRIMARY KEY,"
                 + COLUMN_GAME_ID            + " INTEGER,"
                 + COLUMN_PARAMETER_NM       + " TEXT,"
-                + COLUMN_PARAMETER_VALUE    + " TEXT" + ")";
+                + COLUMN_PARAMETER_VALUE    + " TEXT)";
         db.execSQL(CREATE_SETTING_TABLE);
 
         String CREATE_COUNTRY_TABLE = "CREATE TABLE " + TABLE_GAME_MAP + "("
@@ -269,6 +270,29 @@ class MyDBHandler extends SQLiteOpenHelper {
                 startPlayer = startPlayer + 1;
         }
         countries.close();
+    }
+
+    public String checkAttackCard (int game_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select " + COLUMN_CARD + " from " + TABLE_GAME + " where " +  COLUMN_ID + " = " + game_id;
+        Log.i("checkAttackCard", query);
+        Cursor checkCard = db.rawQuery(query, null);
+
+        if (checkCard.moveToFirst())
+        {
+            checkCard1 = checkCard.getString(0);
+        }
+        checkCard.close();
+        return checkCard1;
+    }
+
+    public void setAttackCard (int game_id, String status) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "update " + TABLE_GAME + " set " + COLUMN_CARD + " = '" +  status + "' where " + COLUMN_ID + " = " + game_id;
+        Log.i("setAttackCard", query);
+        db.execSQL(query);
     }
 
     public void setPlayerStatus(int game_id, String status) {

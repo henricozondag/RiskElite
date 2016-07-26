@@ -33,17 +33,9 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
         //actieve game ophalen
         gameID = db.getActiveGameID();
 
-        //status zetten van speler
-        //gebeurt al in de stap hiervoor ivm pas enzo
-
         //speler_id ophalen die aan de beurt is
         int activePlayer = Integer.parseInt(db.currentPlayer(gameID,"ID"));
         playerStatus = db.getPlayerStatus(gameID);
-
-        //als een speler past dan krijgt hij het aantal landen gedeeld door 3 aan legers erbij
-        if (Objects.equals(playerStatus, "pas")) {
-            db.updateArmiesToPlace(activePlayer,db.passArmies(activePlayer, gameID),"+");
-        }
 
         // aantal te plaatsen legers ophalen
         aantalLegers = db.armyToPlace(activePlayer);
