@@ -29,6 +29,7 @@
         <activity android:name=".MoveActionResult" />
         <activity android:name=".MapScreen" />
         <activity android:name=".LoadGame" />
+        <activity android:name=".GameResult"></activity>
     </application>
 
 </manifest>
