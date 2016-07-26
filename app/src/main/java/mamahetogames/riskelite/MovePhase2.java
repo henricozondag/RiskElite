@@ -143,6 +143,7 @@ public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemS
                 startActivity(i);
                 break;
             case R.id.buttonMoveAction:
+                db.setPlayerStatus(currentPlayerId, "aanval");
                 //Checken of aanval land wel van de actieve speler is
                 checkAttack(true);
                 break;
