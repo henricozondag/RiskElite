@@ -877,8 +877,9 @@ class MyDBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        double n = passArmies/3;
-        passArmies = (int) Math.round(n);
+        //double n = passArmies/3;
+        //passArmies = (int) Math.round(n);
+        passArmies = (int) Math.round(passArmies/3);
         if (passArmies < 3) {
             passArmies = 3;
         }

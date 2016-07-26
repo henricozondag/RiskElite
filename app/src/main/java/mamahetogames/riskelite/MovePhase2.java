@@ -37,9 +37,6 @@ public class MovePhase2 extends AppCompatActivity implements AdapterView.OnItemS
         //current player_id ophalen
         currentPlayerId = Integer.parseInt(db.currentPlayer(gameID,"ID"));
 
-        //status zetten van speler
-        db.setPlayerStatus(gameID, "phase2");
-
         Button buttonMovePhase3 = (Button) findViewById(R.id.buttonMovePhase3);
         buttonMovePhase3.setOnClickListener(this);
         Button buttonMoveAction = (Button) findViewById(R.id.buttonMoveAction);

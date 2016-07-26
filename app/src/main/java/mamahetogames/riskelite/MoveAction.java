@@ -305,6 +305,7 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
             db.updateCountryResult(attackPlayer,"WON",1);
             db.updateCountryResult(defendPlayer,"LOST",1);
             db.updateCountryOwner(defendCountry,activePlayer, gameID);
+            // inbouwen dat dit maar 1 keer per beurt mag
             db.addRandomCard(attackPlayer);
             Intent i = new Intent(this, MoveActionResult.class);
             i.putExtra("winnaar", attackPlayer);
