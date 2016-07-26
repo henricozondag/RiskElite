@@ -24,6 +24,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         Button buttonLoadGame = (Button) findViewById(R.id.buttonLoadGame);
         buttonLoadGame.setOnClickListener(this);
 
+        // Zorgen dat alle games altijd op pauze staan wanneer je vanuit het menu een nieuwe game wil starten (load of new)
         db.pauseGames();
     }
 

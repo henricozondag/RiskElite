@@ -235,6 +235,8 @@ private void addRandomCard(int player_id) {
         switch (v.getId()) {
             case R.id.buttonMovePhase2:
                 i = new Intent(this, MovePhase2.class);
+                //status zetten van speler
+                db.setPlayerStatus(gameID, "phase2");
                 startActivity(i);
                 break;
             case R.id.buttonRuilKaarten:

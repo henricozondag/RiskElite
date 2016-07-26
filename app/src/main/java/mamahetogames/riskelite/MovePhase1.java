@@ -68,10 +68,12 @@ public class MovePhase1 extends AppCompatActivity implements View.OnClickListene
             case R.id.buttonMovePhase2:
                 if (Objects.equals(playerStatus, "phase1")) {
                     i = new Intent(this, MovePhase2.class);
-                    Log.i("1", playerStatus);
+                    //status zetten van speler
+                    db.setPlayerStatus(gameID, "phase2");
                 } else {
                     i = new Intent(this, MovePhase3.class);
-                    Log.i("2", playerStatus);
+                    //status zetten van speler
+                    db.setPlayerStatus(gameID, "phase3");
                 }
                 startActivity(i);
                 break;
