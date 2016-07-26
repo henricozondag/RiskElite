@@ -20,6 +20,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 
 public class MapScreen extends Activity implements View.OnTouchListener {
 
@@ -192,55 +194,12 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                             break;
                     }
                     // zet de coordinaten van het leger voor deze rij
-                    switch (cursor.getString(2)) {
-                        case "NoordBrabant":
-                            coordX = ProvinciesLijst[10].centerX();
-                            coordY = ProvinciesLijst[10].centerY();
-                            break;
-                        case "Zeeland":
-                            coordX = ProvinciesLijst[0].centerX();
-                            coordY = ProvinciesLijst[0].centerY();
-                            break;
-                        case "Limburg":
-                            coordX = ProvinciesLijst[9].centerX();
-                            coordY = ProvinciesLijst[9].centerY();
-                            break;
-                        case "NoordHolland":
-                            coordX = ProvinciesLijst[6].centerX();
-                            coordY = ProvinciesLijst[6].centerY();
-                            break;
-                        case "ZuidHolland":
-                            coordX = ProvinciesLijst[11].centerX();
-                            coordY = ProvinciesLijst[11].centerY();
-                            break;
-                        case "Utrecht":
-                            coordX = ProvinciesLijst[7].centerX();
-                            coordY = ProvinciesLijst[7].centerY();
-                            break;
-                        case "Gelderland":
-                            coordX = ProvinciesLijst[8].centerX();
-                            coordY = ProvinciesLijst[8].centerY();
-                            break;
-                        case "Overijssel":
-                            coordX = ProvinciesLijst[5].centerX();
-                            coordY = ProvinciesLijst[5].centerY();
-                            break;
-                        case "Flevoland":
-                            coordX = ProvinciesLijst[4].centerX();
-                            coordY = ProvinciesLijst[4].centerY();
-                            break;
-                        case "Groningen":
-                            coordX = ProvinciesLijst[2].centerX();
-                            coordY = ProvinciesLijst[2].centerY();
-                            break;
-                        case "Friesland":
-                            coordX = ProvinciesLijst[1].centerX();
-                            coordY = ProvinciesLijst[1].centerY();
-                            break;
-                        case "Drenthe":
-                            coordX = ProvinciesLijst[3].centerX();
-                            coordY = ProvinciesLijst[3].centerY();
-                            break;
+                    for (int i=0; i <12;i++) {
+                        // zet alleen iets neer als dat land ook van de actieve speler is
+                        if (Objects.equals(cursor.getString(2), ProvincieStringNaam[i])) {
+                            coordX = ProvinciesLijst[i].centerX();
+                            coordY = ProvinciesLijst[i].centerY();
+                        }
                     }
                     // teken het soldaatje met de juiste kleur op de juiste plaats
                     c.drawBitmap(countryArmy, coordX - (countryArmy.getWidth() / 2), coordY - (countryArmy.getHeight() / 2), null);
