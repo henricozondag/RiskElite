@@ -117,10 +117,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     // als dit een aanvalsbeurt is:
                     if(!firstAttackclick) {
                         // als attackTurnBoolean is true (er is nog niet eerder op een land geklikt): probeer dan een attack country te maken
-                        selectAttackCountry(intX, intY);
+                        attackCountry = selectAttackCountry(intX, intY);
                     }
                     else {
-                        selectDefendCountry(intX, intY);
+                        selectDefendCountry(intX, intY, attackCountry);
                         // als attackTurnBoolean is false (er is al één keer geklikt): probeer dan een defend country te maken
                     }
                     // db.initAttack(String attacker, String defender, int game_id)
@@ -261,7 +261,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         }
     }
 
-    public void selectAttackCountry (int x, int y) {
+    public String selectAttackCountry (int x, int y) {
         for (int i=0; i <12;i++) {
             if (db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
                 // zet alleen iets neer als dat land ook van de actieve speler is
@@ -274,9 +274,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 }
             }
         }
+        return attackCountry;
     }
 
-    public void selectDefendCountry (int x, int y) {
+    public void selectDefendCountry (int x, int y, String attackCountry) {
         for (int i=0; i <12;i++) {
             if (!db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
                 // zet alleen iets neer als dat land NIET van de actieve speler is
@@ -287,6 +288,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     defendCountry = ProvincieStringNaam[i];
                     firstAttackclick = false;
                     db.initAttack(attackCountry, defendCountry, gameID);
+                    Log.i("aanv en verd ", "" + attackCountry + " en " + defendCountry);
                     Intent intent = new Intent(this, MoveAction.class);
                     startActivity(intent);
                 }
