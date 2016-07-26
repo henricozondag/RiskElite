@@ -263,13 +263,14 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
     public void selectAttackCountry (int x, int y) {
         for (int i=0; i <12;i++) {
-            // zet alleen iets neer als dat land ook van de actieve speler is
             if (db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
+                // zet alleen iets neer als dat land ook van de actieve speler is
                 if (ProvinciesLijst[i].contains(x, y)) {
+                    // en als er in een land geklikt wordt
                     attackCoordX = ProvinciesLijst[i].centerX();
                     attackCoordY = ProvinciesLijst[i].centerY();
                     firstAttackclick = true;
-                    defendCountry = ProvincieStringNaam[i];
+                    attackCountry = ProvincieStringNaam[i];
                 }
             }
         }
@@ -277,9 +278,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
     public void selectDefendCountry (int x, int y) {
         for (int i=0; i <12;i++) {
-            // zet alleen iets neer als dat land ook van de actieve speler is
             if (!db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
+                // zet alleen iets neer als dat land NIET van de actieve speler is
                 if (ProvinciesLijst[i].contains(x, y)) {
+                    // en als er in een land geklikt wordt
                     defendCoordX = ProvinciesLijst[i].centerX();
                     defendCoordY = ProvinciesLijst[i].centerY();
                     defendCountry = ProvincieStringNaam[i];
