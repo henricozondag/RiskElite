@@ -24,10 +24,10 @@ import android.widget.Toast;
 public class MapScreen extends Activity implements View.OnTouchListener {
 
     mapView v;
-    Bitmap armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
-    Bitmap landKaart;
+    Bitmap landKaart, armyRed, armyBlue, armyYellow, armyGreen, countryArmy;
     float coordX, coordY;
-    int screenWidth, screenHeight, aantalLegers, active_game_id, active_player_id, count;
+    int screenWidth, screenHeight, aantalLegers, active_game_id, active_player_id;
+    boolean attackTurnBoolean;
 
     Paint black, white;
     MyDBHandler db = new MyDBHandler(this);
@@ -37,11 +37,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        attackTurnBoolean = false;
         super.onCreate(savedInstanceState);
         v = new mapView(this);
         v.setOnTouchListener(this);
-
-        aantalLegers = 3;
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -72,44 +71,37 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         Rect NoordBrabant = new Rect(ScaleX(289),   ScaleY(1139),   ScaleX(651),    ScaleY(1408));
         Rect ZuidHolland =  new Rect(ScaleX(169),   ScaleY(866),    ScaleX(409),    ScaleY(1115));
 
-        ProvinciesLijst[0] = Zeeland;
-        ProvincieStringNaam[0] = "Zeeland";
-        ProvinciesLijst[1] = Friesland;
-        ProvincieStringNaam[1] = "Friesland";
-        ProvinciesLijst[2] = Groningen;
-        ProvincieStringNaam[2] = "Groningen";
-        ProvinciesLijst[3] = Drenthe;
-        ProvincieStringNaam[3] = "Drenthe";
-        ProvinciesLijst[4] = Flevoland;
-        ProvincieStringNaam[4] = "Flevoland";
-        ProvinciesLijst[5] = Overijssel;
-        ProvincieStringNaam[5] = "Overijssel";
-        ProvinciesLijst[6] = NoordHolland;
-        ProvincieStringNaam[6] = "NoordHolland";
-        ProvinciesLijst[7] = Utrecht;
-        ProvincieStringNaam[7] = "Utrecht";
-        ProvinciesLijst[8] = Gelderland;
-        ProvincieStringNaam[8] = "Gelderland";
-        ProvinciesLijst[9] = Limburg;
-        ProvincieStringNaam[9] = "Limburg";
-        ProvinciesLijst[10] = NoordBrabant;
-        ProvincieStringNaam[10] = "NoordBrabant";
-        ProvinciesLijst[11] = ZuidHolland;
-        ProvincieStringNaam[11] = "ZuidHolland";
+        ProvinciesLijst[0] = Zeeland;               ProvincieStringNaam[0] = "Zeeland";
+        ProvinciesLijst[1] = Friesland;             ProvincieStringNaam[1] = "Friesland";
+        ProvinciesLijst[2] = Groningen;             ProvincieStringNaam[2] = "Groningen";
+        ProvinciesLijst[3] = Drenthe;               ProvincieStringNaam[3] = "Drenthe";
+        ProvinciesLijst[4] = Flevoland;             ProvincieStringNaam[4] = "Flevoland";
+        ProvinciesLijst[5] = Overijssel;            ProvincieStringNaam[5] = "Overijssel";
+        ProvinciesLijst[6] = NoordHolland;          ProvincieStringNaam[6] = "NoordHolland";
+        ProvinciesLijst[7] = Utrecht;               ProvincieStringNaam[7] = "Utrecht";
+        ProvinciesLijst[8] = Gelderland;            ProvincieStringNaam[8] = "Gelderland";
+        ProvinciesLijst[9] = Limburg;               ProvincieStringNaam[9] = "Limburg";
+        ProvinciesLijst[10] = NoordBrabant;         ProvincieStringNaam[10] = "NoordBrabant";
+        ProvinciesLijst[11] = ZuidHolland;          ProvincieStringNaam[11] = "ZuidHolland";
 
-        armyRed = BitmapFactory.decodeResource(getResources(),R.mipmap.red_soldier);
-        armyBlue = BitmapFactory.decodeResource(getResources(),R.mipmap.blue_soldier);
-        armyYellow = BitmapFactory.decodeResource(getResources(),R.mipmap.yellow_soldier);
-        armyGreen = BitmapFactory.decodeResource(getResources(),R.mipmap.green_soldier);
+        armyRed = BitmapFactory.decodeResource(getResources(),R.mipmap.red_soldier);        armyRed = Bitmap.createScaledBitmap(armyRed, screenWidth / 15 , screenHeight / 15, false);
+        armyBlue = BitmapFactory.decodeResource(getResources(),R.mipmap.blue_soldier);      armyBlue = Bitmap.createScaledBitmap(armyBlue, screenWidth / 15 , screenHeight / 15, false);
+        armyYellow = BitmapFactory.decodeResource(getResources(),R.mipmap.yellow_soldier);  armyYellow = Bitmap.createScaledBitmap(armyYellow, screenWidth / 15 , screenHeight / 15, false);
+        armyGreen = BitmapFactory.decodeResource(getResources(),R.mipmap.green_soldier);    armyGreen = Bitmap.createScaledBitmap(armyGreen, screenWidth / 15 , screenHeight / 15, false);
         landKaart = BitmapFactory.decodeResource(getResources(), R.mipmap.provincieskaart);
-        armyRed = Bitmap.createScaledBitmap(armyRed, screenWidth / 15 , screenHeight / 15, false);
-        armyBlue = Bitmap.createScaledBitmap(armyBlue, screenWidth / 15 , screenHeight / 15, false);
-        armyYellow = Bitmap.createScaledBitmap(armyYellow, screenWidth / 15 , screenHeight / 15, false);
-        armyGreen = Bitmap.createScaledBitmap(armyGreen, screenWidth / 15 , screenHeight / 15, false);
 
         active_game_id = db.getActiveGameID();
         active_player_id = Integer.parseInt(db.currentPlayer(active_game_id,"ID"));
 
+        // check of deze beurt een aanvalsbeurt is
+        if (db.getPlayerStatus(active_game_id) == "aanval"){
+            attackTurnBoolean = true;
+        }
+        // als het geen aanvalsbeurt is; haal dan het aantal legers op dat de speler mag zetten
+        else {
+            aantalLegers = db.armyToPlace(active_player_id);
+        }
+        // maak de landkaart aan
         landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
         setContentView(v);
     }
@@ -125,24 +117,31 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
         switch (me.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.i("klik locatie", "" + me.getX() + "  " + me.getY());
-                if (aantalLegers > 0) {
-                    zetLeger(intX, intY);
+                if(attackTurnBoolean){
+                    // als dit een aanvalsbeurt is:
+                    db.initAttack("Zeeland", "NoordBrabant", active_game_id);
+                    //db.initAttack(String attacker, String defender, int game_id)
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
-                    // als er geen legers meer te plaatsen zijn, wacht dan 1 seconde en ga naar het volgende scherm
-                    Intent i = new Intent(this, MovePhase2.class);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ie) {
+                    // als het geen aanvalsbeurt is:
+                    Log.i("klik locatie", "" + me.getX() + "  " + me.getY());
+                    if (aantalLegers > 0) {
+                        zetLeger(intX, intY);
                     }
-                    startActivity(i);
+                    else {
+                        Toast.makeText(getApplicationContext(), "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
+                        // als er geen legers meer te plaatsen zijn, wacht dan 1 seconde en ga naar het volgende scherm
+                        Intent i = new Intent(this, MovePhase2.class);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ie) {
+                        }
+                        startActivity(i);
+                    }
+                    break;
                 }
-                break;
-            //case MotionEvent.ACTION_UP:
-            //    break;
-            }
+
+        }
         // return true zodat je meer dan een keer kan klikken met effect
         return true;
     }
