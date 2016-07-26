@@ -45,8 +45,6 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
         list2.add("2");
         list2.add("3");
         list2.add("4");
-        list2.add("5");
-        list2.add("6");
 
         // Vul deze spinner met al de beschikbare werelden
         spinnerWorld = (Spinner) findViewById(R.id.spinnerWorld);
@@ -91,7 +89,10 @@ public class StartGame extends AppCompatActivity  implements View.OnClickListene
                 Log.i("spinnerLegers",String.valueOf(spinnerLegers.getSelectedItem()));
                 Log.i("spinnerPlayers", String.valueOf(spinnerPlayers.getSelectedItem()));
                 Log.i("spinnerWorld", String.valueOf(spinnerWorld.getSelectedItem()));
-
+                //actieve game ophalen
+                int gameID = db.getActiveGameID();
+                //status zetten van speler
+                db.setPlayerStatus(gameID, "game");
                 startActivity(i);
                 break;
         }

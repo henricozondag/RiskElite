@@ -69,6 +69,8 @@ public class Game extends AppCompatActivity  implements View.OnClickListener {
                 }
 
                 db.startPlayer(gameID);
+                //status zetten van speler
+                db.setPlayerStatus(gameID, "premove");
                 startActivity(i);
                 break;
         }

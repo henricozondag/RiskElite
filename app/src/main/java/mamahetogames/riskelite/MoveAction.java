@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Random;
 
 public class MoveAction extends AppCompatActivity implements View.OnClickListener {
@@ -298,6 +299,9 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
             i.putExtra("totalLostA", totalLostA);
             i.putExtra("totalLostD", totalLostD);
             i.putExtra("dices", 0);
+
+            //status zetten van speler
+            db.setPlayerStatus(gameID, "phase2");
             startActivity(i);
         }
         else if (defendArmies == 0) {
@@ -306,12 +310,18 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
             db.updateCountryResult(defendPlayer,"LOST",1);
             db.updateCountryOwner(defendCountry,activePlayer, gameID);
             // inbouwen dat dit maar 1 keer per beurt mag
-            db.addRandomCard(attackPlayer);
+            if (Objects.equals(db.checkAttackCard(gameID),"N")) {
+                db.addRandomCard(attackPlayer);
+                db.setAttackCard(gameID, "J");
+            }
             Intent i = new Intent(this, MoveActionResult.class);
             i.putExtra("winnaar", attackPlayer);
             i.putExtra("totalLostA", totalLostA);
             i.putExtra("totalLostD", totalLostD);
             i.putExtra("dices", numberOfDice);
+
+            //status zetten van speler
+            db.setPlayerStatus(gameID, "phase2");
             startActivity(i);
         }
     }
@@ -326,6 +336,9 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
                 i.putExtra("totalLostA", totalLostA);
                 i.putExtra("totalLostD", totalLostD);
                 i.putExtra("dices", 0);
+
+                //status zetten van speler
+                db.setPlayerStatus(gameID, "phase2");
                 startActivity(i);
                 break;
             case R.id.buttonGooiAttack:

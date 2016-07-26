@@ -23,8 +23,8 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
         //actieve game ophalen
         gameID = db.getActiveGameID();
 
-        //status zetten van speler
-        db.setPlayerStatus(gameID, "premove");
+        //setting zetten dat deze beurt nog geen card verkregen is
+        db.setAttackCard(gameID, "N");
 
         //speler_name ophalen die aan de beurt is
         String player = db.currentPlayer(gameID,"name");
@@ -87,6 +87,7 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
                 // Start andere scherm
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 db.setPlayerStatus(gameID, "pas");
+                db.updateArmiesToPlace(currentPlayerId,db.passArmies(currentPlayerId, gameID),"+");
                 startActivity(i);
                 break;
         }
