@@ -666,17 +666,14 @@ class MyDBHandler extends SQLiteOpenHelper {
 
     //geeft een cursor terug met alle games. Gemaakt voor de spinner om de games te laden.
     public Cursor fetchAllGames() {
-
         SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select " + COLUMN_ID + ", " + COLUMN_NAME + ", " + COLUMN_STATUS + " from " + TABLE_GAME + " where " + COLUMN_STATUS + "!= 'finished' ";
+        Cursor cursor = db.rawQuery(query,null);
 
-        Cursor mCursor = db.query(TABLE_GAME, new String[] {COLUMN_ID,
-                        COLUMN_NAME, COLUMN_STATUS},
-                null, null, null, null, null);
-
-        if (mCursor != null) {
-            mCursor.moveToFirst();
+        if (cursor != null) {
+            cursor.moveToFirst();
         }
-        return mCursor;
+        return cursor;
     }
 
     private int getCountryId(String name, int game_id) {
@@ -921,5 +918,42 @@ class MyDBHandler extends SQLiteOpenHelper {
                 " where " + COLUMN_COUNTRY_NAME + " = '" + country_name + "' and " + COLUMN_GAME_ID + " = " + game_id;
         Log.i("updateCountryOwner", query);
         db.execSQL(query);
+    }
+
+    public boolean checkWinner (int player_id, int game_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean winner = false;
+
+        String query = "select count(1) from " + TABLE_GAME_MAP + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_PLAYER_ID + " != " + player_id;
+        Log.i("checkWinner", query);
+        Cursor cursor = db.rawQuery(query, null);
+
+        //Als er geen landen meer een andere eigenaar hebben dan de actieve speler, heeft de actieve speler gewonnen
+        cursor.moveToFirst();
+        if (cursor.getInt(0) == 0) {
+                winner = true;
+        }
+        cursor.close();
+
+        return winner;
+    }
+
+    public void makeWinner (int player_id, int game_id) {
+        //Tijdelijke methode om een winnaar te zetten, zodat gameResult gemakkelijker te bereiken is
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "update " + TABLE_GAME_MAP + " set " + COLUMN_PLAYER_ID + " = " + player_id + " where " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("makeWinner", query);
+        db.execSQL(query);
+    }
+
+    public void endGame (int game_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "update " + TABLE_GAME + " set " + COLUMN_STATUS + " = 'finished' where " + COLUMN_ID + " = " + game_id;
+        Log.i("endGame", query);
+        db.execSQL(query);
+
+        //Nog andere dingen uitvoeren, highscores bijwerken bijvoorbeeld?
     }
 }

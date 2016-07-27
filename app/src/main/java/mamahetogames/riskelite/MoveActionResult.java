@@ -63,6 +63,12 @@ public class MoveActionResult extends AppCompatActivity implements AdapterView.O
 
         Button buttonMovePhase2 = (Button) findViewById(R.id.buttonBackMovePhase2);
         buttonMovePhase2.setOnClickListener(this);
+
+        //<<Tijdelijk een knop om actieve speler te laten winnen
+        Button buttonMakeWinner = (Button) findViewById(R.id.buttonTmpMakeWinner);
+        buttonMakeWinner.setOnClickListener(this);
+        //>>
+
         ArrayList<String> list1 = new ArrayList<>();
         spinnerArmies = (Spinner) findViewById(R.id.spinnerArmies);
 
@@ -103,9 +109,18 @@ public class MoveActionResult extends AppCompatActivity implements AdapterView.O
     public void onClick(View v) {
         Intent i;
         switch (v.getId()) {
+            case R.id.buttonTmpMakeWinner:
+                db.makeWinner(Integer.parseInt(db.currentPlayer(gameID,"ID")), gameID);
+                break;
             case R.id.buttonBackMovePhase2:
-                //checken of speler meer dan 4 kaarten heeft, dan moet hij eerst kaarten wisselen namelijk
-                if (db.countCards(Integer.parseInt(db.currentPlayer(gameID,"ID"))) > 4) {
+                if (db.checkWinner(Integer.parseInt(db.currentPlayer(gameID,"ID")), gameID)) {
+                    //als speler het spel gewonnen heeft dan spel beeindigen
+                    i = new Intent(this, GameResult.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    db.setPlayerStatus(gameID, "finished");
+                    startActivity(i);
+                } else if (db.countCards(Integer.parseInt(db.currentPlayer(gameID,"ID"))) > 4) {
+                    //als speler meer dan 4 kaarten heeft, dan moet hij eerst kaarten wisselen
                     i = new Intent(this, PlayerDetails.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     // alle runtime veldslagdata verwijderen
