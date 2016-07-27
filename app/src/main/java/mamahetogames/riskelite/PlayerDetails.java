@@ -181,6 +181,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(PlayerDetails.this, "Heel goed, je hebt drie verschillende aangevinkt!",  Toast.LENGTH_LONG).show();
                 addArmies();
                 removeCards();
+                buttonMovePhase2.setVisibility(View.INVISIBLE);
             }
             else {
                 Toast.makeText(PlayerDetails.this, "Wow 3 kaarten, alleen helaas niet 3 verschillende of 3 dezelfde!",  Toast.LENGTH_LONG).show();

@@ -1,10 +1,16 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +20,11 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
     private int gameID, currentPlayerId;
     private int backButtonCount;
     private final MyDBHandler db = new MyDBHandler(this);
+    String armyRed = "red_soldier";
+    String armyBlue = "blue_soldier";
+    String armyYellow = "yellow_soldier";
+    String armyGreen = "green_soldier";
+    private ImageView imageViewArmy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,34 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
 
         textViewCurrentPlayer = (TextView) this.findViewById(R.id.textViewCurrentPlayer);
         textViewCurrentPlayer.setText(player);
+
+        imageViewArmy = (ImageView)findViewById(R.id.imageViewArmy);
+        String PACKAGE_NAME = getApplicationContext().getPackageName();
+        int imgId;
+        imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + armyRed, null, null);
+        imageViewArmy.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
+
+        // definieer de cursor uit de database handler en loop door de records heen
+        String gamePlayer = db.currentPlayer(gameID, "gameplayer");
+        // bepaal de kleur voor deze speler
+            switch (gamePlayer) {
+                case "1":
+                    imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + armyRed, null, null);
+                    imageViewArmy.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
+                    break;
+                case "2":
+                    imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + armyBlue, null, null);
+                    imageViewArmy.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
+                    break;
+                case "3":
+                    imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + armyYellow, null, null);
+                    imageViewArmy.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
+                    break;
+                case "4":
+                    imgId = getResources().getIdentifier(PACKAGE_NAME + ":mipmap/" + armyGreen, null, null);
+                    imageViewArmy.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
+                    break;
+            }
     }
 
     @Override

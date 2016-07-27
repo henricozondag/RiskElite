@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="MovePhase3"
+        android:text="Schuiven"
         android:id="@+id/textViewMovePhase3"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -21,8 +21,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PreMove"
+        android:text="Einde beurt"
         android:id="@+id/buttonPreMove"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

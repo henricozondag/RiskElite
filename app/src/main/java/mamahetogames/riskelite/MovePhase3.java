@@ -36,7 +36,7 @@ public class MovePhase3 extends AppCompatActivity implements View.OnClickListene
 
                 //Volgende speler de beurt geven
                 db.nextPlayer(db.getActiveGameID());
-
+                db.setPlayerStatus(gameID, "premove");
                 startActivity(i);
                 break;
         }

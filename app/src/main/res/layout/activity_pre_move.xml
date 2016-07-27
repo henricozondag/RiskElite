@@ -42,9 +42,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text=".....is aan zet."
         android:id="@+id/textView18"
-        android:layout_below="@+id/textViewCurrentPlayer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp" />
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/imageViewArmy"
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -62,4 +62,12 @@
         android:id="@+id/buttonPas"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/imageViewArmy"
+        android:layout_below="@+id/textViewCurrentPlayer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp" />
 </RelativeLayout>

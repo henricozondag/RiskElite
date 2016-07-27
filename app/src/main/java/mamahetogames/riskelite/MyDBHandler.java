@@ -452,6 +452,8 @@ class MyDBHandler extends SQLiteOpenHelper {
             currentPlayer1 = currentPlayer.getString(0);
         }
         currentPlayer.close();
+        Log.i("currentplayer", query);
+        Log.i("currentgameplayer", currentPlayer1);
         return currentPlayer1;
     }
 

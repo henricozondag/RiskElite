@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="MovePhase2 - Speler X"
+        android:text="Aanvallen"
         android:id="@+id/textViewMovePhase2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -41,41 +41,5 @@
         android:id="@+id/buttonMoveAction"
         android:layout_below="@+id/textViewMovePhase2"
         android:layout_alignParentStart="true" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerAttackCountry"
-        android:layout_below="@+id/buttonMovePhase3"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp"
-        android:layout_toStartOf="@+id/buttonMovePhase3"
-        android:layout_alignEnd="@+id/buttonPlayerDetails" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerDefendCountry"
-        android:layout_below="@+id/spinnerAttackCountry"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/spinnerAttackCountry" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textViewAttackArmies"
-        android:layout_alignTop="@+id/spinnerAttackCountry"
-        android:layout_alignStart="@+id/buttonMovePhase3" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textViewDefendArmies"
-        android:layout_below="@+id/spinnerAttackCountry"
-        android:layout_alignStart="@+id/textViewAttackArmies" />
 
 </RelativeLayout>

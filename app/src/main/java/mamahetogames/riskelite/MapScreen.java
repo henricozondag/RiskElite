@@ -134,8 +134,19 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
+                        Intent i;
+                        // als de speler gepast heeft en daarna in dit scherm legers zet dan moet hij daarna naar phase3 ipv phase2
+                        if (Objects.equals(db.getPlayerStatus(gameID), "pas")) {
+                            i = new Intent(this, MovePhase3.class);
+                            //status zetten van speler
+                            db.setPlayerStatus(gameID, "phase3");
+                        } else {
+                            i = new Intent(this, MovePhase2.class);
+                            //status zetten van speler
+                            db.setPlayerStatus(gameID, "phase2");
+                        }
                         // als er geen legers meer te plaatsen zijn, wacht dan 1 seconde en ga naar het volgende scherm
-                        Intent i = new Intent(this, MovePhase2.class);
+                        //Intent i = new Intent(this, MovePhase2.class);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException ie) {
