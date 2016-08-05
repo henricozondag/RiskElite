@@ -11,7 +11,7 @@ import java.util.Random;
 
 class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
     private static final String DATABASE_NAME = "riskElite";
 
     private static final String TABLE_CARD = "card";

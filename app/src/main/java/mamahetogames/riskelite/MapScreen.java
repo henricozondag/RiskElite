@@ -123,8 +123,6 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                         selectDefendCountry(intX, intY);
                         // als attackTurnBoolean is false (er is al één keer geklikt): probeer dan een defend country te maken
                     }
-                    // db.initAttack(String attacker, String defender, int game_id)
-                    // db.initAttack("Zeeland", "NoordBrabant", gameID);
                 }
                 else {
                     // als het geen aanvalsbeurt is:
@@ -274,8 +272,8 @@ public class MapScreen extends Activity implements View.OnTouchListener {
 
     public void selectAttackCountry (int x, int y) {
         for (int i=0; i <12;i++) {
-            if (db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID)) {
-                // zet alleen iets neer als dat land ook van de actieve speler is
+            if (db.isOwner(active_player_id, ProvincieStringNaam[i] , gameID) && db.getCountryArmies( ProvincieStringNaam[i] , gameID) > 1) {
+                // zet alleen iets neer als dat land ook van de actieve speler is en er meer dan 1 land staat
                 if (ProvinciesLijst[i].contains(x, y)) {
                     // en als er in een land geklikt wordt
                     attackCoordX = ProvinciesLijst[i].centerX();
@@ -301,12 +299,14 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                         firstAttackclick = false;
                         db.initAttack(attackCountry, defendCountry, gameID);
                         Log.i("aanv en verd ", "" + attackCountry + " en " + defendCountry);
+                        // Zet de naam van de verdediger in een Toast zodat het duidelijk is wie tegen wie moet vechten
+                        Toast.makeText(getApplicationContext(), "Verdediger: " + db.getPlayerName(gameID,db.getCountryOwner(defendCountry, gameID)), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(this, MoveAction.class);
                         startActivity(intent);
                     }
                     else {
                         Log.i("isneighbour " , attackCountry + " en " + defendCountry);
-                        Toast.makeText(getApplicationContext(), "Deze landen zijn geen buren!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Deze landen zijn geen buren!", Toast.LENGTH_LONG).show();
                     }
                 }
             }
