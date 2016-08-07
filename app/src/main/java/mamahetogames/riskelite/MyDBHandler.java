@@ -458,7 +458,6 @@ class MyDBHandler extends SQLiteOpenHelper {
 
     }
 
-
     public void nextPlayer(int game_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -470,32 +469,24 @@ class MyDBHandler extends SQLiteOpenHelper {
         String query = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'resting' where " + COLUMN_STATUS + " not in ('resting','dead') and " + COLUMN_GAME_ID + " = " + game_id;
         Log.i("GameplayerResting", query);
         db.execSQL(query);
+        boolean active = true;
 
-//        // Volgende speler bepalen
-//        if (gamePlayer == numberOfPlayers) {
-//            nextGamePlayer = 1;
-//        } else
-//            nextGamePlayer = gamePlayer + 1;
+        while (active) {
+            // Volgende speler bepalen
+            if (gamePlayer == numberOfPlayers) {
+                nextGamePlayer = 1;
+            } else
+                nextGamePlayer = gamePlayer + 1;
 
-        // volgende speler bepalen
-        for (int i = 1;;) {
-            if (gamePlayer + i <= numberOfPlayers) {
-                if (isPlayerActive((gamePlayer + i), game_id)) {
-                    nextGamePlayer = gamePlayer + i;
-                    Log.i("forifif",String.valueOf(nextGamePlayer));
-                    break;
-                } else i++;
-            } else {
-                gamePlayer = 0;
-                i = 1;
-                Log.i("forifif",String.valueOf(gamePlayer));
-            }
+            if (isPlayerActive((nextGamePlayer), game_id)) {
+                // Volgende speler actief maken
+                String query2 = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'active' where " + COLUMN_GAMEPLAYER + " = " + nextGamePlayer + " and " + COLUMN_GAME_ID + " = " + game_id;
+                Log.i("GameplayerActive",query2);
+                db.execSQL(query2);
+                active = false;
+            } else
+                gamePlayer = nextGamePlayer;
         }
-
-        // Volgende speler actief maken
-        String query2 = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'active' where " + COLUMN_GAMEPLAYER + " = " + nextGamePlayer + " and " + COLUMN_GAME_ID + " = " + game_id;
-        Log.i("GameplayerActive",query2);
-        db.execSQL(query2);
     }
 
     public boolean isPlayerActive(int gameplayer, int game_id) {
