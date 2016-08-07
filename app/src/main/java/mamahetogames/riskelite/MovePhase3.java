@@ -20,9 +20,6 @@ public class MovePhase3 extends AppCompatActivity implements View.OnClickListene
         //actieve game ophalen
         gameID = db.getActiveGameID();
 
-        //status zetten van speler
-        db.setPlayerStatus(gameID, "phase3");
-
         Button buttonPreMove = (Button) findViewById(R.id.buttonPreMove);
         buttonPreMove.setOnClickListener(this);
     }
@@ -35,7 +32,7 @@ public class MovePhase3 extends AppCompatActivity implements View.OnClickListene
                 i = new Intent(this, PreMove.class);
 
                 //Volgende speler de beurt geven
-                db.nextPlayer(db.getActiveGameID());
+                db.nextPlayer(gameID);
                 db.setPlayerStatus(gameID, "premove");
                 startActivity(i);
                 break;

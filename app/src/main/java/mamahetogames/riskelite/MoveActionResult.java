@@ -114,28 +114,23 @@ public class MoveActionResult extends AppCompatActivity implements AdapterView.O
                 break;
             case R.id.buttonBackMovePhase2:
                 if (db.checkWinner(Integer.parseInt(db.currentPlayer(gameID,"ID")), gameID)) {
-                    //als speler het spel gewonnen heeft dan spel beeindigen
+                    // Als er een winnaar is op basis van het verover van de wereld dan:
                     i = new Intent(this, GameResult.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     db.setPlayerStatus(gameID, "finished");
                     startActivity(i);
+
                 } else if (db.countCards(Integer.parseInt(db.currentPlayer(gameID,"ID"))) > 4) {
-                    //als speler meer dan 4 kaarten heeft, dan moet hij eerst kaarten wisselen
+                    // Als een speler op basis van de laatste aanval op meer dan 5 kaarten is gekomen dan:
                     i = new Intent(this, PlayerDetails.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    // alle runtime veldslagdata verwijderen
-                    db.setCountryArmies(defendCountry,Integer.parseInt(armies),"PLUS",gameID);
-                    db.setCountryArmies(attackCountry,Integer.parseInt(armies),"MIN",gameID);
-                    db.resetCountries(gameID);
                     startActivity(i);
+
                 } else {
-                    // Start andere scherm
+                    // Als het spel gewoon door moet gaan dan:
                     i = new Intent(this, MovePhase2.class);
+                    db.setPlayerStatus(gameID, "phase2");
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    // alle runtime veldslagdata verwijderen
-                    db.setCountryArmies(defendCountry,Integer.parseInt(armies),"PLUS",gameID);
-                    db.setCountryArmies(attackCountry,Integer.parseInt(armies),"MIN",gameID);
-                    db.resetCountries(gameID);
                     startActivity(i);
                 }
                 break;
