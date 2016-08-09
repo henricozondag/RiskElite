@@ -275,13 +275,13 @@ public class MoveAction extends AppCompatActivity implements View.OnClickListene
 
         //Bijwerken van het aantal legers welke nog op de landen staan en bijwerken database totalen
         attackArmies = attackArmies - lostA;
-        db.setCountryArmies(attackCountry,lostA,"min",gameID);
+        db.setCountryArmies(attackCountry,lostA,"MIN",gameID);
         db.updateArmyResult(attackPlayer,"LOST",lostA);
         db.updateArmyResult(defendPlayer,"WON",lostA);
         Log.i("lostA", Integer.toString(lostA));
 
         defendArmies = defendArmies - lostD;
-        db.setCountryArmies(defendCountry,lostD,"min",gameID);
+        db.setCountryArmies(defendCountry,lostD,"MIN",gameID);
         db.updateArmyResult(attackPlayer,"WON",lostD);
         db.updateArmyResult(defendPlayer,"LOST",lostD);
         Log.i("lostD", Integer.toString(lostD));

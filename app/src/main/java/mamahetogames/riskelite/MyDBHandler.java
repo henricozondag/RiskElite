@@ -373,19 +373,6 @@ class MyDBHandler extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getCountries (int game_id, int player_id, String type) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query;
-        if (type.equals("owner")) {
-            query = "select " + COLUMN_COUNTRY_NAME + " from " + TABLE_GAME_MAP + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_PLAYER_ID + " = " + player_id;
-        } else
-            query = "select " + COLUMN_COUNTRY_NAME + " from " + TABLE_GAME_MAP + " where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_PLAYER_ID + " <> " + player_id;
-        Log.i("getcountries",query);
-
-        return db.rawQuery(query, null);
-    }
-
     public int getCountryArmies (String country_name, int game_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query;
@@ -471,30 +458,57 @@ class MyDBHandler extends SQLiteOpenHelper {
 
     }
 
-
     public void nextPlayer(int game_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        int gamePlayer = Integer.parseInt(currentPlayer(game_id,"gameplayer"));
+        int gamePlayer = Integer.parseInt(currentPlayer(game_id, "gameplayer"));
         int numberOfPlayers = numberOfPlayers(game_id);
         int nextGamePlayer;
 
         // Huidige speler resting maken
-        String query = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'resting' where " + COLUMN_STATUS + " != 'resting' and " + COLUMN_GAME_ID + " = " + game_id;
-        Log.i("GameplayerResting",query);
+        String query = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'resting' where " + COLUMN_STATUS + " not in ('resting','dead') and " + COLUMN_GAME_ID + " = " + game_id;
+        Log.i("GameplayerResting", query);
         db.execSQL(query);
+        boolean active = true;
 
-        // Volgende speler bepalen
-        if (gamePlayer == numberOfPlayers) {
-            nextGamePlayer = 1;
+        while (active) {
+            // Volgende speler bepalen
+            if (gamePlayer == numberOfPlayers) {
+                nextGamePlayer = 1;
+            } else
+                nextGamePlayer = gamePlayer + 1;
+
+            if (isPlayerActive((nextGamePlayer), game_id)) {
+                // Volgende speler actief maken
+                String query2 = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'active' where " + COLUMN_GAMEPLAYER + " = " + nextGamePlayer + " and " + COLUMN_GAME_ID + " = " + game_id;
+                Log.i("GameplayerActive",query2);
+                db.execSQL(query2);
+                active = false;
+            } else
+                gamePlayer = nextGamePlayer;
         }
-        else
-            nextGamePlayer = gamePlayer + 1;
+    }
 
-        // Volgende speler actief maken
-        String query2 = "update " + TABLE_PLAYER + " set " + COLUMN_STATUS + " = 'active' where " + COLUMN_GAMEPLAYER + " = " + nextGamePlayer + " and " + COLUMN_GAME_ID + " = " + game_id;
-        Log.i("GameplayerActive",query2);
-        db.execSQL(query2);
+    public boolean isPlayerActive(int gameplayer, int game_id) {
+        boolean result = false;
+        String query = "select " + COLUMN_STATUS + " from " + TABLE_PLAYER + " where " + COLUMN_GAMEPLAYER + " = " + gameplayer +  " and " + COLUMN_GAME_ID + " = " + game_id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Log.i("playeractive", query);
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            String test = cursor.getString(0);
+
+            if (!Objects.equals(test, "dead")) {
+                result = true;
+                Log.i("playeractivetrue", String.valueOf(result));
+            } else {
+                result = false;
+                Log.i("playeractivefalse", String.valueOf(result));
+            }
+        }
+        cursor.close();
+        return result;
     }
 
     public boolean attackerThrown(int game_id) {
