@@ -221,16 +221,24 @@ class MyDBHandler extends SQLiteOpenHelper {
 
         //insert het aantal cards per kaartruil
         setParameter("armyCard",Integer.valueOf(armyCards),gameID,"insert");
-        //setCardArmy(armyCards,gameID);
 
-        //insert het aantal players
+        // aantal legers wat iedereen krijgt ophalen door het aantal landen van de wererld X 1,5 te doen.
         Integer x = Integer.valueOf(players);
         SQLiteDatabase db = this.getWritableDatabase();
-        // Tijdelijk toegevoegd dat elke speler 2 armies mag plaatsen (Voor Thomas zijn code)
+        String query2 = "select count(" + COLUMN_ID + ") from " + TABLE_MAP + " where " + COLUMN_WORLD + " = '" + world + "'";
+        Log.i("aantal landen in world", query2);
+        Cursor countries = db.rawQuery(query2, null);
+        if (countries.moveToFirst())
+        {
+            armies = countries.getInt(0);
+            armies = (int) Math.round(armies * 1.5 / x);
+        }
+
+        //insert het aantal players
         for (int i = 0;i < x; i++) {
             String query = "insert into " + TABLE_PLAYER +
                     "(" + COLUMN_GAME_ID    + " , " + COLUMN_NAME + "   , " + COLUMN_GAMEPLAYER + " , " + COLUMN_STATUS + " , " + COLUMN_PLACE_ARMIES + "   , " + COLUMN_ARMIES_LOST + "    , " + COLUMN_ARMIES_WON + " , " + COLUMN_COUNTRIES_LOST + "    , " + COLUMN_COUNTRIES_WON + ") values " +
-                    "(" + gameID            + " , 'leeg'                , " + (i+1) + "             , 'resting'             , 2                             , 0                             , 0                         , 0                             , 0)";
+                    "(" + gameID            + " , 'leeg'                , " + (i+1) + "             , 'resting'             , " + armies + "                , 0                             , 0                         , 0                             , 0)";
             Log.i("insertaantalplayers", query);
             db.execSQL(query);
         }
@@ -853,7 +861,6 @@ class MyDBHandler extends SQLiteOpenHelper {
     public Cursor getSituation(int game_id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        //String query = "select " + COLUMN_PLAYER_ID + "," + COLUMN_WORLD + "," + COLUMN_COUNTRY_NAME + "," + COLUMN_COUNTRY_ARMIES + " from " + TABLE_GAME_MAP  + " where " + COLUMN_GAME_ID + " = " + gameID;
         String query = "select play." + COLUMN_GAMEPLAYER + ", gmap." + COLUMN_WORLD + ", gmap." + COLUMN_COUNTRY_NAME + ",gmap." + COLUMN_COUNTRY_ARMIES +
                 " from " + TABLE_GAME_MAP + " gmap," + TABLE_PLAYER + " play" +
                 " where gmap." + COLUMN_GAME_ID + " = " + game_id +
