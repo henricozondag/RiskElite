@@ -108,11 +108,20 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 } else {
-                    // Start andere scherm
-                    i = new Intent(this, MovePhase1.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    db.setPlayerStatus(gameID, "phase1");
-                    startActivity(i);
+                    if (db.armyToPlace(currentPlayerId) > 0) {
+                        // Start andere scherm
+                        i = new Intent(this, MapScreen.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        db.setPlayerStatus(gameID, "phase1");
+                        startActivity(i);
+                    } else {
+                        // Start andere scherm
+                        i = new Intent(this, MovePhase2.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        db.setPlayerStatus(gameID, "phase2");
+                        startActivity(i);
+                    }
+
                 }
                 break;
             case R.id.buttonMenu:
@@ -122,7 +131,7 @@ public class PreMove extends AppCompatActivity  implements View.OnClickListener 
                 startActivity(i);
                 break;
             case R.id.buttonPas:
-                i = new Intent(this, MovePhase1.class);
+                i = new Intent(this, MapScreen.class);
                 // Start andere scherm
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 db.setPlayerStatus(gameID, "pas");

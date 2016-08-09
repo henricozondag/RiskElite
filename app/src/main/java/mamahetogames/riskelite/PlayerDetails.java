@@ -225,7 +225,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.buttonMovePhase2:
                 if (Objects.equals(db.getPlayerStatus(gameID),"pas")) {
-                    i = new Intent(this, MovePhase1.class);
+                    i = new Intent(this, MapScreen.class);
                 } else {
                     i = new Intent(this, MovePhase2.class);
                     //status zetten van speler
@@ -240,7 +240,7 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.buttonPlaatsenLegers:
-                i = new Intent(this, MovePhase1.class);
+                i = new Intent(this, MapScreen.class);
                 db.setPlayerStatus(gameID, "phase1");
                 startActivity(i);
                 break;

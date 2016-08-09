@@ -148,7 +148,7 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                         i = new Intent(this, PreMove.class);
                         break;
                     case "phase1":
-                        i = new Intent(this, MovePhase1.class);
+                        i = new Intent(this, MapScreen.class);
                         break;
                     case "phase2":
                         i = new Intent(this, MovePhase2.class);
@@ -160,7 +160,7 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                         i = new Intent(this, MoveAction.class);
                         break;
                     case "pas":
-                        i = new Intent(this, MovePhase1.class);
+                        i = new Intent(this, MapScreen.class);
                         break;
                     case "game":
                         i = new Intent(this, Game.class);
