@@ -268,7 +268,7 @@ class MyDBHandler extends SQLiteOpenHelper {
             // selecteer player_id van de speler die het land krijgt
             player_id = getPlayerID(startPlayer, game_id);
 
-            String query3 = "update " + TABLE_GAME_MAP + " set " + COLUMN_PLAYER_ID + " = " +  player_id + ", " + COLUMN_COUNTRY_ARMIES + " = 3 where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_ID + " = " + countries.getInt(0);
+            String query3 = "update " + TABLE_GAME_MAP + " set " + COLUMN_PLAYER_ID + " = " +  player_id + ", " + COLUMN_COUNTRY_ARMIES + " = 1 where " + COLUMN_GAME_ID + " = " + game_id + " and " + COLUMN_ID + " = " + countries.getInt(0);
             Log.i("updatecountryplayerid", query3);
             db.execSQL(query3);
 
