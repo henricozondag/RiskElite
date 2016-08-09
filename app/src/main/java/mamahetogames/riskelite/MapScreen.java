@@ -14,10 +14,12 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -129,6 +131,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                     Log.i("klik locatie", "" + me.getX() + "  " + me.getY());
                     if (aantalLegers > 0) {
                         zetLeger(intX, intY);
+                        if(aantalLegers == 0){
+                            Intent i = new Intent(this, MovePhase2.class);
+                            startActivity(i);
+                        }
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Geen legers mee bij te zetten!", Toast.LENGTH_SHORT).show();
