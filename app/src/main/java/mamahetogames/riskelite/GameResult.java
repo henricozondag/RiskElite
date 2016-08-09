@@ -1,11 +1,13 @@
 package mamahetogames.riskelite;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class GameResult extends AppCompatActivity implements View.OnClickListener  {
 
@@ -17,6 +19,8 @@ public class GameResult extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_result);
 
+
+        //Wat willen we: 4 statistieken voor alle spelers Armies en Countries won/lost
         Log.i("gameResult","onCreate, woohoo");
 
         //actieve game ophalen
@@ -24,6 +28,14 @@ public class GameResult extends AppCompatActivity implements View.OnClickListene
 
         //spel beeindigen
         db.endGame(gameID);
+
+        //Speler_name ophalen die aan de beurt is, en deze tonen op het scherm
+        Cursor statistics = db.getStatistics(gameID);
+
+        //Ff winnaar uit cursor halen om te zien of die het doet
+        statistics.moveToFirst();
+        TextView textViewWinnerName = (TextView) this.findViewById(R.id.textViewWinnerName);
+        textViewWinnerName.setText(statistics.getString(1));
 
         Button buttonMenu = (Button) findViewById(R.id.buttonMenu);
         buttonMenu.setOnClickListener(this);

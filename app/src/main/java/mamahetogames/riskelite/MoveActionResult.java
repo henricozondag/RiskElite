@@ -123,7 +123,7 @@ public class MoveActionResult extends AppCompatActivity implements AdapterView.O
                     // Als er een winnaar is op basis van het verover van de wereld dan:
                     i = new Intent(this, GameResult.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    db.setPlayerStatus(gameID, "finished");
+                    db.setPlayerStatus(gameID, "winner");
                     startActivity(i);
                 } else if (db.countCards(Integer.parseInt(db.currentPlayer(gameID,"ID"))) > 4) {
                     // Als een speler op basis van de laatste aanval op meer dan 5 kaarten is gekomen dan:

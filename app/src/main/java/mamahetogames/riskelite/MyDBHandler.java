@@ -970,4 +970,16 @@ class MyDBHandler extends SQLiteOpenHelper {
 
         //Nog andere dingen uitvoeren, highscores bijwerken bijvoorbeeld?
     }
+
+    public Cursor getStatistics(int game_id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query =  " select " + COLUMN_ID + ", " + COLUMN_NAME + ", " + COLUMN_STATUS + ", " + COLUMN_ARMIES_WON  + ", " + COLUMN_ARMIES_LOST  + ", " + COLUMN_COUNTRIES_WON  + ", " + COLUMN_COUNTRIES_LOST +
+                        " from  " + TABLE_PLAYER +
+                        " where " + COLUMN_GAME_ID + " = " + game_id +
+                        " order by " + COLUMN_STATUS + " desc";
+        Log.i("QueryStatistics",query);
+        return db.rawQuery(query, null);
+    }
 }
