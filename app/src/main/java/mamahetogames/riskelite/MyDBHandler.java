@@ -222,20 +222,19 @@ class MyDBHandler extends SQLiteOpenHelper {
         //insert het aantal cards per kaartruil
         setParameter("armyCard",Integer.valueOf(armyCards),gameID,"insert");
 
-        //insert het aantal players
+        // aantal legers wat iedereen krijgt ophalen door het aantal landen van de wererld X 1,5 te doen.
         Integer x = Integer.valueOf(players);
         SQLiteDatabase db = this.getWritableDatabase();
-        // aantal legers wat iedereen krijgt ophalen door het aantal landen van de wererld X 1,5 te doen.
         String query2 = "select count(" + COLUMN_ID + ") from " + TABLE_MAP + " where " + COLUMN_WORLD + " = '" + world + "'";
         Log.i("aantal landen in world", query2);
         Cursor countries = db.rawQuery(query2, null);
         if (countries.moveToFirst())
         {
             armies = countries.getInt(0);
-            armies = (int) Math.round(armies * 1.5);
-            armies = (int) Math.round(armies / x);
+            armies = (int) Math.round(armies * 1.5 / x);
         }
 
+        //insert het aantal players
         for (int i = 0;i < x; i++) {
             String query = "insert into " + TABLE_PLAYER +
                     "(" + COLUMN_GAME_ID    + " , " + COLUMN_NAME + "   , " + COLUMN_GAMEPLAYER + " , " + COLUMN_STATUS + " , " + COLUMN_PLACE_ARMIES + "   , " + COLUMN_ARMIES_LOST + "    , " + COLUMN_ARMIES_WON + " , " + COLUMN_COUNTRIES_LOST + "    , " + COLUMN_COUNTRIES_WON + ") values " +
