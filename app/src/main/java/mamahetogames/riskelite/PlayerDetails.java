@@ -41,9 +41,6 @@ public class PlayerDetails extends AppCompatActivity implements View.OnClickList
 
         gameID = db.getActiveGameID();
         currentPlayerId = Integer.parseInt(db.currentPlayer(gameID,"ID"));
-        //player = Integer.parseInt(db.currentPlayer(gameID,"gameplayer"));
-        // welke status heeft de speler? (phase1/2 of 3) ivm het wel of niet mogen ruilen van de kaarten dit moet nog wel geimplementeerd worden (knop wel niet tonen)
-        //status = db.currentPlayer(gameID, "status");
 
         buttonMovePhase2 = (Button) findViewById(R.id.buttonMovePhase2);
         buttonMovePhase2.setOnClickListener(this);

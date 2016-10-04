@@ -140,9 +140,10 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                         Intent i;
                         // als de speler gepast heeft en daarna in dit scherm legers zet dan moet hij daarna naar phase3 ipv phase2
                         if (Objects.equals(db.getPlayerStatus(gameID), "pas")) {
-                            i = new Intent(this, MovePhase3.class);
-                            //status zetten van speler
-                            db.setPlayerStatus(gameID, "phase3");
+                            i = new Intent(this, PreMove.class);
+                            //Volgende speler de beurt geven
+                            db.nextPlayer(gameID);
+                            db.setPlayerStatus(gameID, "premove");
                         } else {
                             i = new Intent(this, MovePhase2.class);
                             //status zetten van speler
