@@ -1,6 +1,7 @@
 package mamahetogames.riskelite;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,14 +13,13 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -84,7 +84,7 @@ public class MapScreen extends Activity implements View.OnTouchListener {
         armyBlue = BitmapFactory.decodeResource(getResources(),R.mipmap.blue_soldier);      armyBlue = Bitmap.createScaledBitmap(armyBlue, screenWidth / 15 , screenHeight / 15, false);
         armyYellow = BitmapFactory.decodeResource(getResources(),R.mipmap.yellow_soldier);  armyYellow = Bitmap.createScaledBitmap(armyYellow, screenWidth / 15 , screenHeight / 15, false);
         armyGreen = BitmapFactory.decodeResource(getResources(),R.mipmap.green_soldier);    armyGreen = Bitmap.createScaledBitmap(armyGreen, screenWidth / 15 , screenHeight / 15, false);
-        landKaart = BitmapFactory.decodeResource(getResources(), R.mipmap.provincieskaart);
+        landKaart = BitmapFactory.decodeResource(getResources(), R.mipmap.provincieskaart); landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
 
         gameID = db.getActiveGameID();
         active_player_id = Integer.parseInt(db.currentPlayer(gameID,"ID"));
@@ -99,9 +99,8 @@ public class MapScreen extends Activity implements View.OnTouchListener {
             aantalLegers = db.armyToPlace(active_player_id);
         }
         Log.i("", "attakcturn boolean: " + attackTurnBoolean);
-        // maak de landkaart aan
-        landKaart = Bitmap.createScaledBitmap(landKaart, screenWidth, screenHeight,false);
         setContentView(v);
+
     }
 
     @Override
@@ -184,10 +183,6 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                 }
                 Canvas c = holder.lockCanvas();
                 c.drawBitmap(landKaart, 0, 0, null);
-                c.drawRect(ScaleX(5), ScaleY(5), ScaleX(430), ScaleY(100), black);
-                c.drawRect(ScaleX(15), ScaleY(15), ScaleX(420), ScaleY(90), white);
-                c.drawText("Legers zetten: ", ScaleX(25), ScaleY(70), black);
-                c.drawText( "" + aantalLegers , ScaleX(350) , ScaleY(70), black);
 
                 // definieer de cursor uit de database handler en loop door de records heen
                 Cursor cursor = db.getSituation(gameID);
@@ -207,6 +202,32 @@ public class MapScreen extends Activity implements View.OnTouchListener {
                         case "4":
                             countryArmy = armyGreen;
                             break;
+                    }
+                    // zet het aantal te zetten legers linksboven als het een bijzet beurt is, zet een soldaatje in de kleur van de huidige speler neer als het een aanvalsbeurt is
+                    if(!attackTurnBoolean){
+                        c.drawRect(ScaleX(5), ScaleY(5), ScaleX(430), ScaleY(100), black);
+                        c.drawRect(ScaleX(15), ScaleY(15), ScaleX(420), ScaleY(90), white);
+                        c.drawText("Legers zetten: ", ScaleX(25), ScaleY(70), black);
+                        c.drawText( "" + aantalLegers , ScaleX(350) , ScaleY(70), black);
+                    }
+                    else {
+                        // definieer de cursor uit de database handler en loop door de records heen
+                        String gamePlayer = db.currentPlayer(gameID, "gameplayer");
+                        // bepaal de kleur voor deze speler
+                        switch (gamePlayer) {
+                            case "1":
+                                c.drawBitmap(armyRed, 50 - (countryArmy.getWidth() / 2), 80 - (countryArmy.getHeight() / 2), null);
+                                break;
+                            case "2":
+                                c.drawBitmap(armyBlue, 50 - (countryArmy.getWidth() / 2), 80 - (countryArmy.getHeight() / 2), null);
+                                break;
+                            case "3":
+                                c.drawBitmap(armyYellow, 50 - (countryArmy.getWidth() / 2), 80 - (countryArmy.getHeight() / 2), null);
+                                break;
+                            case "4":
+                                c.drawBitmap(armyGreen, 50 - (countryArmy.getWidth() / 2), 80 - (countryArmy.getHeight() / 2), null);
+                                break;
+                        }
                     }
                     // zet de coordinaten van het leger voor deze rij
                     for (int i=0; i <12;i++) {
