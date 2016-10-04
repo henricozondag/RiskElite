@@ -153,9 +153,6 @@ public class LoadGame extends AppCompatActivity implements View.OnClickListener 
                     case "phase2":
                         i = new Intent(this, MovePhase2.class);
                         break;
-                    case "phase3":
-                        i = new Intent(this, MovePhase3.class);
-                        break;
                     case "moveaction":
                         i = new Intent(this, MoveAction.class);
                         break;

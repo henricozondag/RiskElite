@@ -32,8 +32,10 @@ public class MovePhase2 extends AppCompatActivity implements View.OnClickListene
         Intent i;
         switch (v.getId()) {
             case R.id.buttonMovePhase3:
-                db.setPlayerStatus(gameID, "phase3");
-                i = new Intent(this, MovePhase3.class);
+                i = new Intent(this, PreMove.class);
+                //Volgende speler de beurt geven
+                db.nextPlayer(gameID);
+                db.setPlayerStatus(gameID, "premove");
                 startActivity(i);
                 break;
             case R.id.buttonMoveAction:
