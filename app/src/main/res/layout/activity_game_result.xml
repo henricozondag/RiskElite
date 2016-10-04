@@ -38,10 +38,10 @@
     <ImageView
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/imageWinner"
+        android:id="@+id/imageViewArmy"
         android:layout_marginTop="75dp"
         android:layout_below="@+id/textViewEndGame"
-        android:layout_toStartOf="@+id/textViewWinner" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,9 +49,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="WinnerName"
         android:id="@+id/textViewWinnerName"
-        android:layout_alignTop="@+id/imageWinner"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/imageWinner" />
+        android:layout_alignTop="@+id/imageViewArmy"
+        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -59,9 +59,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="WinnerCountriesText"
         android:id="@+id/textViewWinnerCountries"
-        android:layout_alignTop="@+id/imageWinner"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/imageWinner" />
+        android:layout_alignTop="@+id/imageViewArmy"
+        android:layout_marginTop="95dp"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,7 +69,19 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="WinnerArmiesText"
         android:id="@+id/textViewWinnerArmies"
-        android:layout_alignTop="@+id/imageWinner"
-        android:layout_marginTop="50dp"
-        android:layout_toEndOf="@+id/imageWinner" />
+        android:layout_alignTop="@+id/imageViewArmy"
+        android:layout_marginTop="115dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="LoserText"
+        android:id="@+id/textViewLosers"
+        android:layout_alignTop="@+id/imageViewArmy"
+        android:layout_marginTop="185dp"
+        android:layout_centerHorizontal="true"
+        />
+
 </RelativeLayout>
